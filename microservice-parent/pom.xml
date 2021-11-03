@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>oceanstars-ecommerce</groupId>
+  <artifactId>parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>parent</name>
+  <description>parent project for oceanstars bz platform</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <!--spring依赖版本控制（和spring-boot-parent版本保持一致）-->
+    <springframework.version>5.3.12</springframework.version>
+    <!--spring-boot-parent版本号，通过spring-boot管理其他第三方依赖版本-->
+    <spring.boot.version>2.5.6</spring.boot.version>
+    <!--spring security依赖版本控制（和spring framework版本保持一致）-->
+    <springframework.security.version>5.5.3</springframework.security.version>
+
+    <commons.lang3.version>3.8.1</commons.lang3.version>
+    <commons.io.version>2.11.0</commons.io.version>
+    <jjwt.version>0.9.1</jjwt.version>
+    <redis.version>3.3.0</redis.version>
+    <shiro.version>1.8.0</shiro.version>
+    <jaxb.version>2.3.1</jaxb.version>
+    <druid.spring.boot.version>1.1.14</druid.spring.boot.version>
+    <mysql.version>8.0.27</mysql.version>
+    <mybatis.spring.boot.version>2.0.0</mybatis.spring.boot.version>
+    <google.gson.version>2.8.5</google.gson.version>
+    <alibaba.fastjson.version>1.2.57</alibaba.fastjson.version>
+    <io.micrometer>1.5.10</io.micrometer>
+    <spring-kafka.version>2.6.2</spring-kafka.version>
+    <elasticsearch.version>7.10.1</elasticsearch.version>
+    <google.guava.version>30.0-jre</google.guava.version>
+    <jooq.version>3.14.0</jooq.version>
+    <jetcache.version>2.6.0</jetcache.version>
+    <xxl.version>2.2.0</xxl.version>
+    <swagger.version>3.0.0</swagger.version>
+    <protobuf.bom.version>4.0.0-rc-2</protobuf.bom.version>
+    <grpc.bom.version>1.41.0</grpc.bom.version>
+
+    <!-- Plugin -->
+    <plugin.os.maven.version>1.7.0</plugin.os.maven.version>
+    <plugin.protobuf.maven.version>0.6.1</plugin.protobuf.maven.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <!-- 统一管理Spring依赖 -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-framework-bom</artifactId>
+        <version>${springframework.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!-- grpc -->
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-bom</artifactId>
+        <version>${protobuf.bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-bom</artifactId>
+        <version>${grpc.bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!-- Spring 安全工具组件 -->
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${springframework.security.version}</version>
+      </dependency>
+
+      <!-- Apache工具组件 -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons.lang3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons.io.version}</version>
+      </dependency>
+
+      <!-- JWT工具组件 -->
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>${jjwt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>${jaxb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${jaxb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>${jaxb.version}</version><!-- JDK11已经删除javax.xml.bind相关-->
+      </dependency>
+
+      <!-- Redis工具组件 -->
+      <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+        <version>${redis.version}</version>
+      </dependency>
+
+      <!-- Shiro工具组件 -->
+      <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-core</artifactId>
+        <version>${shiro.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-spring</artifactId>
+        <version>${shiro.version}</version>
+      </dependency>
+
+      <!-- 线程池工具组件druid -->
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid-spring-boot-starter</artifactId>
+        <version>${druid.spring.boot.version}</version>
+      </dependency>
+
+      <!-- MySql连接工具 -->
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysql.version}</version>
+      </dependency>
+
+      <!-- Kafka工具组件 -->
+      <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+        <version>${spring-kafka.version}</version>
+      </dependency>
+
+      <!-- ElasticSearch工具组件 -->
+      <dependency>
+        <groupId>org.elasticsearch</groupId>
+        <artifactId>elasticsearch</artifactId>
+        <version>${elasticsearch.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>elasticsearch-rest-client</artifactId>
+        <version>${elasticsearch.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        <version>${elasticsearch.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <!-- JSON 工具组件 -->
+      <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>${google.gson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>${alibaba.fastjson.version}</version>
+      </dependency>
+
+      <!-- prometheus 工具组件 -->
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-registry-prometheus</artifactId>
+        <version>${io.micrometer}</version>
+      </dependency>
+
+      <!-- google java 工具组件 -->
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${google.guava.version}</version>
+      </dependency>
+
+      <!-- jooq 代码生成工具组件 -->
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-meta</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-meta-extensions</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+
+      <!-- JetCache 缓存工具组件 -->
+      <dependency>
+        <groupId>com.alicp.jetcache</groupId>
+        <artifactId>jetcache-starter-redis</artifactId>
+        <version>${jetcache.version}</version>
+      </dependency>
+
+      <!-- xxl-job 分布式任务调度组件 -->
+      <dependency>
+        <groupId>com.xuxueli</groupId>
+        <artifactId>xxl-job-core</artifactId>
+        <version>${xxl.version}</version>
+      </dependency>
+
+      <!-- Swagger -->
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-boot-starter</artifactId>
+        <version>${swagger.version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <profileActive>dev</profileActive>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>sit</id>
+      <properties>
+        <profileActive>sit</profileActive>
+      </properties>
+    </profile>
+    <profile>
+      <id>uat</id>
+      <properties>
+        <profileActive>uat</profileActive>
+      </properties>
+    </profile>
+    <profile>
+      <id>prd</id>
+      <properties>
+        <profileActive>prd</profileActive>
+      </properties>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
+    <repository>
+      <id>${repository.release.id}</id>
+      <url>${repository.release.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${repository.snapshot.id}</id>
+      <url>${repository.snapshot.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>${plugin.os.maven.version}</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <version>${plugin.protobuf.maven.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>compile-custom</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <protocArtifact>com.google.protobuf:protoc:4.0.0-rc-2:exe:${os.detected.classifier}</protocArtifact>
+          <pluginId>grpc-java</pluginId>
+          <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.41.0:exe:${os.detected.classifier}</pluginArtifact>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

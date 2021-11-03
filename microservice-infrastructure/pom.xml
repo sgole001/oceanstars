@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>oceanstars-ecommerce</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <artifactId>infrastructure</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>infrastructure</name>
+  <description>infrastructure project for oceanstars bz platform</description>
+
+  <properties>
+    <infrastructure.version>0.0.1-SNAPSHOT</infrastructure.version>
+    <infrastructure.common.version>0.0.1-SNAPSHOT</infrastructure.common.version>
+    <infrastructure.druid.version>0.0.1-SNAPSHOT</infrastructure.druid.version>
+    <infrastructure.redis.version>0.0.1-SNAPSHOT</infrastructure.redis.version>
+    <infrastructure.job.version>0.0.1-SNAPSHOT</infrastructure.job.version>
+    <infrastructure.jooq.version>0.0.1-SNAPSHOT</infrastructure.jooq.version>
+    <infrastructure.kafka.version>0.0.1-SNAPSHOT</infrastructure.kafka.version>
+    <infrastructure.elasticsearch.version>0.0.1-SNAPSHOT</infrastructure.elasticsearch.version>
+    <infrastructure.shiro.version>0.0.1-SNAPSHOT</infrastructure.shiro.version>
+  </properties>
+
+  <!--聚合子模块-->
+  <modules>
+    <module>common</module>
+<!--    <module>druid</module>-->
+<!--    <module>redis</module>-->
+<!--    <module>job</module>-->
+<!--    <module>jooq</module>-->
+<!--    <module>kafka</module>-->
+<!--    <module>elasticsearch</module>-->
+<!--    <module>shiro</module>-->
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
