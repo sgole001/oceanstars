@@ -36,7 +36,7 @@
     <google.gson.version>2.8.5</google.gson.version>
     <alibaba.fastjson.version>1.2.57</alibaba.fastjson.version>
     <io.micrometer>1.5.10</io.micrometer>
-    <spring-kafka.version>2.6.2</spring-kafka.version>
+    <spring-kafka.version>2.7.8</spring-kafka.version>
     <elasticsearch.version>7.10.1</elasticsearch.version>
     <google.guava.version>30.0-jre</google.guava.version>
     <jooq.version>3.14.0</jooq.version>

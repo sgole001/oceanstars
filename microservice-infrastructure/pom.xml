@@ -27,18 +27,20 @@
     <infrastructure.kafka.version>0.0.1-SNAPSHOT</infrastructure.kafka.version>
     <infrastructure.elasticsearch.version>0.0.1-SNAPSHOT</infrastructure.elasticsearch.version>
     <infrastructure.shiro.version>0.0.1-SNAPSHOT</infrastructure.shiro.version>
+    <infrastructure.grpc.version>0.0.1-SNAPSHOT</infrastructure.grpc.version>
   </properties>
 
   <!--聚合子模块-->
   <modules>
     <module>common</module>
-<!--    <module>druid</module>-->
-<!--    <module>redis</module>-->
-<!--    <module>job</module>-->
-<!--    <module>jooq</module>-->
-<!--    <module>kafka</module>-->
-<!--    <module>elasticsearch</module>-->
-<!--    <module>shiro</module>-->
+    <module>druid</module>
+    <module>elasticsearch</module>
+    <module>grpc</module>
+    <module>job</module>
+    <module>jooq</module>
+    <module>kafka</module>
+    <module>redis</module>
+    <module>shiro</module>
   </modules>
 
   <dependencies>

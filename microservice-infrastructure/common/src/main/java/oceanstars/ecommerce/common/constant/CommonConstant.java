@@ -42,6 +42,11 @@ public interface CommonConstant {
   String KEY_JWT_HTTP_HEADER = "token";
 
   /**
+   * 调用链追踪ID
+   */
+  String KEY_TRACE = "traceId";
+
+  /**
    * JWT刷新用Token RedisKey后缀名
    */
   String KEY_SUFFIX_JWT_REFRESH_TOKEN = "_Refresh_Token";
