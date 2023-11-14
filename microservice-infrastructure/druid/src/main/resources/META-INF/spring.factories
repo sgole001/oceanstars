@@ -1,0 +1,3 @@
+# AutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  oceanstars.ecommerce.infrastructure.druid.configuration.OceanStarsDataSourceAutoConfig

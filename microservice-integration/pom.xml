@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>oceanstars-ecommerce</groupId>
+    <artifactId>infrastructure</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>integration</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>integration</name>
+  <description>integration project for oceanstars bz platform</description>
+
+  <properties>
+    <integration.version>0.0.1-SNAPSHOT</integration.version>
+    <integration.api.rest.version>0.0.1-SNAPSHOT</integration.api.rest.version>
+    <integration.api.rpc.version>0.0.1-SNAPSHOT</integration.api.rpc.version>
+    <integration.constant.version>0.0.1-SNAPSHOT</integration.constant.version>
+    <integration.configuration.version>0.0.1-SNAPSHOT</integration.configuration.version>
+    <integration.controller.version>0.0.1-SNAPSHOT</integration.controller.version>
+    <integration.application.version>0.0.1-SNAPSHOT</integration.application.version>
+    <integration.domain.version>0.0.1-SNAPSHOT</integration.domain.version>
+    <integration.repository.version>0.0.1-SNAPSHOT</integration.repository.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>common</artifactId>
+      <version>${infrastructure.common.version}</version>
+    </dependency>
+  </dependencies>
+
+  <!--聚合子模块-->
+  <modules>
+    <module>api-rest</module>
+    <module>api-rpc</module>
+    <module>application</module>
+    <module>constant</module>
+    <module>configuration</module>
+    <module>controller</module>
+    <module>domain</module>
+    <module>repository</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

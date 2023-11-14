@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package oceanstars.message.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.message.api.rpc.v1.dto";
+
+// 消息发布命令实体
+message MessagePublishCommand {
+  // 消息类型
+  string                    type        = 1;
+  // 消息内容
+  bytes                     content     = 2;
+  // 消息源类型：聚合对象类型
+  string                    source_type = 3;
+  // 消息源ID：聚合对象ID
+  string                    source_id   = 4;
+  // 消息发生时间
+  google.protobuf.Timestamp occurred_on = 5;
+
+}
+
+// 消息发布返回结果实体
+message MessagePublishResult {
+  // 消息唯一识别符（自然主键）
+  string identifier = 1;
+}

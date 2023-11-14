@@ -1,0 +1,39 @@
+spring:
+  kafka:
+    bootstrap-servers: kafka-1:19092,kafka-2:29092,kafka-3:39092
+    listener:
+      concurrency: 3
+      poll-timeout: 3000
+    producer:
+      key-serializer: oceanstars.ecommerce.infrastructure.kafka.serialization.ProtobufSerializer
+      value-serializer: oceanstars.ecommerce.infrastructure.kafka.serialization.ProtobufSerializer
+    consumer:
+      key-deserializer: oceanstars.ecommerce.infrastructure.kafka.serialization.ProtobufDeserializer
+      value-deserializer: oceanstars.ecommerce.infrastructure.kafka.serialization.ProtobufDeserializer
+oceanstars:
+  kafka:
+    topics:
+      - name: oceanstars.notification.user.resource-type.created
+        partitions: 1
+        replicas: 1
+        compact: true
+        replicasAssignments:
+          0:
+            - 0
+            - 1
+          1:
+            - 2
+            - 3
+        configs: { "segment.bytes": "0" ,"segment.ms": "0" }
+      - name: oceanstars.notification.user.role.created
+        partitions: 1
+        replicas: 1
+        compact: false
+        replicasAssignments:
+          0:
+            - 0
+            - 1
+          1:
+            - 2
+            - 3
+        configs: { "segment.bytes": "0" ,"segment.ms": "0" }

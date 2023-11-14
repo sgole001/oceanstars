@@ -1,9 +1,10 @@
 package oceanstars.ecommerce.infrastructure.jooq.listener;
 
 import java.io.Serial;
+import java.util.Objects;
 import org.jooq.ExecuteContext;
+import org.jooq.ExecuteListener;
 import org.jooq.SQLDialect;
-import org.jooq.impl.DefaultExecuteListener;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 
@@ -14,7 +15,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
  * @version 1.0.0
  * @since 2021/11/4 2:01 下午
  */
-public class ExceptionTranslator extends DefaultExecuteListener {
+public class ExceptionTranslator implements ExecuteListener {
 
   @Serial
   private static final long serialVersionUID = 4370839189184446301L;
@@ -25,6 +26,6 @@ public class ExceptionTranslator extends DefaultExecuteListener {
   public void exception(ExecuteContext context) {
     SQLDialect dialect = context.configuration().dialect();
     SQLExceptionTranslator translator = new SQLErrorCodeSQLExceptionTranslator(dialect.name());
-    context.exception(translator.translate(TRANSLATE_TASK, context.sql(), context.sqlException()));
+    context.exception(translator.translate(TRANSLATE_TASK, context.sql(), Objects.requireNonNull(context.sqlException())));
   }
 }

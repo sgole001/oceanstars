@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.common.tools;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.time.LocalDateTime;
@@ -15,6 +15,12 @@ import oceanstars.ecommerce.common.data.databind.gson.LocalDateTimeSerializer;
  * @since 2021/11/3 5:58 下午
  */
 public class JsonUtil {
+
+  /**
+   * Add a private constructor to hide the implicit public one.
+   */
+  private JsonUtil() {
+  }
 
   /**
    * 解析JSON字符串转换为POJO对象

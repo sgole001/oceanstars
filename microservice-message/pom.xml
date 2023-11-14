@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>oceanstars-ecommerce</groupId>
+    <artifactId>infrastructure</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>message</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>message</name>
+  <description>message project for oceanstars bz platform</description>
+
+  <properties>
+    <message.version>0.0.1-SNAPSHOT</message.version>
+    <message.api.rest.version>0.0.1-SNAPSHOT</message.api.rest.version>
+    <message.api.rpc.version>0.0.1-SNAPSHOT</message.api.rpc.version>
+    <message.constant.version>0.0.1-SNAPSHOT</message.constant.version>
+    <message.configuration.version>0.0.1-SNAPSHOT</message.configuration.version>
+    <message.controller.version>0.0.1-SNAPSHOT</message.controller.version>
+    <message.application.version>0.0.1-SNAPSHOT</message.application.version>
+    <message.domain.version>0.0.1-SNAPSHOT</message.domain.version>
+    <message.repository.version>0.0.1-SNAPSHOT</message.repository.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>common</artifactId>
+      <version>${infrastructure.common.version}</version>
+    </dependency>
+  </dependencies>
+
+  <!--聚合子模块-->
+  <modules>
+    <module>api-rest</module>
+    <module>api-rpc</module>
+    <module>constant</module>
+    <module>configuration</module>
+    <module>controller</module>
+    <module>application</module>
+    <module>domain</module>
+    <module>repository</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

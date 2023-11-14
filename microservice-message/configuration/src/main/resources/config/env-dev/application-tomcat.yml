@@ -1,0 +1,93 @@
+server:
+  tomcat:
+    # 当所有可能的请求处理线程都在使用时，传入连接请求的最大队列长度。
+    accept-count:
+    accesslog:
+      # 是否缓冲输出，使其仅定期刷新
+      #      buffered: true
+      # 是否检查日志文件是否存在，以便在外部进程重命名它时可以重新创建它
+      #      check-exists: false
+      # 是否仅在以下情况下启用请求的日志记录“ServletRequest.getAttribute（conditionIf）“不产生null
+      #      condition-if:
+      # 是否仅在以下情况下启用请求的日志记录“ServletRequest.getAttribute（conditionexcel）“产生空值
+      #      condition-unless:
+      # 在其中创建日志文件的目录。可以是绝对的，也可以是相对于Tomcat基目录的。
+      directory: logs
+      # 启用访问日志
+      enabled: false
+      # 日志文件使用的字符集。默认为系统默认字符集
+      encoding: UTF-8
+      # 要放入日志文件名中的日期格式
+      file-date-format: .yyyy-MM-dd
+      # 是否使用RFC5952定义的IPv6规范表示格式
+      #      ipv6-canonical: false
+      # 用于格式化日志项和日志文件名后缀中的时间戳的区域设置。默认为Java进程的默认区域设置
+      #      locale:
+      # 删除访问日志文件之前保留这些文件的天数
+      max-days: -1
+      # 访问日志的格式模式
+      pattern: common
+      # 日志文件名前缀
+      prefix: access_log
+      # 是否将文件名中的日期戳推迟到旋转时间
+      #      rename-on-rotate: false
+      # 设置用于请求的IP地址、主机名、协议和端口的请求属性
+      #      request-attributes-enabled: false
+      # 是否启用访问日志轮换
+      #      rotate: true
+      # 日志文件名后缀
+      suffix: .log
+    # 逗号分隔的其他模式列表，这些模式与TLD扫描时要忽略的jar匹配。特别的“？”和“*”字符可用于模式中，以分别匹配一个字符和零个或多个字符。
+    #    additional-tld-skip-patterns:
+    # 调用backgroundProcess方法之间的延迟。如果未指定持续时间后缀，将使用秒。
+    #    background-processor-delay: 10s
+    # Tomcat基本目录。如果未指定，则使用临时目录。
+    basedir: ./log/
+    # 连接器在接受连接后等待请求URI行出现的时间量。
+    connection-timeout: 10000
+    # 服务器在任何给定时间接受和处理的最大连接数。一旦达到限制，操作系统仍然可以接受基于“acceptCount”属性的连接。
+    max-connections: 8192
+    # 任何httppost请求中表单内容的最大大小。
+    #    max-http-form-post-size: 2MB
+    # 请求Body最大吞咽量。
+    #    max-swallow-size: 2MB
+    #    mbeanregistry:
+    # 是否应启用Tomcat的MBean注册表。
+    #      enabled: false
+    # 将保留在缓存中并与后续请求一起重用的最大空闲处理器数。当设置为-1时，缓存将不受限制，理论最大大小等于最大连接数。
+    #    processor-cache: 200
+    # 是否应通过将/附加到路径来重定向对上下文根的请求。使用在代理上终止的SSL时，此属性应设置为false。
+    #    redirect-context-root: true
+    # URI路径中应允许的其他未编码字符的逗号分隔列表。只允许“<>[\]^{|}”。
+    #    relaxed-path-chars:
+    # URI查询字符串中应允许的其他未编码字符的逗号分隔列表。只允许“<>[\]^{|}”。
+    #    relaxed-query-chars:
+    #    remoteip:
+    # 从中提取远程主机的HTTP标头的名称。
+    #      host-header: X-Forwarded-Host
+    # 匹配要信任的代理的正则表达式。
+    #      internal-proxies: 10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3}|169\\.254\\.\\d{1,3}\\.\\d{1,3}|127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.1[6-9]{1}\\.\\d{1,3}\\.\\d{1,3}|172\\.2[0-9]{1}\\.\\d{1,3}\\.\\d{1,3}|172\\.3[0-1]{1}\\.\\d{1,3}\\.\\d{1,3}|0:0:0:0:0:0:0:1|::1
+    # 用于重写原始端口值的HTTP标头的名称。
+    #      port-header: X-Forwarded-Port
+    # 包含传入协议的头，通常命名为“X-Forwarded-Proto”。
+    #      protocol-header:
+    # 指示传入请求是否使用SSL的协议头的值。
+    #      protocol-header-https-value: https
+    # 从中提取远程IP的HTTP标头的名称。例如，“X-FORWARDED-For”。
+    #      remote-ip-header:
+    #    resource:
+    # 此web应用程序是否允许静态资源缓存。
+    #      allow-caching: true
+    # 静态资源缓存的生存时间。
+    #      cache-ttl:
+    threads:
+      # 工作线程的最大数量。
+      max: 200
+      # 工作线程的最小数量。
+      min-spare: 50
+    # 用于解码URI的字符编码。
+    uri-encoding: UTF-8
+    # 调用sendRedirect生成的HTTP1.1和更高版本的位置标头将使用相对重定向还是绝对重定向。
+#    use-relative-redirects: false
+
+

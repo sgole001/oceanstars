@@ -1,12 +1,12 @@
 package oceanstars.ecommerce.common.tools;
 
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.StringJoiner;
 import java.util.UUID;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import oceanstars.ecommerce.common.constant.CommonConstant;
 import oceanstars.ecommerce.common.session.Sessions;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,14 @@ public class ServletUtil {
   /**
    * 日志管理器
    */
-  private static Logger logger = LogManager.getLogger(ServletUtil.class.getName());
+  private static final Logger logger = LogManager.getLogger(ServletUtil.class.getName());
+
+  /**
+   * 工具类显示声明私有构造函数
+   */
+  private ServletUtil() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * 获取当前HttpServletRequest对象信息
@@ -129,49 +136,49 @@ public class ServletUtil {
    *
    * @return 远程调用IP地址
    */
-  public static String getRemoteIPAddress() {
+  public static String getRemoteIpAddress() {
 
     // 获取当前HttpServletRequest对象信息
     HttpServletRequest servletRequest = getHttpServletRequest();
 
     // 根据X-Forwarded-For（XFF）获取IP地址（通过HTTP代理或负载均衡方式连接）
-    String remoteIPAddress = null;
+    String remoteIpAddress = null;
     if (servletRequest != null) {
-      remoteIPAddress = servletRequest.getHeader("x-forwarded-for");
+      remoteIpAddress = servletRequest.getHeader("x-forwarded-for");
     }
 
-    if (StringUtils.isNotBlank(remoteIPAddress)) {
+    if (StringUtils.isNotBlank(remoteIpAddress)) {
       // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
       // 格式：X-Forwarded-For: client1, proxy1, proxy2, proxy3
-      String[] ips = remoteIPAddress.split(",");
-      remoteIPAddress = ips[0];
+      String[] ips = remoteIpAddress.split(",");
+      remoteIpAddress = ips[0];
     }
 
     // 在apache+WebLogic整合系统中，apache会对request对象进行再包装，附加一些WLS要用的头信息
     // 代理客服端IP
-    if (StringUtils.isBlank(remoteIPAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIPAddress)) {
-      remoteIPAddress = null != servletRequest ? servletRequest.getHeader("Proxy-Client-IP") : null;
+    if (StringUtils.isBlank(remoteIpAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIpAddress)) {
+      remoteIpAddress = null != servletRequest ? servletRequest.getHeader("Proxy-Client-IP") : null;
     }
     // WebLogic代理客服端IP（webLogic设置了才会有这个参数）
-    if (StringUtils.isBlank(remoteIPAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIPAddress)) {
-      remoteIPAddress = null != servletRequest ? servletRequest.getHeader("WL-Proxy-Client-IP") : null;
+    if (StringUtils.isBlank(remoteIpAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIpAddress)) {
+      remoteIpAddress = null != servletRequest ? servletRequest.getHeader("WL-Proxy-Client-IP") : null;
     }
 
     // 没有代理的情况
-    if (StringUtils.isBlank(remoteIPAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIPAddress)) {
-      remoteIPAddress = null != servletRequest ? servletRequest.getRemoteAddr() : null;
+    if (StringUtils.isBlank(remoteIpAddress) || CommonConstant.SQUID_OFF_IP_ADDRESS.equalsIgnoreCase(remoteIpAddress)) {
+      remoteIpAddress = null != servletRequest ? servletRequest.getRemoteAddr() : null;
 
-      if (CommonConstant.LOOPBACK_IP_ADDRESS.equalsIgnoreCase(remoteIPAddress)) {
+      if (CommonConstant.LOOPBACK_IP_ADDRESS.equalsIgnoreCase(remoteIpAddress)) {
         try {
           // 根据网卡取本机配置的IP
-          remoteIPAddress = InetAddress.getLocalHost().getHostAddress();
+          remoteIpAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
           logger.error(e);
         }
       }
     }
 
-    return remoteIPAddress;
+    return remoteIpAddress;
   }
 
   /**

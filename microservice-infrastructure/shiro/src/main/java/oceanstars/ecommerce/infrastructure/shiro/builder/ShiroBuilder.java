@@ -1,8 +1,8 @@
 package oceanstars.ecommerce.infrastructure.shiro.builder;
 
+import jakarta.servlet.Filter;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.Filter;
 import org.apache.shiro.realm.Realm;
 
 /**

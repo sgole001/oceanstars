@@ -1,14 +1,15 @@
 package oceanstars.ecommerce.infrastructure.shiro.builder.impl;
 
+import jakarta.servlet.Filter;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.Filter;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.infrastructure.shiro.builder.ShiroBuilder;
-import oceanstars.ecommerce.infrastructure.shiro.constant.ShiroConstant;
+import oceanstars.ecommerce.infrastructure.shiro.constant.ShiroMessageConstant;
 import oceanstars.ecommerce.infrastructure.shiro.filter.HttpRequestFilter;
-import oceanstars.ecommerce.infrastructure.shiro.filter.MarriottShiroFilterFactoryBean;
+import oceanstars.ecommerce.infrastructure.shiro.filter.OceanStarsShiroFilterFactoryBean;
 import oceanstars.ecommerce.infrastructure.shiro.filter.RestInvalidRequestFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -86,7 +87,7 @@ public class DefaultShiroBuilder implements ShiroBuilder {
    */
   @Override
   public Map<String, String> buildFilterChain() {
-    return null;
+    return Collections.emptyMap();
   }
 
   @Override
@@ -96,13 +97,13 @@ public class DefaultShiroBuilder implements ShiroBuilder {
       // 构建Shiro过滤对象链
       final Map<String, String> filterChains = this.buildFilterChain();
       // 获取Shiro过滤服务配置接口
-      final MarriottShiroFilterFactoryBean shiroFilterFactoryBean = ApplicationContextProvider.getBean(
-          MarriottShiroFilterFactoryBean.class);
+      final OceanStarsShiroFilterFactoryBean shiroFilterFactoryBean = ApplicationContextProvider.getBean(
+          OceanStarsShiroFilterFactoryBean.class);
       // 获取Shiro过滤器对象
       AbstractShiroFilter shiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean.getObject();
       // 重载Shiro拦截链信息发生异常，未能获取Shiro拦截器对象！
       if (null == shiroFilter) {
-        logger.error(ShiroConstant.MSG_SHIRO_SYS_00001);
+        logger.error(ShiroMessageConstant.MSG_SHIRO_SYS_00001);
         return;
       }
 
@@ -124,7 +125,7 @@ public class DefaultShiroBuilder implements ShiroBuilder {
       manager.createDefaultChain("/**");
 
     } catch (Exception e) {
-      logger.error(ShiroConstant.MSG_SHIRO_SYS_00002, e);
+      logger.error(ShiroMessageConstant.MSG_SHIRO_SYS_00002, e);
     }
   }
 }

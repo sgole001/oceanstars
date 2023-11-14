@@ -7,6 +7,7 @@ import io.grpc.Server;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.SmartLifecycle;
@@ -102,7 +103,8 @@ public class GrpcServerLifecycle implements SmartLifecycle {
         this.server.start();
 
         // 记录启动成功日志
-        logger.info(MessageFormat.format("*** gRPC服务器启动完成，正在监听:{0}:{1}", this.factory.getAddress(), this.factory.getPort()));
+        logger.log(Level.INFO,
+            () -> MessageFormat.format("*** gRPC服务器启动完成，正在监听:{0}:{1}", this.factory.getAddress(), this.factory.getPort()));
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
           @Override

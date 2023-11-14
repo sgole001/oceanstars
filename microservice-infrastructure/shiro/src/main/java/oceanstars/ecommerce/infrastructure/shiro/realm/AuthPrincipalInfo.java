@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.infrastructure.shiro.realm;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ import java.util.Set;
  */
 public class AuthPrincipalInfo implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = 2791371181471703671L;
   /**
    * 用户ID
    */

@@ -1,0 +1,2 @@
+oceanstars.ecommerce.infrastructure.jooq.spi.DataSourceConfigurationSpi=\
+  oceanstars.ecommerce.infrastructure.jooq.spi.impl.DefaultDataSourceConfigurationSpi

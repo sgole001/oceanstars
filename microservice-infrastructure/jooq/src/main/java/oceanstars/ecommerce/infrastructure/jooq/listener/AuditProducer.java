@@ -50,19 +50,19 @@ public class AuditProducer extends DefaultRecordListener {
   public void insertStart(RecordContext recordContext) {
 
     // 获取数据类型
-    RecordType<?> recordType = recordContext.recordType();
+    final RecordType<?> recordType = recordContext.recordType();
 
     // 获取审计字段创建时间字段
-    Field<LocalDateTime> fieldCreateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_CREATE_AT);
+    final Field<LocalDateTime> fieldCreateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_CREATE_AT);
     // 获取审计字段创建者字段
-    Field<String> fieldCreateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_CREATE_BY);
+    final Field<String> fieldCreateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_CREATE_BY);
     // 获取审计字段更新时间字段
-    Field<LocalDateTime> fieldUpdateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_AT);
+    final Field<LocalDateTime> fieldUpdateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_AT);
     // 获取审计字段更新者字段
-    Field<String> fieldUpdateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_BY);
+    final Field<String> fieldUpdateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_BY);
 
     // 获取数据集
-    Record[] records = recordContext.batchRecords();
+    final Record[] records = recordContext.batchRecords();
 
     // 获取当前系统时间
     final LocalDateTime now = LocalDateTime.now(CommonConstant.DEFAULT_ZONE);
@@ -89,15 +89,15 @@ public class AuditProducer extends DefaultRecordListener {
   public void updateStart(RecordContext recordContext) {
 
     // 获取数据类型
-    RecordType<?> recordType = recordContext.recordType();
+    final RecordType<?> recordType = recordContext.recordType();
 
     // 获取审计字段更新时间字段
-    Field<LocalDateTime> fieldUpdateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_AT);
+    final Field<LocalDateTime> fieldUpdateAt = (Field<LocalDateTime>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_AT);
     // 获取审计字段更新者字段
-    Field<String> fieldUpdateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_BY);
+    final Field<String> fieldUpdateBy = (Field<String>) recordType.field(COLUMN_NAME_AUDIT_UPDATE_BY);
 
     // 获取数据集
-    Record[] records = recordContext.batchRecords();
+    final Record[] records = recordContext.batchRecords();
 
     // 获取当前系统时间
     final LocalDateTime now = LocalDateTime.now(CommonConstant.DEFAULT_ZONE);

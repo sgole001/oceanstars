@@ -1,26 +1,12 @@
 package oceanstars.ecommerce.infrastructure.kafka.configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Resource;
-import oceanstars.ecommerce.infrastructure.kafka.interceptor.Consumer4SessionInterceptor;
-import oceanstars.ecommerce.infrastructure.kafka.interceptor.Producer4SessionInterceptor;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
+import oceanstars.ecommerce.infrastructure.kafka.interceptor.Record4SessionInterceptor;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.RecordInterceptor;
 
 /**
  * kafka配置信息
@@ -30,128 +16,72 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
  * @since 2021/11/3 11:55 下午
  */
 @EnableKafka
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({KafkaProperties.class})
 public class KafkaConfig {
 
-  /**
-   * 消息生产者配置信息
-   */
-  @Resource(name = "kafkaProducerConfig")
-  private KafkaProducerConfigBean producerConfigBean;
-
-  /**
-   * 消息消费者配置信息
-   */
-  @Resource(name = "kafkaConsumerConfig")
-  private KafkaConsumerConfigBean consumerConfigBean;
-
-  /**
-   * Admin配置信息Bean
-   */
-  @Resource(name = "kafkaAdminConfig")
-  private KafkaAdminConfigBean adminConfigBean;
-
-  /**
-   * 构建消息管理配置
-   *
-   * @return 消息管理配置
-   */
-  @Bean(name = "kafkaAdminConfigs")
-  public Map<String, Object> adminConfigs() {
-
-    Map<String, Object> configs = new HashMap<>(1);
-    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, adminConfigBean.getBootstrapServers());
-
-    return configs;
-  }
-
-  /**
-   * 构建消息生产者工厂类
-   *
-   * @return 消息生产者工厂类
-   * @throws Exception 构建异常
-   */
-  @Bean
-  public ProducerFactory<Integer, String> producerFactory() throws Exception {
-    return new DefaultKafkaProducerFactory<>(this.producerConfigs());
-  }
-
-  /**
-   * 构建消息生产者配置信息
-   *
-   * @return 消息生产者配置信息
-   * @throws Exception 构建异常
-   */
-  @Bean
-  public Map<String, Object> producerConfigs() throws Exception {
-    Map<String, Object> props = new HashMap<>();
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerConfigBean.getBootstrapServers());
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.forName(producerConfigBean.getKeySerializer()));
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(producerConfigBean.getValueSerializer()));
-    // 生产端拦截器
-    List<String> interceptors = new ArrayList<>();
-    interceptors.add(Producer4SessionInterceptor.class.getName());
-    props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
-    // See https://kafka.apache.org/documentation/#producerconfigs for more properties
-    return props;
-  }
-
-  /**
-   * 构建消息发送模板对象
-   *
-   * @return 消息发送模板对象
-   * @throws Exception 构建异常
-   */
-  @Bean
-  public KafkaTemplate<Integer, String> kafkaTemplate() throws Exception {
-    return new KafkaTemplate<>(this.producerFactory());
-  }
-
-  /**
-   * 构建消息监听容器工厂对象
-   *
-   * @return 消息监听容器工厂对象
-   * @throws Exception 构建异常
-   */
-  @Bean
-  KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Integer, String>> kafkaListenerContainerFactory() throws Exception {
-    ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(this.consumerFactory());
-    factory.setConcurrency(consumerConfigBean.getConcurrency());
-    factory.getContainerProperties().setPollTimeout(consumerConfigBean.getPollTimeout());
-    factory.setRecordInterceptor(new Consumer4SessionInterceptor<>());
-    return factory;
-  }
-
-  /**
-   * 构建消息消费者工厂类
-   *
-   * @return 消息消费者工厂类
-   * @throws Exception 构建异常
-   */
-  @Bean
-  public ConsumerFactory<Integer, String> consumerFactory() throws Exception {
-    return new DefaultKafkaConsumerFactory<>(this.consumerConfigs());
-  }
-
-  /**
-   * 构建消息消费者配置信息
-   *
-   * @return 消息消费者配置信息
-   * @throws Exception 构建异常
-   */
-  @Bean
-  public Map<String, Object> consumerConfigs() throws Exception {
-    Map<String, Object> props = new HashMap<>();
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigBean.getBootstrapServers());
-    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, Class.forName(consumerConfigBean.getKeyDeserializer()));
-    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, Class.forName(consumerConfigBean.getValueDeserializer()));
-    // See https://kafka.apache.org/documentation/#consumerconfigs for more properties
-    return props;
-  }
-
-//  @Override
-//  public void configureKafkaListeners(KafkaListenerEndpointRegistrar kafkaListenerEndpointRegistrar) {
-//    kafkaListenerEndpointRegistrar.setValidator(this.validator);
+//  /**
+//   * Spring Kafka自动配置信息
+//   */
+//  private final KafkaProperties properties;
+//
+//  /**
+//   * 构造函数：初始化Spring Kafka自动配置信息
+//   *
+//   * @param properties Spring Kafka自动配置信息
+//   */
+//  public KafkaConfig(KafkaProperties properties) {
+//    this.properties = properties;
 //  }
+
+  @Bean
+  public RecordInterceptor<Object, Object> recordInterceptor() {
+    return new Record4SessionInterceptor<>();
+  }
+
+//  /**
+//   * 构建消息生产者工厂类
+//   *
+//   * @param customizers 生产者工厂配置类
+//   * @return 生产者工厂对象
+//   */
+//  @Bean
+//  public ProducerFactory<Object, Object> kafkaProducerFactory(ObjectProvider<DefaultKafkaProducerFactoryCustomizer> customizers) {
+//
+//    // 构建Kafka消息生产者配置信息
+//    final Map<String, Object> configs = this.properties.buildProducerProperties();
+//    // 生产端拦截器
+//    final List<String> interceptors = new ArrayList<>();
+//    interceptors.add(Producer4SessionInterceptor.class.getName());
+//    configs.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
+//
+//    // 初始化创建Kafka消息生产者工厂对象
+//    final DefaultKafkaProducerFactory<Object, Object> factory = new DefaultKafkaProducerFactory<>(configs);
+//    // 事务前缀设定
+//    String transactionIdPrefix = this.properties.getProducer().getTransactionIdPrefix();
+//    if (transactionIdPrefix != null) {
+//      factory.setTransactionIdPrefix(transactionIdPrefix);
+//    }
+//
+//    // 根据生产者工厂配置类配置Kafka消息生产者工厂对象
+//    customizers.orderedStream().forEach(customizer -> customizer.customize(factory));
+//
+//    return factory;
+//  }
+//
+//  @Bean
+//  public ConsumerFactory<Object, Object> kafkaConsumerFactory(ObjectProvider<DefaultKafkaConsumerFactoryCustomizer> customizers) {
+//
+//    // 构建Kafka消息消费者配置信息
+//    final Map<String, Object> configs = this.properties.buildConsumerProperties();
+//    // 消费端拦截器
+//    final List<String> interceptors = new ArrayList<>();
+//    interceptors.add(Consumer4AckInterceptor.class.getName());
+//    configs.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
+//
+//    final DefaultKafkaConsumerFactory<Object, Object> factory = new DefaultKafkaConsumerFactory<>(configs);
+//    customizers.orderedStream().forEach(customizer -> customizer.customize(factory));
+//    return factory;
+//  }
+
 }

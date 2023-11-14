@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package oceanstars.message.protobuf;
+
+import "message-dto.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.message.api.rpc.v1.service";
+
+service MessageAppService {
+
+  // 消息发送接口
+  rpc publish(MessagePublishCommand) returns (MessagePublishResult);
+}
+

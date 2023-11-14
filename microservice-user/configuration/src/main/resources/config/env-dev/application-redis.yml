@@ -1,0 +1,14 @@
+redis:
+  configuration: default,session
+default:
+  redis:
+    host: localhost
+    password: msscn!123
+    port: 6379
+    database: 2
+session:
+  redis:
+    host: localhost
+    password: msscn!123
+    port: 6379
+    database: 1

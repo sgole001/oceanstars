@@ -1,0 +1,12 @@
+xxl:
+  job:
+    admin:
+      addresses: http://xxl-service.marriott-middleware-xxl.svc.cluster.local:8080/xxl-job-admin
+    accessToken:
+    executor:
+      appname: marriott-message-service
+      address:
+      ip: ${POD_IP}
+      port: 10001
+      logpath: /
+      logretentiondays: 30

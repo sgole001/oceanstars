@@ -27,12 +27,12 @@ public interface RedisEnum {
     /**
      * 枚举编号
      */
-    Integer code;
+    final Integer code;
 
     /**
      * 枚举显示名
      */
-    String name;
+    final String name;
 
     /**
      * 构造函数

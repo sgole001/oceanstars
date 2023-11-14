@@ -26,7 +26,7 @@ import org.springframework.util.CollectionUtils;
  * @version 1.0.0
  * @since 2021/11/3 4:56 下午
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MessageSourceConfig {
 
   /**
@@ -71,8 +71,7 @@ public class MessageSourceConfig {
 
     try {
       // 资源加载
-      Resource[] resources = pathMatchingResourcePatternResolver
-          .getResources("classpath*:/i18n/**/messages**");
+      Resource[] resources = pathMatchingResourcePatternResolver.getResources("classpath*:/i18n/**/messages**");
       // 资源路径
       String resourcePath;
 

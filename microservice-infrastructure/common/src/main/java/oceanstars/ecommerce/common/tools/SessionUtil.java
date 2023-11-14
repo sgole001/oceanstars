@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.common.tools;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import oceanstars.ecommerce.common.session.SessionThreadLocal;
 import oceanstars.ecommerce.common.session.Sessions;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +19,13 @@ public class SessionUtil {
    * 日志管理器
    */
   private static Logger logger = LogManager.getLogger(SessionUtil.class.getName());
+
+  /**
+   * 构造函数：私有化，显式表示静态工具类
+   */
+  private SessionUtil() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * 获取Session信息

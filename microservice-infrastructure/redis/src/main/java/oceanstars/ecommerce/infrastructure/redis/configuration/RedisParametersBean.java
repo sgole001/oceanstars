@@ -1,5 +1,9 @@
 package oceanstars.ecommerce.infrastructure.redis.configuration;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import org.springframework.boot.convert.DurationUnit;
+
 /**
  * Redis参数配置Bean
  *
@@ -42,7 +46,8 @@ public class RedisParametersBean {
   /**
    * spring.redis.timeout:3000
    */
-  private Long timeout;
+  @DurationUnit(ChronoUnit.MILLIS)
+  private Duration timeout = Duration.ofMillis(3000);
 
   /**
    * spring.redis.maxIdle:300
@@ -116,11 +121,11 @@ public class RedisParametersBean {
     this.password = password;
   }
 
-  public Long getTimeout() {
+  public Duration getTimeout() {
     return timeout;
   }
 
-  public void setTimeout(Long timeout) {
+  public void setTimeout(Duration timeout) {
     this.timeout = timeout;
   }
 

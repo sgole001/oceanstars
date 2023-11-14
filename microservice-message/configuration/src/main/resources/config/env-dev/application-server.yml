@@ -1,0 +1,11 @@
+server:
+  port: 28080
+  servlet:
+    context-path: /api-message
+  # 在web容器关闭时，web服务器将不再接收新请求，并将等待活动请求完成的缓冲期。默认为立即关闭。
+  shutdown: graceful
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

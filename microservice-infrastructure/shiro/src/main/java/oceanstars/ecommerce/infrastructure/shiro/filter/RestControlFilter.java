@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.infrastructure.shiro.filter;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import oceanstars.ecommerce.common.tools.ServletUtil;
 import oceanstars.ecommerce.infrastructure.shiro.constant.ShiroConstant;
 import org.apache.commons.lang3.StringUtils;

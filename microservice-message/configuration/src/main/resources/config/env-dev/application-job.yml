@@ -1,0 +1,12 @@
+xxl:
+  job:
+    admin:
+      addresses: http://localhost:29090/xxl-job-admin
+    accessToken:
+    executor:
+      appname: marriott-message-service
+      address:
+      ip: host.docker.internal
+      port: 10001
+      logpath: /Users/lingliyi/Documents/mystudio/project/demo/docker/xxl/applogs/xxl-job/jobhandler
+      logretentiondays: 30

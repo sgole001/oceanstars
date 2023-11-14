@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package oceanstars.user.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto";
+
+// 资源数据获取链接实体
+message ResourceLink {
+  // 资源数据API路径
+  string href   = 1;
+  // 资源数据API的HTTP请求方法
+  string method = 2;
+  // 资源数据PI的HTTP请求Body(JSON字符串)
+  string body   = 3;
+}
+
+// 创建资源类型命令实体
+message CreateResourceTypeCommand {
+  // 资源类型名
+  string       name = 1;
+  // 资源类型功能说明
+  string       desc = 2;
+  // 资源数据获取链接
+  ResourceLink link = 3;
+}
+
+// 消息发布返回结果实体
+message CreateResourceTypeResult {
+  // 消息唯一识别符（自然主键）
+  string identifier = 1;
+}

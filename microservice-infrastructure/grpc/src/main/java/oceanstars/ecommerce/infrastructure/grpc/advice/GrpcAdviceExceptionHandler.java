@@ -67,7 +67,7 @@ public class GrpcAdviceExceptionHandler implements GrpcExceptionResponseHandler 
         errorWhileResolving.addSuppressed(error);
       }
       // 处理因调用处理异常的方法时发生的异常
-      handleThrownExceptionByImplementation(serverCall, errorWhileResolving);
+      this.handleThrownExceptionByImplementation(serverCall, errorWhileResolving);
     }
   }
 
@@ -113,17 +113,18 @@ public class GrpcAdviceExceptionHandler implements GrpcExceptionResponseHandler 
   protected Status resolveStatus(final Object mappedReturnType) {
 
     // 异常处理返回结果类型为Status，转换异常处理返回结果为Status类型并返回
-    if (mappedReturnType instanceof Status) {
-      return (Status) mappedReturnType;
+    if (mappedReturnType instanceof Status status) {
+      return status;
     }
     // 异常处理返回结果类型为Throwable, 从结果中提取Status信息并返回
-    else if (mappedReturnType instanceof Throwable) {
-      return Status.fromThrowable((Throwable) mappedReturnType);
+    else if (mappedReturnType instanceof Throwable throwable) {
+      return Status.fromThrowable(throwable);
     }
 
     // 返回结果类型错误，异常抛出
     throw new IllegalStateException(
-        MessageFormat.format("在@GrpcAdvice内的异常处理返回结果是[{0}],其类型必须是[Status, StatusException, StatusRuntimeException, Throwable]", mappedReturnType));
+        MessageFormat.format("在@GrpcAdvice内的异常处理返回结果是[{0}],其类型必须是[Status, StatusException, StatusRuntimeException, Throwable]",
+            mappedReturnType));
   }
 
   /**

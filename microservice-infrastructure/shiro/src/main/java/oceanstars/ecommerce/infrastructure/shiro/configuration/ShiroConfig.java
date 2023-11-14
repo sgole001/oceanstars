@@ -1,10 +1,10 @@
 package oceanstars.ecommerce.infrastructure.shiro.configuration;
 
 import java.util.List;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import oceanstars.ecommerce.infrastructure.shiro.builder.ShiroBuilder;
 import oceanstars.ecommerce.infrastructure.shiro.filter.JwtSubjectFactory;
-import oceanstars.ecommerce.infrastructure.shiro.filter.MarriottShiroFilterFactoryBean;
+import oceanstars.ecommerce.infrastructure.shiro.filter.OceanStarsShiroFilterFactoryBean;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -39,7 +39,7 @@ public class ShiroConfig {
   public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 
     // 1.定义shiroFactoryBean
-    MarriottShiroFilterFactoryBean shiroFilterFactoryBean = new MarriottShiroFilterFactoryBean();
+    OceanStarsShiroFilterFactoryBean shiroFilterFactoryBean = new OceanStarsShiroFilterFactoryBean();
     // 2.设置securityManager
     shiroFilterFactoryBean.setSecurityManager(securityManager);
     // 3.拦截器配置

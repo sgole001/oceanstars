@@ -1,0 +1,10 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /api-user
+  shutdown: graceful
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

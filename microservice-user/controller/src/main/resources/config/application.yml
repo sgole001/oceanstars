@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: user-service
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    include: server,redis,druid,kafka,cache

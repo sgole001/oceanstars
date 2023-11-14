@@ -30,6 +30,7 @@ public class RedisUtil {
   private RedisTemplate<String, Object> redisTemplate;
 
   private RedisUtil() {
+    throw new IllegalStateException("Utility class");
   }
 
   /**
@@ -59,8 +60,8 @@ public class RedisUtil {
     // 创建工具类实例
     RedisUtil redisUtil = new RedisUtil();
     // 指定RedisTemplate
-    Map<String, RedisTemplate<String, Object>> redisTemplates =
-        (Map<String, RedisTemplate<String, Object>>) ApplicationContextProvider.getBean("redisTemplates");
+    Map<String, RedisTemplate<String, Object>> redisTemplates = (Map<String, RedisTemplate<String, Object>>) ApplicationContextProvider.getBean(
+        "redisTemplates");
     redisUtil.redisTemplate = redisTemplates.get(configGroup);
 
     return redisUtil;

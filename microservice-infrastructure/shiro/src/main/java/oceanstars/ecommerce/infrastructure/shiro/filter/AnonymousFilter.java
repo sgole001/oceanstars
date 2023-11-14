@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.infrastructure.shiro.filter;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 
 /**
  * 匿名过滤器

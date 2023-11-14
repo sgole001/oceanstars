@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.infrastructure.shiro.filter;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.subject.Subject;
@@ -29,7 +29,7 @@ public class PartPermissionAuthorizationFilter extends AuthorizationFilter {
     // 权限过滤条件信息获取
     String[] perms = (String[]) mappedValue;
 
-    if (perms != null && perms.length > 0) {
+    if (null != perms) {
 
       for (String perm : perms) {
         if (subject.isPermitted(perm)) {

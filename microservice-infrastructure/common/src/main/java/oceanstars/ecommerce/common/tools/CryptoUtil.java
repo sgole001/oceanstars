@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -129,15 +128,15 @@ public class CryptoUtil {
   public SecretKeySpec generateKey(String key) throws NoSuchAlgorithmException {
 
     // "AES"：请求的密钥算法的标准名称
-    KeyGenerator kgen = KeyGenerator.getInstance(this.cryptoBean.getAlgorithm());
+    KeyGenerator keyGenerator = KeyGenerator.getInstance(this.cryptoBean.getAlgorithm());
 
     // 256：密钥生成参数；secure random：密钥生成器的随机源
     SecureRandom securerandom = new SecureRandom(this.digestKey(key));
 
-    kgen.init(this.cryptoBean.getKeyDigit(), securerandom);
+    keyGenerator.init(this.cryptoBean.getKeyDigit(), securerandom);
 
     // 生成秘密（对称）密钥
-    SecretKey secretKey = kgen.generateKey();
+    SecretKey secretKey = keyGenerator.generateKey();
 
     // 返回基本编码格式的密钥
     byte[] enCodeFormat = secretKey.getEncoded();

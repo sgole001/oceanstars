@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.common.exception;
 
 import java.io.Serial;
+import oceanstars.ecommerce.common.constant.IEnum;
 
 /**
  * 数据库异常类
@@ -28,6 +29,22 @@ public class DBException extends BaseException {
 
   public DBException(String errorCode) {
     super(errorCode);
+  }
+
+  public DBException(IEnum<String, String, ?> errorCode, Object... params) {
+    super(errorCode.key(), params);
+  }
+
+  public DBException(IEnum<String, String, ?> errorCode, Throwable cause, Object... params) {
+    super(errorCode.key(), cause, params);
+  }
+
+  public DBException(IEnum<String, String, ?> errorCode, Throwable cause) {
+    super(errorCode.key(), cause);
+  }
+
+  public DBException(IEnum<String, String, ?> errorCode) {
+    super(errorCode.key());
   }
 
   public DBException(Throwable cause) {

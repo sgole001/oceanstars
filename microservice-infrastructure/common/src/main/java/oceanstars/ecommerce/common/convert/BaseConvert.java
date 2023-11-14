@@ -2,7 +2,7 @@ package oceanstars.ecommerce.common.convert;
 
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.BaseEntity;
+import oceanstars.ecommerce.common.domain.EntityDelegator;
 import oceanstars.ecommerce.common.dto.BaseDto;
 import oceanstars.ecommerce.common.exception.SystemException;
 
@@ -13,7 +13,7 @@ import oceanstars.ecommerce.common.exception.SystemException;
  * @version 1.0.0
  * @since 2021/11/3 3:36 下午
  */
-public abstract class BaseConvert<D extends BaseDto, E extends BaseEntity> implements Convert<D, E> {
+public abstract class BaseConvert<D extends BaseDto, E extends EntityDelegator> implements Convert<D, E> {
 
   @Serial
   private static final long serialVersionUID = 398623324319968209L;
@@ -45,11 +45,11 @@ public abstract class BaseConvert<D extends BaseDto, E extends BaseEntity> imple
       // 初始化实体对象
       final E entity = this.entityType().getDeclaredConstructor().newInstance();
 
-      entity.setId(dto.getId());
-      entity.setCreateAt(dto.getCreateAt());
-      entity.setCreateBy(dto.getCreateBy());
-      entity.setUpdateAt(dto.getUpdateAt());
-      entity.setUpdateBy(dto.getUpdateBy());
+//      entity.setId(dto.getId());
+//      entity.setCreateAt(dto.getCreateAt());
+//      entity.setCreateBy(dto.getCreateBy());
+//      entity.setUpdateAt(dto.getUpdateAt());
+//      entity.setUpdateBy(dto.getUpdateBy());
 
       return entity;
 

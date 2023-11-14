@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.infrastructure.shiro.token;
 
+import java.io.Serial;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**
@@ -11,6 +12,8 @@ import org.apache.shiro.authc.AuthenticationToken;
  */
 public class JwtAuthenticationToken implements AuthenticationToken {
 
+  @Serial
+  private static final long serialVersionUID = -1951813409098969170L;
   /**
    * JWT信息
    */

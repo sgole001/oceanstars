@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.common.exception;
 
 import java.io.Serial;
+import oceanstars.ecommerce.common.constant.IEnum;
 
 /**
  * 业务异常类
@@ -28,6 +29,22 @@ public class BusinessException extends BaseException {
 
   public BusinessException(String errorCode) {
     super(errorCode);
+  }
+
+  public BusinessException(IEnum<String, String, ?> errorCode, Object... params) {
+    super(errorCode.key(), params);
+  }
+
+  public BusinessException(IEnum<String, String, ?> errorCode, Throwable cause, Object... params) {
+    super(errorCode.key(), cause, params);
+  }
+
+  public BusinessException(IEnum<String, String, ?> errorCode, Throwable cause) {
+    super(errorCode.key(), cause);
+  }
+
+  public BusinessException(IEnum<String, String, ?> errorCode) {
+    super(errorCode.key());
   }
 
   public BusinessException(Throwable cause) {

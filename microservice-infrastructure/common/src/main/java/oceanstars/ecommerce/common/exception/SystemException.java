@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.common.exception;
 
 import java.io.Serial;
+import oceanstars.ecommerce.common.constant.IEnum;
 
 /**
  * 系统异常类
@@ -28,6 +29,22 @@ public class SystemException extends BaseException {
 
   public SystemException(String errorCode) {
     super(errorCode);
+  }
+
+  public SystemException(IEnum<String, String, ?> errorCode, Object... params) {
+    super(errorCode.key(), params);
+  }
+
+  public SystemException(IEnum<String, String, ?> errorCode, Throwable cause, Object... params) {
+    super(errorCode.key(), cause, params);
+  }
+
+  public SystemException(IEnum<String, String, ?> errorCode, Throwable cause) {
+    super(errorCode.key(), cause);
+  }
+
+  public SystemException(IEnum<String, String, ?> errorCode) {
+    super(errorCode.key());
   }
 
   public SystemException(Throwable cause) {

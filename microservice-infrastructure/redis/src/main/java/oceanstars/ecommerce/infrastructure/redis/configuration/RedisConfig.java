@@ -1,7 +1,5 @@
 package oceanstars.ecommerce.infrastructure.redis.configuration;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +14,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -137,7 +136,7 @@ public class RedisConfig {
       // 创建Redis客户端配置信息
       JedisClientConfiguration jedisClientConfiguration = JedisClientConfiguration.builder().usePooling()
           .poolConfig(jedisPoolConfig).and()
-          .readTimeout(Duration.ofMillis(Optional.ofNullable(redisParametersBean.getTimeout()).orElse(3000L))).build();
+          .readTimeout(redisParametersBean.getTimeout()).build();
 
       redisConnectionFactories.put(redisParametersEntry.getKey(), new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration));
 
@@ -150,7 +149,7 @@ public class RedisConfig {
   public RedisTemplate<String, Object> redisTemplate(Map<String, JedisConnectionFactory> redisConnectionFactories) {
 
     // 使用jackson序列化替代jdk序列化
-    final FastJsonRedisSerializer<Object> redisSerializer = new FastJsonRedisSerializer<>(Object.class);
+    final GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer();
     final RedisTemplate<String, Object> template = new RedisTemplate<>();
     template.setConnectionFactory(redisConnectionFactories.get(RedisParametersBean.DEFAULT_REDIS_CONFIG));
     template.setKeySerializer(redisSerializer);
@@ -169,7 +168,7 @@ public class RedisConfig {
 
     for (Entry<String, JedisConnectionFactory> redisConnectionFactoryEntry : redisConnectionFactories.entrySet()) {
       // 使用jackson序列化替代jdk序列化
-      final FastJsonRedisSerializer<Object> redisSerializer = new FastJsonRedisSerializer<>(Object.class);
+      final GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer();
       final RedisTemplate<String, Object> template = new RedisTemplate<>();
       template.setConnectionFactory(redisConnectionFactoryEntry.getValue());
       template.setKeySerializer(redisSerializer);

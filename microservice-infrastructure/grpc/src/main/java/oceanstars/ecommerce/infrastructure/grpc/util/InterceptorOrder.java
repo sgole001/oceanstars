@@ -17,9 +17,6 @@ public final class InterceptorOrder {
   public static final int ORDER_FIRST = Ordered.HIGHEST_PRECEDENCE;
 
   /**
-   * The order value for global exception handling interceptors.
-   */
-  /**
    * 全局异常处理拦截器的顺序值
    */
   public static final int ORDER_GLOBAL_EXCEPTION_HANDLING = 0;
