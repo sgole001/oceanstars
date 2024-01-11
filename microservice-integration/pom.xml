@@ -28,14 +28,6 @@
     <integration.repository.version>0.0.1-SNAPSHOT</integration.repository.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>common</artifactId>
-      <version>${infrastructure.common.version}</version>
-    </dependency>
-  </dependencies>
-
   <!--聚合子模块-->
   <modules>
     <module>api-rest</module>

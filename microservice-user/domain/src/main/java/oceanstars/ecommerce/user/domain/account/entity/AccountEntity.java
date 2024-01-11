@@ -2,10 +2,12 @@ package oceanstars.ecommerce.user.domain.account.entity;
 
 import java.util.List;
 import oceanstars.ecommerce.common.domain.AggregateRoot;
+import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
-import oceanstars.ecommerce.user.domain.account.entity.valueobject.AccountRoleValueObject;
+import oceanstars.ecommerce.user.repository.account.IAccountRepository;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 账号实体：聚合根
@@ -74,7 +76,12 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
   /**
    * 账号角色列表
    */
-  private List<AccountRoleValueObject> roles;
+  private List<Long> roles;
+
+  /**
+   * 账号聚合仓储
+   */
+  private IAccountRepository accountRepository;
 
   /**
    * 构造函数：根据构建器初始化成员变量
@@ -95,6 +102,7 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
     status = builder.status;
     profile = builder.profile;
     roles = builder.roles;
+    accountRepository = ApplicationContextProvider.getApplicationContext().getBean(IAccountRepository.class);
   }
 
   /**
@@ -151,7 +159,7 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
     return profile;
   }
 
-  public List<AccountRoleValueObject> getRoles() {
+  public List<Long> getRoles() {
     return roles;
   }
 
@@ -191,7 +199,7 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
     this.profile = profile;
   }
 
-  public void setRoles(List<AccountRoleValueObject> roles) {
+  public void setRoles(List<Long> roles) {
     this.roles = roles;
   }
 
@@ -202,7 +210,7 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
    * @version 1.0.0
    * @since 2022/1/6 1:46 PM
    */
-  protected static final class Builder {
+  public static final class Builder {
 
     private final AccountRegisterSource source;
     private final AccountRegisterMeans means;
@@ -215,7 +223,7 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
     private Integer loginTimes;
     private AccountStatus status;
     private ProfileEntity profile;
-    private List<AccountRoleValueObject> roles;
+    private List<Long> roles;
 
     public Builder(AccountRegisterSource source, AccountRegisterMeans means) {
       this.source = source;
@@ -267,12 +275,31 @@ public final class AccountEntity extends AggregateRoot<AccountIdentifier> {
       return this;
     }
 
-    public Builder roles(List<AccountRoleValueObject> val) {
+    public Builder roles(List<Long> val) {
       roles = val;
       return this;
     }
 
     public AccountEntity build() {
+      switch (this.means) {
+        case EMAIL:
+          if (StringUtils.isBlank(this.email)) {
+            throw new IllegalArgumentException("email is required");
+          }
+          break;
+        case MOBILE:
+          if (StringUtils.isBlank(this.mobile)) {
+            throw new IllegalArgumentException("mobile is required");
+          }
+          break;
+        case EXTERNAL:
+          if (StringUtils.isBlank(this.externalId)) {
+            throw new IllegalArgumentException("externalId is required");
+          }
+          break;
+        default:
+          throw new IllegalArgumentException("means is illegal");
+      }
       return new AccountEntity(this);
     }
   }

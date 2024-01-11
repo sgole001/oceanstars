@@ -28,7 +28,7 @@ public class UserEnums {
     MOBILE(1, "MOBILE"),
 
     // 第三方授权注册
-    THIRD(2, "THIRD PARTY");
+    EXTERNAL(2, "EXTERNAL");
 
     /**
      * 枚举编号
@@ -306,18 +306,21 @@ public class UserEnums {
    * @version 1.0.0
    * @since 2022/1/5 1:41 PM
    */
-  public enum PermissionType implements IEnum<Integer, String, PermissionType> {
+  public enum PermissionType implements IEnum<Short, String, PermissionType> {
 
-    // 运营
-    OPERATION(0, "运营区域"),
+    // 功能权限
+    FUNCTION(Short.valueOf("0"), "功能权限"),
 
-    // 功能菜单
-    FUNCTION(1, "功能菜单");
+    // 数据权限
+    DATA(Short.valueOf("1"), "数据权限"),
+
+    // 多媒体文件权限
+    MEDIA(Short.valueOf("2"), "多媒体文件权限");
 
     /**
      * 枚举编号
      */
-    private final Integer code;
+    private final Short code;
 
     /**
      * 枚举显示名
@@ -330,7 +333,7 @@ public class UserEnums {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    PermissionType(Integer code, String name) {
+    PermissionType(Short code, String name) {
       this.code = code;
       this.name = name;
     }
@@ -341,7 +344,7 @@ public class UserEnums {
      * @param key 枚举项KEY
      * @return 枚举对象
      */
-    public static PermissionType of(Integer key) {
+    public static PermissionType of(Short key) {
       for (PermissionType value : values()) {
         if (value.key().equals(key)) {
           return value;
@@ -356,7 +359,59 @@ public class UserEnums {
     }
 
     @Override
-    public Integer key() {
+    public Short key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 权限操作类型
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/1/8 16:10
+   */
+  public enum PermissionOperationType implements IEnum<Byte, String, PermissionOperationType> {
+
+    // 资源禁止操作
+    PROHIBIT((byte) 0x00, "资源禁止操作"),
+    // 资源允许读入
+    READ((byte) 0x01, "资源允许读入"),
+    // 资源可允许写入
+    WRITE((byte) 0x02, "资源可允许写入"),
+    // 资源允许更新
+    UPDATE((byte) 0x04, "资源允许更新"),
+    // 资源允许删除
+    DELETE((byte) 0x06, "资源允许删除"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Byte code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    PermissionOperationType(Byte code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    @Override
+    public PermissionOperationType get() {
+      return this;
+    }
+
+    @Override
+    public Byte key() {
       return this.code;
     }
 

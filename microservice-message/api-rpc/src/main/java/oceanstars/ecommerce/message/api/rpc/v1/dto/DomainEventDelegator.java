@@ -3,7 +3,7 @@ package oceanstars.ecommerce.message.api.rpc.v1.dto;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import java.util.Map;
-import oceanstars.ecommerce.common.domain.AbstractDomainEvent;
+import oceanstars.ecommerce.common.domain.DomainEvent;
 import oceanstars.ecommerce.common.tools.SerializeUtil;
 
 /**
@@ -22,7 +22,7 @@ public final class DomainEventDelegator {
    * @param <E>         领域事件类型
    * @return 领域事件委托者
    */
-  public static <E extends AbstractDomainEvent<?, ?>> MessagePublishCommand delegate(E domainEvent) {
+  public static <E extends DomainEvent<?, ?>> MessagePublishCommand delegate(E domainEvent) {
 
     // 构建消息发送命令信息
     return MessagePublishCommand.newBuilder()
@@ -42,7 +42,7 @@ public final class DomainEventDelegator {
    * @param <E>         领域事件类型
    * @return 领域事件委托者
    */
-  public static <E extends AbstractDomainEvent<?, ?>> MessagePublishCommand delegate(final E domainEvent, final Map<String, Object> headers) {
+  public static <E extends DomainEvent<?, ?>> MessagePublishCommand delegate(final E domainEvent, final Map<String, Object> headers) {
 
     // 构建消息发送命令信息
     return MessagePublishCommand.newBuilder()

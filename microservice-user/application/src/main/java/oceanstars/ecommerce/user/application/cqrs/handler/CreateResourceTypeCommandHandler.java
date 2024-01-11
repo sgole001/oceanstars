@@ -2,12 +2,14 @@ package oceanstars.ecommerce.user.application.cqrs.handler;
 
 import jakarta.annotation.Resource;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;
+import oceanstars.ecommerce.common.domain.EventGateway;
+import oceanstars.ecommerce.user.api.message.payload.resource.ResourceTypeCreatedPayload;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.CreateResourceTypeCommand;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.CreateResourceTypeResult;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.ResourceLink;
 import oceanstars.ecommerce.user.domain.resource.entity.ResourceTypeEntity;
 import oceanstars.ecommerce.user.domain.resource.entity.valueobject.ResourceLinkValueObject;
-import oceanstars.ecommerce.user.domain.resource.repository.IResourceRepository;
+import oceanstars.ecommerce.user.domain.resource.event.ResourceTypeCreated;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,11 +22,8 @@ import org.springframework.stereotype.Component;
 @Component(value = "createResourceTypeCommandHandler")
 public class CreateResourceTypeCommandHandler implements ICommandHandler<CreateResourceTypeResult, CreateResourceTypeCommand> {
 
-  /**
-   * 权限资源聚合仓储接口
-   */
-  @Resource(name = "resourceRepository")
-  private IResourceRepository resourceRepository;
+  @Resource(name = "eventGateway")
+  private EventGateway eventGateway;
 
   @Override
   public CreateResourceTypeResult handle(CreateResourceTypeCommand command) {
@@ -55,7 +54,12 @@ public class CreateResourceTypeCommandHandler implements ICommandHandler<CreateR
         .build();
 
     // 创建权限资源类型数据
-    resourceRepository.createResourceType(resourceTypeEntity);
+//    resourceTypeEntity.create();
+
+    final ResourceTypeCreatedPayload payload = new ResourceTypeCreatedPayload();
+    payload.setResourceId(resourceTypeEntity.getIdentifier().toString());
+    // 发布领域事件
+    eventGateway.publish(new ResourceTypeCreated(resourceTypeEntity, payload));
 
     return CreateResourceTypeResult.newBuilder().setIdentifier(resourceTypeEntity.getIdentifier().toString()).build();
   }

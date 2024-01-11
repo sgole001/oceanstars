@@ -39,12 +39,6 @@
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>common</artifactId>
-      <version>${infrastructure.common.version}</version>
-    </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
       <artifactId>redis</artifactId>

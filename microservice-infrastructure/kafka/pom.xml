@@ -18,15 +18,26 @@
   </properties>
 
   <dependencies>
+    <!-- Spring Boot 配置处理组件 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!-- Spring Kafka处理组件 -->
     <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
     </dependency>
-
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>common</artifactId>
-      <version>${infrastructure.common.version}</version>
+      <artifactId>elasticsearch</artifactId>
+      <version>${infrastructure.elasticsearch.version}</version>
     </dependency>
   </dependencies>
 

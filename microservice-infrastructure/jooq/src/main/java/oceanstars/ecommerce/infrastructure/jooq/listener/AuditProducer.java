@@ -2,14 +2,15 @@ package oceanstars.ecommerce.infrastructure.jooq.listener;
 
 import java.time.LocalDateTime;
 import oceanstars.ecommerce.common.constant.CommonConstant;
+import oceanstars.ecommerce.common.session.BaseSessionAttribute;
 import oceanstars.ecommerce.common.tools.SessionUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.RecordContext;
+import org.jooq.RecordListener;
 import org.jooq.RecordType;
-import org.jooq.impl.DefaultRecordListener;
 
 /**
  * 监听数据插入更新，自动注入审计字段
@@ -19,7 +20,7 @@ import org.jooq.impl.DefaultRecordListener;
  * @since 2021/11/4 2:00 下午
  */
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class AuditProducer extends DefaultRecordListener {
+public class AuditProducer implements RecordListener {
 
   /**
    * 日志管理器
@@ -67,21 +68,22 @@ public class AuditProducer extends DefaultRecordListener {
     // 获取当前系统时间
     final LocalDateTime now = LocalDateTime.now(CommonConstant.DEFAULT_ZONE);
 
-    // 获取当前用户ID
-    String userId;
+    // 获取审计ID
+    String auditId;
+    // 获取Session信息
+    final BaseSessionAttribute sessionAttribute = SessionUtil.getSessionAttribute();
     // 用户为授权登录时，使用跟踪ID
-    if (null == SessionUtil.getSessions().getUserId()) {
-      userId = SessionUtil.getSessions().getTraceId();
+    if (null == sessionAttribute.getUserId()) {
+      auditId = sessionAttribute.getTraceId();
     } else {
-      userId = SessionUtil.getSessions().getUserId().toString();
+      auditId = sessionAttribute.getUserId();
     }
 
     for (Record record : records) {
-
       record.with(fieldCreateAt, now);
-      record.with(fieldCreateBy, userId);
+      record.with(fieldCreateBy, auditId);
       record.with(fieldUpdateAt, now);
-      record.with(fieldUpdateBy, userId);
+      record.with(fieldUpdateBy, auditId);
     }
   }
 
@@ -102,19 +104,20 @@ public class AuditProducer extends DefaultRecordListener {
     // 获取当前系统时间
     final LocalDateTime now = LocalDateTime.now(CommonConstant.DEFAULT_ZONE);
 
-    // 获取当前用户ID
-    String userId;
+    // 获取审计ID
+    String auditId;
+    // 获取Session信息
+    final BaseSessionAttribute sessionAttribute = SessionUtil.getSessionAttribute();
     // 用户为授权登录时，使用跟踪ID
-    if (null == SessionUtil.getSessions().getUserId()) {
-      userId = SessionUtil.getSessions().getTraceId();
+    if (null == sessionAttribute.getUserId()) {
+      auditId = sessionAttribute.getTraceId();
     } else {
-      userId = SessionUtil.getSessions().getUserId().toString();
+      auditId = sessionAttribute.getUserId();
     }
 
     for (Record record : records) {
-
       record.with(fieldUpdateAt, now);
-      record.with(fieldUpdateBy, userId);
+      record.with(fieldUpdateBy, auditId);
     }
   }
 }

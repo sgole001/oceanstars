@@ -3,5 +3,7 @@ spring:
     name: user-service
   main:
     allow-bean-definition-overriding: true
+  jackson:
+    time-zone: Asia/Shanghai
   profiles:
-    include: server,redis,druid,kafka,cache
+    include: server,redis,mysql,cache,kafka,elasticsearch

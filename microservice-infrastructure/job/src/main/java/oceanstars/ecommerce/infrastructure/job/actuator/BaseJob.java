@@ -1,5 +1,7 @@
 package oceanstars.ecommerce.infrastructure.job.actuator;
 
+import oceanstars.ecommerce.common.constant.CommonConstant;
+import oceanstars.ecommerce.common.session.BaseSessionAttribute;
 import oceanstars.ecommerce.common.session.SessionThreadLocal;
 import oceanstars.ecommerce.common.session.Sessions;
 import oceanstars.ecommerce.common.tools.ServletUtil;
@@ -18,15 +20,17 @@ public class BaseJob {
    * JobHandler初始化方法
    */
   public void init() {
-    // 构建当前线程Session
-    Sessions sessions = new Sessions();
+    // 构建Session属性对象
+    BaseSessionAttribute baseSessionAttribute = new BaseSessionAttribute();
     // 会话调用链ID
-    sessions.setTraceId(ServletUtil.generateTraceId());
+    baseSessionAttribute.setTraceId(ServletUtil.generateTraceId());
+    // 构建当前线程Session
+    Sessions sessions = new Sessions(baseSessionAttribute);
 
     SessionThreadLocal.setSessions(sessions);
 
     // 日志全局加入跟踪ID
-    ThreadContext.put("TRACE_ID", sessions.getTraceId());
+    ThreadContext.put(CommonConstant.KEY_TRACE, baseSessionAttribute.getTraceId());
   }
 
   /**
@@ -36,6 +40,6 @@ public class BaseJob {
     // 手动回收ThreadLocal，避免内存溢出
     SessionThreadLocal.removeSessions();
 
-    ThreadContext.remove("TRACE_ID");
+    ThreadContext.remove(CommonConstant.KEY_TRACE);
   }
 }

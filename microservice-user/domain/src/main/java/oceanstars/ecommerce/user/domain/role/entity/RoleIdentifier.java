@@ -9,7 +9,7 @@ import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
  * @version 1.0.0
  * @since 2022/1/5 9:49 AM
  */
-public final class RoleIdentifier extends BaseEntityIdentifier {
+public final class RoleIdentifier extends BaseEntityIdentifier<String> {
 
   /**
    * 角色名
@@ -27,6 +27,7 @@ public final class RoleIdentifier extends BaseEntityIdentifier {
    * @param name 角色名
    */
   public RoleIdentifier(final String name) {
+    super(null);
     this.name = name;
   }
 

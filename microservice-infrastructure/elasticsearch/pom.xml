@@ -20,8 +20,8 @@
   <dependencies>
     <!-- ElasticSearch工具组件 -->
     <dependency>
-      <groupId>co.elastic.clients</groupId>
-      <artifactId>elasticsearch-java</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
     </dependency>
   </dependencies>
 

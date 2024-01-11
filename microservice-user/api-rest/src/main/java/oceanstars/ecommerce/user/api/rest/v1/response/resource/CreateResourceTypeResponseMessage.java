@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.user.api.rest.v1.response.resource;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
  * @version 1.0.0
  * @since 2022/1/14 10:46 AM
  */
-@ApiModel(value = "CreateResourceTypeResponseMessage", description = "创建资源类型接口响应参数")
+@Schema(name = "CreateResourceTypeResponseMessage", description = "创建资源类型接口响应参数")
 public class CreateResourceTypeResponseMessage extends RestResponseMessage {
 
   @Serial

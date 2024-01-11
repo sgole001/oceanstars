@@ -1,0 +1,2 @@
+oceanstars.ecommerce.infrastructure.kafka.spi.KafkaEventSourcingStorageSPI=\
+  oceanstars.ecommerce.infrastructure.kafka.spi.elasticsearch.Elasticsearch4KafkaEventSourcingStorage

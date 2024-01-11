@@ -24,6 +24,10 @@
       <artifactId>grpc</artifactId>
       <version>${infrastructure.grpc.version}</version>
     </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -34,7 +38,7 @@
       </plugin>
       <plugin>
         <groupId>org.xolstice.maven.plugins</groupId>
-        <artifactId>protobuf-maven-plugin</artifactId>
+          <artifactId>protobuf-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

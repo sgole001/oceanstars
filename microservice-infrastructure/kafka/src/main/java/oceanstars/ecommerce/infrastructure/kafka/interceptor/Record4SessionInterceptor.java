@@ -30,14 +30,22 @@ public class Record4SessionInterceptor<K, V> implements RecordInterceptor<K, V> 
     if (headers.hasNext()) {
 
       // 反序列化获取Session对象
-      final Sessions sessions = SerializeUtil.deserialize(headers.next().value(), Sessions.class);
+      final Sessions sessions = SerializeUtil.deserialize(headers.next().value());
 
-      // kafka多线程消费，线程池使用每次线程消费覆盖，由于线程数有限，不手动回收内存。
-      SessionThreadLocal.setSessions(sessions);
-      // 日志全局加入跟踪ID
-      ThreadContext.put(CommonConstant.KEY_TRACE, sessions.getTraceId());
+      if (null != sessions) {
+        // kafka多线程消费，线程池使用每次线程消费覆盖，由于线程数有限，不手动回收内存。
+        SessionThreadLocal.setSessions(sessions);
+        // 日志全局加入跟踪ID
+        ThreadContext.put(CommonConstant.KEY_TRACE, sessions.attribute().getTraceId());
+      }
     }
 
     return consumerRecord;
+  }
+
+  @Override
+  public void afterRecord(@NonNull ConsumerRecord<K, V> consumerRecord, @NonNull Consumer<K, V> consumer) {
+    // 回收内存
+    SessionThreadLocal.removeSessions();
   }
 }

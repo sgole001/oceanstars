@@ -1,9 +1,13 @@
 package oceanstars.ecommerce.message.domain.aggregate.event.event.data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class EventData {
+public class EventData implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = 4281210191346451031L;
   private Long eventId;
 
   private String eventName;

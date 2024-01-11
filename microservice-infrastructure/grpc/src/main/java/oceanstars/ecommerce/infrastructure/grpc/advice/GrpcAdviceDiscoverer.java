@@ -65,7 +65,7 @@ public class GrpcAdviceDiscoverer implements InitializingBean, ApplicationContex
     // 调试日志
     annotatedBeans.forEach((key, value) -> logger.debug("发现gRPC Advice: {}, class: {}", key, value.getClass().getName()));
 
-    annotatedMethods = findAnnotatedMethods();
+    this.annotatedMethods = this.findAnnotatedMethods();
   }
 
   /**

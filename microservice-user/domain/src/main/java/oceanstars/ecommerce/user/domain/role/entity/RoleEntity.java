@@ -2,7 +2,8 @@ package oceanstars.ecommerce.user.domain.role.entity;
 
 import java.util.List;
 import oceanstars.ecommerce.common.domain.AggregateRoot;
-import oceanstars.ecommerce.user.domain.role.entity.valueobject.RolePermValueObject;
+import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
+import oceanstars.ecommerce.user.repository.role.IRoleRepository;
 
 /**
  * 角色实体：聚合根
@@ -29,19 +30,19 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
   private Boolean enabled;
 
   /**
-   * 父角色列表
+   * 父角色(角色继承)列表
    */
   private List<RoleEntity> parents;
 
   /**
-   * 子角色列表
-   */
-  private List<RoleEntity> children;
-
-  /**
    * 角色权限列表
    */
-  private List<RolePermValueObject> permissions;
+  private List<Long> permissions;
+
+  /**
+   * 角色聚合仓储接口
+   */
+  private IRoleRepository roleRepository;
 
   /**
    * 构造函数：根据构建器初始化成员变量
@@ -54,8 +55,8 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
     desc = builder.desc;
     enabled = builder.enabled;
     parents = builder.parents;
-    children = builder.children;
     permissions = builder.permissions;
+    roleRepository = ApplicationContextProvider.getApplicationContext().getBean(IRoleRepository.class);
   }
 
   /**
@@ -84,11 +85,7 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
     return parents;
   }
 
-  public List<RoleEntity> getChildren() {
-    return children;
-  }
-
-  public List<RolePermValueObject> getPermissions() {
+  public List<Long> getPermissions() {
     return permissions;
   }
 
@@ -104,11 +101,7 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
     this.parents = parents;
   }
 
-  public void setChildren(List<RoleEntity> children) {
-    this.children = children;
-  }
-
-  public void setPermissions(List<RolePermValueObject> permissions) {
+  public void setPermissions(List<Long> permissions) {
     this.permissions = permissions;
   }
 
@@ -125,8 +118,7 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
     private String desc;
     private Boolean enabled;
     private List<RoleEntity> parents;
-    private List<RoleEntity> children;
-    private List<RolePermValueObject> permissions;
+    private List<Long> permissions;
 
     public Builder(String name) {
       this.name = name;
@@ -147,12 +139,7 @@ public final class RoleEntity extends AggregateRoot<RoleIdentifier> {
       return this;
     }
 
-    public Builder children(List<RoleEntity> val) {
-      children = val;
-      return this;
-    }
-
-    public Builder permissions(List<RolePermValueObject> val) {
+    public Builder permissions(List<Long> val) {
       permissions = val;
       return this;
     }

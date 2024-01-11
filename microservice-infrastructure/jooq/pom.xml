@@ -58,8 +58,8 @@
 
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>druid</artifactId>
-      <version>${infrastructure.druid.version}</version>
+      <artifactId>database-connection-pool</artifactId>
+      <version>${infrastructure.database.connection.pool.version}</version>
     </dependency>
 
   </dependencies>

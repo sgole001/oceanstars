@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>oceanstars-ecommerce</groupId>
+    <artifactId>infrastructure</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>ecm</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>ecm</name>
+  <description>ecm project for oceanstars bz platform</description>
+
+  <properties>
+    <ecm.api.message.version>0.0.1-SNAPSHOT</ecm.api.message.version>
+    <ecm.api.rest.version>0.0.1-SNAPSHOT</ecm.api.rest.version>
+    <ecm.api.rpc.version>0.0.1-SNAPSHOT</ecm.api.rpc.version>
+    <ecm.constant.version>0.0.1-SNAPSHOT</ecm.constant.version>
+    <ecm.controller.version>0.0.1-SNAPSHOT</ecm.controller.version>
+    <ecm.application.version>0.0.1-SNAPSHOT</ecm.application.version>
+    <ecm.domain.version>0.0.1-SNAPSHOT</ecm.domain.version>
+    <ecm.repository.version>0.0.1-SNAPSHOT</ecm.repository.version>
+  </properties>
+
+  <!--聚合子模块-->
+  <modules>
+    <module>api-message</module>
+    <module>api-rest</module>
+    <module>api-rpc</module>
+    <module>application</module>
+    <module>constant</module>
+    <module>controller</module>
+    <module>domain</module>
+    <module>repository</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

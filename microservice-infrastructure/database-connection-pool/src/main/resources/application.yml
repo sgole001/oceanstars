@@ -1,0 +1,21 @@
+oceanstars:
+  datasource:
+    hikari:
+      "database1":
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 10
+        minimum-idle: 5
+        pool-name: OceanstarsHikariCP1
+        validation-timeout: 5000
+        data-source-properties:
+      "database2":
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 10
+        minimum-idle: 5
+        pool-name: OceanstarsHikariCP2
+        validation-timeout: 5000
+    type: com.zaxxer.hikari.HikariDataSource

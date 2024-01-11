@@ -1,17 +1,12 @@
 package oceanstars.ecommerce.message.application.service;
 
 import io.grpc.stub.StreamObserver;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import jakarta.annotation.Resource;
 import oceanstars.ecommerce.common.cqrs.CqrsGateway;
-import oceanstars.ecommerce.common.domain.IDomainEvent;
 import oceanstars.ecommerce.infrastructure.grpc.service.provider.GrpcService;
 import oceanstars.ecommerce.message.api.rpc.v1.dto.MessagePublishCommand;
 import oceanstars.ecommerce.message.api.rpc.v1.dto.MessagePublishResult;
 import oceanstars.ecommerce.message.api.rpc.v1.service.MessageAppServiceGrpc;
-import oceanstars.ecommerce.message.constant.enums.MessageEnum.MessageBus;
-import oceanstars.ecommerce.message.domain.aggregate.event.entity.EventMetaEntity;
 
 /**
  * 消息应用服务
@@ -37,22 +32,5 @@ public class MessageAppServiceImpl extends MessageAppServiceGrpc.MessageAppServi
 
     responseObserver.onNext(publishResult);
     responseObserver.onCompleted();
-  }
-
-  public static void main(String[] args)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-
-    EventMetaEntity entity = EventMetaEntity.newBuilder("EventMetaCreated", MessageBus.KAFKA).build();
-
-    Class<?> clazz = Class.forName("oceanstars.ecommerce.message.domain.aggregate.event.event.EventMetaCreated");
-
-    Constructor<?> constructor = clazz.getConstructor(EventMetaEntity.class);
-
-    IDomainEvent domainEvent = (IDomainEvent) constructor.newInstance(entity);
-
-    domainEvent.applyOn();
-
-    System.out.println(domainEvent.getSourceId());
-
   }
 }

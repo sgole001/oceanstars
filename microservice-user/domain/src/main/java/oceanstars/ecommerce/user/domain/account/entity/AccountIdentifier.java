@@ -12,7 +12,7 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
  * @version 1.0.0
  * @since 2022/1/6 10:55 AM
  */
-public final class AccountIdentifier extends BaseEntityIdentifier {
+public final class AccountIdentifier extends BaseEntityIdentifier<String> {
 
   /**
    * 账号注册源
@@ -51,6 +51,7 @@ public final class AccountIdentifier extends BaseEntityIdentifier {
    * @param source 账号注册源
    */
   public AccountIdentifier(String email, String mobile, String externalId, AccountRegisterSource source, AccountRegisterMeans means) {
+    super(null);
     this.email = email;
     this.mobile = mobile;
     this.externalId = externalId;

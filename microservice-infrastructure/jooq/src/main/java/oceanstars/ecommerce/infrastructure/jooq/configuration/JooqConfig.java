@@ -1,6 +1,5 @@
 package oceanstars.ecommerce.infrastructure.jooq.configuration;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
@@ -8,13 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import oceanstars.ecommerce.infrastructure.druid.configuration.MultiDruidDataSource;
+import javax.sql.DataSource;
 import oceanstars.ecommerce.infrastructure.jooq.listener.AuditProducer;
 import oceanstars.ecommerce.infrastructure.jooq.listener.ExceptionTranslator;
 import oceanstars.ecommerce.infrastructure.jooq.listener.PkProducer;
 import oceanstars.ecommerce.infrastructure.jooq.page.AdvancedHandlerMethodArgumentResolver;
 import oceanstars.ecommerce.infrastructure.jooq.provider.JsonConverterProvider;
 import oceanstars.ecommerce.infrastructure.jooq.spi.DataSourceConfigurationSpi;
+import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.SQLDialect;
@@ -52,17 +52,18 @@ public class JooqConfig extends SpringDataWebConfiguration {
   /**
    * 多数据源配置信息
    */
-  private final MultiDruidDataSource dataSources;
+  private final OceanstarsDataSource dataSources;
 
   /**
    * 日志管理器
    */
   private final Logger logger = LogManager.getLogger(JooqConfig.class.getName());
 
-  public JooqConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService, MultiDruidDataSource dataSources) {
+  public JooqConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService,
+      ObjectProvider<OceanstarsDataSource> dataSources) {
     super(context, conversionService);
     logger.info("Jooq Config...");
-    this.dataSources = dataSources;
+    this.dataSources = dataSources.getIfUnique();
   }
 
   /**
@@ -88,13 +89,13 @@ public class JooqConfig extends SpringDataWebConfiguration {
   public DefaultDSLContext dsl() {
 
     // 获取单数据源信息
-    final DruidDataSource druid = this.dataSources.getDruid();
+    final DataSource dataSource = this.dataSources.getSource();
 
-    if (null != druid) {
+    if (null != dataSource) {
 
       logger.info("Single Jooq DSL Init Start...");
 
-      final DefaultDSLContext dsl = new DefaultDSLContext(configuration(druid));
+      final DefaultDSLContext dsl = new DefaultDSLContext(configuration(dataSource));
 
       logger.info("Single Jooq DSL Init Completed...");
 
@@ -112,19 +113,16 @@ public class JooqConfig extends SpringDataWebConfiguration {
   @Bean
   public Map<String, DefaultDSLContext> multiDsl() {
 
-    // 获取多数据源信息列表
-    final Map<String, DruidDataSource> druids = this.dataSources.getDruids();
-
-    if (null != druids) {
+    if (null != this.dataSources) {
 
       logger.info("Multi Jooq DSL Init Start...");
 
-      final Map<String, DefaultDSLContext> dslContexts = new HashMap<>(druids.size());
+      final Map<String, DefaultDSLContext> dslContexts = HashMap.newHashMap(this.dataSources.getSources().size());
 
       // 遍历数据源信息，初始化构建数据库链接上下文对象
-      for (Entry<String, DruidDataSource> dataSource : druids.entrySet()) {
+      for (Entry<String, ? extends DataSource> dataSource : dataSources.getSources().entrySet()) {
         // 构建数据库链接上下文对象
-        dslContexts.put(dataSource.getKey(), new DefaultDSLContext(configuration(dataSource.getValue())));
+        dslContexts.put(dataSource.getKey(), new DefaultDSLContext(this.configuration(dataSource.getValue())));
       }
 
       logger.info("Multi Jooq DSL Init Completed...");
@@ -178,7 +176,7 @@ public class JooqConfig extends SpringDataWebConfiguration {
    *
    * @return Jooq配置内容
    */
-  private DefaultConfiguration configuration(final DruidDataSource dataSource) {
+  private DefaultConfiguration configuration(final DataSource dataSource) {
 
     final DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
 
@@ -217,7 +215,7 @@ public class JooqConfig extends SpringDataWebConfiguration {
    *
    * @return 数据库连接提供子
    */
-  private DataSourceConnectionProvider connectionProvider(final DruidDataSource dataSource) {
+  private DataSourceConnectionProvider connectionProvider(final DataSource dataSource) {
     return new DataSourceConnectionProvider(new TransactionAwareDataSourceProxy(dataSource));
   }
 

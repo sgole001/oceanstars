@@ -10,39 +10,29 @@
   </parent>
 
   <artifactId>user</artifactId>
-  <version>${revision}</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>user</name>
   <description>user project for oceanstars bz platform</description>
 
   <properties>
-    <revision>0.0.1-SNAPSHOT</revision>
+    <user.api.message.version>0.0.1-SNAPSHOT</user.api.message.version>
     <user.api.rest.version>0.0.1-SNAPSHOT</user.api.rest.version>
     <user.api.rpc.version>0.0.1-SNAPSHOT</user.api.rpc.version>
-    <message.api.rpc.version>0.0.1-SNAPSHOT</message.api.rpc.version>
     <user.constant.version>0.0.1-SNAPSHOT</user.constant.version>
-    <user.configuration.version>0.0.1-SNAPSHOT</user.configuration.version>
     <user.controller.version>0.0.1-SNAPSHOT</user.controller.version>
     <user.application.version>0.0.1-SNAPSHOT</user.application.version>
     <user.domain.version>0.0.1-SNAPSHOT</user.domain.version>
     <user.repository.version>0.0.1-SNAPSHOT</user.repository.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>common</artifactId>
-      <version>${infrastructure.common.version}</version>
-    </dependency>
-  </dependencies>
-
   <!--聚合子模块-->
   <modules>
+    <module>api-message</module>
     <module>api-rest</module>
     <module>api-rpc</module>
     <module>constant</module>
-    <module>configuration</module>
     <module>controller</module>
     <module>application</module>
     <module>domain</module>

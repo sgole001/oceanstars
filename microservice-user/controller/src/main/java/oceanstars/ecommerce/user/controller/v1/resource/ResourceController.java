@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.user.controller.v1.resource;
 
 import jakarta.annotation.Resource;
+import oceanstars.ecommerce.common.exception.BaseException;
 import oceanstars.ecommerce.common.restful.RestApiController;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.user.api.rest.v1.controller.IResourceController;
@@ -29,7 +30,7 @@ public class ResourceController extends RestApiController implements IResourceCo
   private final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
   @Override
-  public RestResponseMessage createResourceType(CreateResourceTypeRequestMessage requestMessage) throws Exception {
+  public RestResponseMessage createResourceType(CreateResourceTypeRequestMessage requestMessage) throws BaseException {
 
     return createResourceTypeRestHandler.handle(requestMessage);
   }

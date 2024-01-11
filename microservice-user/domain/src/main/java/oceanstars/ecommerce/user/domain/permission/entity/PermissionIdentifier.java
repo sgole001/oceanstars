@@ -11,7 +11,7 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionType;
  * @version 1.0.0
  * @since 2022/1/5 11:49 AM
  */
-public final class PermissionIdentifier extends BaseEntityIdentifier {
+public final class PermissionIdentifier extends BaseEntityIdentifier<String> {
 
   /**
    * 权限名
@@ -35,6 +35,7 @@ public final class PermissionIdentifier extends BaseEntityIdentifier {
    * @param type 权限类型
    */
   public PermissionIdentifier(final String name, final PermissionType type) {
+    super(null);
     this.name = name;
     this.type = type;
   }

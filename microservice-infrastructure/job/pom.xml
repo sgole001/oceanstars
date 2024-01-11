@@ -22,11 +22,6 @@
       <groupId>com.xuxueli</groupId>
       <artifactId>xxl-job-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>common</artifactId>
-      <version>${infrastructure.common.version}</version>
-    </dependency>
   </dependencies>
 
   <build>

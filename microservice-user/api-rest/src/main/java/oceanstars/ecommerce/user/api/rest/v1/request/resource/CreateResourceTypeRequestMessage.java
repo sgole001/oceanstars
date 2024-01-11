@@ -1,7 +1,6 @@
 package oceanstars.ecommerce.user.api.rest.v1.request.resource;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import oceanstars.ecommerce.common.restful.RestRequestMessage;
 
@@ -12,7 +11,7 @@ import oceanstars.ecommerce.common.restful.RestRequestMessage;
  * @version 1.0.0
  * @since 2022/1/14 10:48 AM
  */
-@ApiModel(value = "CreateResourceTypeRequestMessage", description = "创建资源类型接口请求参数")
+@Schema(name = "CreateResourceTypeRequestMessage", description = "创建资源类型接口请求参数")
 public class CreateResourceTypeRequestMessage extends RestRequestMessage {
 
   @Serial
@@ -21,31 +20,31 @@ public class CreateResourceTypeRequestMessage extends RestRequestMessage {
   /**
    * 资源类型名
    */
-  @ApiModelProperty(value = "资源类型名")
+  @Schema(description = "资源类型名")
   private String name;
 
   /**
    * 资源类型功能说明
    */
-  @ApiModelProperty(value = "资源类型功能说明")
+  @Schema(description = "资源类型功能说明")
   private String desc;
 
   /**
    * 资源数据API路径
    */
-  @ApiModelProperty(value = "资源数据API路径")
+  @Schema(description = "资源数据API路径")
   private String href;
 
   /**
    * 资源数据API的HTTP请求方法
    */
-  @ApiModelProperty(value = "资源数据API的HTTP请求方法")
+  @Schema(description = "资源数据API的HTTP请求方法")
   private String method;
 
   /**
    * 资源数据API的HTTP请求Body(JSON字符串)
    */
-  @ApiModelProperty(value = "资源数据API的HTTP请求Body(JSON字符串)")
+  @Schema(description = "资源数据API的HTTP请求Body(JSON字符串)")
   private String body;
 
   public String getName() {

@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.RecordContext;
+import org.jooq.RecordListener;
 import org.jooq.RecordType;
-import org.jooq.impl.DefaultRecordListener;
 
 /**
  * 监听数据插入，自动注入PK
@@ -17,7 +17,7 @@ import org.jooq.impl.DefaultRecordListener;
  * @since 2021/11/4 2:08 下午
  */
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class PkProducer extends DefaultRecordListener {
+public class PkProducer implements RecordListener {
 
   /**
    * 日志管理器

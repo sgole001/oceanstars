@@ -19,7 +19,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.PreDestroy;
 import javax.annotation.concurrent.GuardedBy;
 import oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcChannelProperties;
 import oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcChannelsProperties;
@@ -35,7 +34,7 @@ import org.springframework.util.unit.DataSize;
  * @version 1.0.0
  * @since 2021/11/15 9:48 上午
  */
-public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>> implements GrpcChannelFactory {
+public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>> implements GrpcChannelFactory, AutoCloseable {
 
   /**
    * gRPC客户端连接通道属性配置
@@ -123,7 +122,6 @@ public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>>
 
 
   @Override
-  @PreDestroy
   public void close() {
 
     // 如果gRPC客户端连接通道工厂已经关闭，直接返回

@@ -1,7 +1,6 @@
 package oceanstars.ecommerce.user.api.rest.v1.response.resource.data;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -12,7 +11,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @since 2022/1/14 10:59 AM
  */
-@ApiModel(value = "ResourceLinkData", description = "权限关联资源数据获取链接数据")
+@Schema(name = "ResourceLinkData", description = "权限关联资源数据获取链接数据")
 public class ResourceLinkData implements Serializable {
 
   @Serial
@@ -21,19 +20,19 @@ public class ResourceLinkData implements Serializable {
   /**
    * 资源数据API路径
    */
-  @ApiModelProperty(value = "资源数据API路径")
+  @Schema(description = "资源数据API路径")
   private String href;
 
   /**
    * 资源数据API的HTTP请求方法
    */
-  @ApiModelProperty(value = "资源数据API的HTTP请求方法")
+  @Schema(description = "资源数据API的HTTP请求方法")
   private String method;
 
   /**
    * 资源数据PI的HTTP请求Body(JSON字符串)
    */
-  @ApiModelProperty(value = "资源数据PI的HTTP请求Body(JSON字符串)")
+  @Schema(description = "资源数据PI的HTTP请求Body(JSON字符串)")
   private String body;
 
   public String getHref() {

@@ -2,10 +2,10 @@ package oceanstars.ecommerce.infrastructure.grpc.config.server;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import oceanstars.ecommerce.common.tools.SocketUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.convert.DurationUnit;
-import org.springframework.test.util.TestSocketUtils;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
@@ -134,7 +134,7 @@ public class GrpcServerProperties {
 
   public int getPort() {
     if (this.port == 0) {
-      this.port = TestSocketUtils.findAvailableTcpPort();
+      this.port = SocketUtils.findAvailableTcpPort();
     }
     return this.port;
   }

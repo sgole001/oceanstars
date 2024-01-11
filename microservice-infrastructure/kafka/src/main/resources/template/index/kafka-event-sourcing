@@ -1,0 +1,16 @@
+{
+  "index_patterns": ["kafka-event-sourcing*"],
+  "template": {
+    "aliases": {
+      "kafka-event-sourcing": {
+        "is_write_index": true
+      }
+    }
+  },
+  "priority": 0,
+  "composed_of": ["kafka-event-sourcing-settings","kafka-event-sourcing-mappings"],
+  "version": 0,
+  "_meta": {
+    "description": "Kafka Event Source Index Template"
+  }
+}
