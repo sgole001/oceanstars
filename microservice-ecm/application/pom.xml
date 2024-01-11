@@ -19,6 +19,21 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>kafka</artifactId>
+      <version>${infrastructure.kafka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>ecm-api-rpc</artifactId>
+      <version>${ecm.api.rpc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>ecm-domain</artifactId>
+      <version>${ecm.domain.version}</version>
+    </dependency>
   </dependencies>
 
   <build>

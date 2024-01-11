@@ -19,6 +19,16 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>grpc</artifactId>
+      <version>${infrastructure.grpc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -26,6 +36,10 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

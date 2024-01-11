@@ -19,6 +19,16 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>ecm-api-message</artifactId>
+      <version>${ecm.api.message.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>ecm-repository</artifactId>
+      <version>${ecm.repository.version}</version>
+    </dependency>
   </dependencies>
 
   <build>

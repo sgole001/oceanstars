@@ -1,0 +1,10 @@
+server:
+  port: 28080
+  servlet:
+    context-path: /api-ecm
+  shutdown: graceful
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

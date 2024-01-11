@@ -1,0 +1,4 @@
+permission:
+  name:
+    adminOperation: admin-operation
+    adminMenu: admin-menu
