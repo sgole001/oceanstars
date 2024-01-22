@@ -3,6 +3,7 @@ package oceanstars.ecommerce.common.restful;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import java.io.Serializable;
+import org.springframework.http.HttpStatus;
 
 /**
  * RestApi响应消息基类
@@ -20,7 +21,7 @@ public class RestResponseMessage implements Serializable {
    * Http响应返回状态
    */
   @Schema(description = "Http响应返回状态")
-  private final String httpStatus;
+  private final HttpStatus httpStatus;
 
   /**
    * 业务响应返回状态
@@ -41,15 +42,28 @@ public class RestResponseMessage implements Serializable {
   private BaseRestResponseData data;
 
   /**
-   * 构造函数：初始化HTTP响应状态
+   * 构造函数：初始化Http状态
    *
-   * @param httpStatus HTTP响应状态
+   * @param builder 构建器
    */
-  public RestResponseMessage(String httpStatus) {
-    this.httpStatus = httpStatus;
+  private RestResponseMessage(Builder builder) {
+    httpStatus = builder.httpStatus;
+    setStatus(builder.status);
+    setMessage(builder.message);
+    setData(builder.data);
   }
 
-  public String getHttpStatus() {
+  /**
+   * 构建器
+   *
+   * @param httpStatus Http状态
+   * @return 构建器
+   */
+  public static Builder newBuilder(HttpStatus httpStatus) {
+    return new Builder(httpStatus);
+  }
+
+  public HttpStatus getHttpStatus() {
     return httpStatus;
   }
 
@@ -75,5 +89,43 @@ public class RestResponseMessage implements Serializable {
 
   public void setData(BaseRestResponseData data) {
     this.data = data;
+  }
+
+  /**
+   * RestApi响应消息构建器
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/1/17 18:26
+   */
+  public static final class Builder {
+
+    private final HttpStatus httpStatus;
+    private String status;
+    private String message;
+    private BaseRestResponseData data;
+
+    public Builder(HttpStatus httpStatus) {
+      this.httpStatus = httpStatus;
+    }
+
+    public Builder status(String val) {
+      status = val;
+      return this;
+    }
+
+    public Builder message(String val) {
+      message = val;
+      return this;
+    }
+
+    public Builder data(BaseRestResponseData val) {
+      data = val;
+      return this;
+    }
+
+    public RestResponseMessage build() {
+      return new RestResponseMessage(this);
+    }
   }
 }

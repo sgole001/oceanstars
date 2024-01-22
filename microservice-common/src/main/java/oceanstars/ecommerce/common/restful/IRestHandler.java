@@ -7,7 +7,7 @@ package oceanstars.ecommerce.common.restful;
  * @version 1.0.0
  * @since 2022/1/14 12:35 PM
  */
-public interface IRestHandler<T extends RestRequestMessage> {
+public interface IRestHandler<R extends RestResponseMessage, E extends RestRequestMessage> {
 
   /**
    * 请求处理
@@ -15,5 +15,5 @@ public interface IRestHandler<T extends RestRequestMessage> {
    * @param restRequestMessage Restful API请求消息
    * @return Restful API响应消息
    */
-  RestResponseMessage handle(final T restRequestMessage);
+  R handle(final E restRequestMessage);
 }

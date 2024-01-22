@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.GenericTypeResolver;
 
 /**
@@ -18,12 +18,12 @@ import org.springframework.core.GenericTypeResolver;
  * @since 2022/1/17 11:44 AM
  */
 @Configuration(proxyBeanMethods = false)
-@AutoConfigureAfter(value = {ApplicationContextProvider.class, IRestHandler.class})
+@DependsOn("applicationContextProvider")
 @SuppressWarnings("unchecked")
 public class RestConfiguration {
 
   @Bean(value = "restProvider")
-  <C extends RestRequestMessage, H extends IRestHandler<C>> Map<Class<C>, H> restProvider() {
+  <R extends RestResponseMessage, E extends RestRequestMessage, H extends IRestHandler<R, E>> Map<Class<E>, H> restProvider() {
 
     // 获取所有实现接口RestHandler的Bean的名字
     final String[] restHandlerNames = ApplicationContextProvider.getApplicationContext().getBeanNamesForType(IRestHandler.class);
@@ -33,12 +33,12 @@ public class RestConfiguration {
     }
 
     // 初始化创建Restful请求处理映射
-    final Map<Class<C>, H> restHandleMap = HashMap.newHashMap(restHandlerNames.length);
+    final Map<Class<E>, H> restHandleMap = HashMap.newHashMap(restHandlerNames.length);
 
     Arrays.stream(restHandlerNames).forEach(name -> {
 
       // 获取命令处理类型
-      final Class<IRestHandler<C>> handlerClass = (Class<IRestHandler<C>>) ApplicationContextProvider.getApplicationContext().getType(name);
+      final Class<IRestHandler<R, E>> handlerClass = (Class<IRestHandler<R, E>>) ApplicationContextProvider.getApplicationContext().getType(name);
       if (null == handlerClass) {
         return;
       }
@@ -49,7 +49,7 @@ public class RestConfiguration {
         return;
       }
       // 获取Restful请求消息类型
-      final Class<C> restReqType = (Class<C>) generics[0];
+      final Class<E> restReqType = (Class<E>) generics[1];
       // 获取Restful请求处理对象
       final H restHandler = (H) ApplicationContextProvider.getApplicationContext().getBean(handlerClass);
 

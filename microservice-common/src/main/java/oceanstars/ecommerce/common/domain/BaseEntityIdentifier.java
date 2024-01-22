@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.common.domain;
 
+import java.io.Serial;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class BaseEntityIdentifier<T> extends ValueObject implements IEntityIdentifier<T> {
 
+  @Serial
+  private static final long serialVersionUID = -292957966844673891L;
   /**
    * 实体唯一识别符（自然键）
    */

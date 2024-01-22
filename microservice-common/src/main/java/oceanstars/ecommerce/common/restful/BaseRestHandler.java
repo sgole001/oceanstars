@@ -9,10 +9,10 @@ import com.google.protobuf.GeneratedMessageV3;
  * @version 1.0.0
  * @since 2022/1/14 12:13 PM
  */
-public abstract class BaseRestHandler<T extends RestRequestMessage> implements IRestHandler<T> {
+public abstract class BaseRestHandler<E extends RestRequestMessage> implements IRestHandler<RestResponseMessage, E> {
 
   @Override
-  public RestResponseMessage handle(final T restRequestMessage) {
+  public RestResponseMessage handle(final E restRequestMessage) {
 
     // 解析请求参数
     final GeneratedMessageV3[] messages = this.parsingRequestMessage(restRequestMessage);
@@ -30,7 +30,7 @@ public abstract class BaseRestHandler<T extends RestRequestMessage> implements I
    * @param restRequestMessage 请求参数
    * @return 业务处理所需数据集
    */
-  public abstract GeneratedMessageV3[] parsingRequestMessage(final T restRequestMessage);
+  public abstract GeneratedMessageV3[] parsingRequestMessage(final E restRequestMessage);
 
   /**
    * 业务处理

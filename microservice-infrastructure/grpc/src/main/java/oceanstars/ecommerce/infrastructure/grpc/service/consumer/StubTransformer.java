@@ -19,5 +19,5 @@ public interface StubTransformer {
    * @param stub gRPC客户端Stub
    * @return 改造后的gRPC客户端Stub
    */
-  <T extends AbstractStub<T>> AbstractStub<T> transform(String name, AbstractStub<T> stub);
+  AbstractStub<?> transform(String name, AbstractStub<?> stub);
 }

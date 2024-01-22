@@ -42,4 +42,8 @@ public class InProcessChannelFactory extends AbstractChannelFactory<InProcessCha
   protected InProcessChannelBuilder newChannelBuilder(String name) {
     return InProcessChannelBuilder.forName(name);
   }
+
+  @Override
+  protected void configureSecurity(final InProcessChannelBuilder builder, final String name) {
+  }
 }

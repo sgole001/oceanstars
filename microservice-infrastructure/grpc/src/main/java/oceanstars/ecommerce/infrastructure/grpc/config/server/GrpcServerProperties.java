@@ -1,11 +1,16 @@
 package oceanstars.ecommerce.infrastructure.grpc.config.server;
 
+import static oceanstars.ecommerce.common.tools.KeyStoreUtil.FORMAT_AUTODETECT;
+
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
 import oceanstars.ecommerce.common.tools.SocketUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.convert.DurationUnit;
+import org.springframework.core.io.Resource;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
@@ -123,6 +128,11 @@ public class GrpcServerProperties {
    * 是否启用proto反射服务
    */
   private boolean reflectionServiceEnabled = true;
+
+  /**
+   * 安全配置
+   */
+  private final Security security = new Security();
 
   public String getAddress() {
     return address;
@@ -265,5 +275,207 @@ public class GrpcServerProperties {
 
   public void setReflectionServiceEnabled(boolean reflectionServiceEnabled) {
     this.reflectionServiceEnabled = reflectionServiceEnabled;
+  }
+
+  public Security getSecurity() {
+    return security;
+  }
+
+  /**
+   * 安全配置类
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/1/19 21:12
+   */
+  public static class Security {
+
+    /**
+     * 标志位：是否启用安全
+     */
+    private boolean enabled = false;
+
+    /**
+     * 证书链
+     */
+    private Resource certificateChain = null;
+
+    /**
+     * 私钥
+     */
+    private Resource privateKey = null;
+
+    /**
+     * 私钥密码
+     */
+    private String privateKeyPassword = null;
+
+    /**
+     * KeyStore格式
+     */
+    private String keyStoreFormat = FORMAT_AUTODETECT;
+
+    /**
+     * KeyStore资源
+     */
+    private Resource keyStore = null;
+
+    /**
+     * KeyStore密码
+     */
+    private String keyStorePassword = null;
+
+
+    private ClientAuth clientAuth = ClientAuth.NONE;
+
+    /**
+     * 信任证书集合
+     */
+    private Resource trustCertCollection = null;
+
+    /**
+     * 信任证书格式
+     */
+    private String trustStoreFormat = FORMAT_AUTODETECT;
+
+    /**
+     * 信任证书
+     */
+    private Resource trustStore = null;
+
+    /**
+     * 信任证书密码
+     */
+    private String trustStorePassword = null;
+
+    /**
+     * TLS密码套件
+     */
+    private List<String> ciphers = null;
+
+    /**
+     * TLS协议
+     */
+    private String[] protocols = null;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public Resource getCertificateChain() {
+      return certificateChain;
+    }
+
+    public void setCertificateChain(Resource certificateChain) {
+      this.certificateChain = certificateChain;
+    }
+
+    public Resource getPrivateKey() {
+      return privateKey;
+    }
+
+    public void setPrivateKey(Resource privateKey) {
+      this.privateKey = privateKey;
+    }
+
+    public String getPrivateKeyPassword() {
+      return privateKeyPassword;
+    }
+
+    public void setPrivateKeyPassword(String privateKeyPassword) {
+      this.privateKeyPassword = privateKeyPassword;
+    }
+
+    public String getKeyStoreFormat() {
+      return keyStoreFormat;
+    }
+
+    public void setKeyStoreFormat(String keyStoreFormat) {
+      this.keyStoreFormat = keyStoreFormat;
+    }
+
+    public Resource getKeyStore() {
+      return keyStore;
+    }
+
+    public void setKeyStore(Resource keyStore) {
+      this.keyStore = keyStore;
+    }
+
+    public String getKeyStorePassword() {
+      return keyStorePassword;
+    }
+
+    public void setKeyStorePassword(String keyStorePassword) {
+      this.keyStorePassword = keyStorePassword;
+    }
+
+    public ClientAuth getClientAuth() {
+      return clientAuth;
+    }
+
+    public void setClientAuth(ClientAuth clientAuth) {
+      this.clientAuth = clientAuth;
+    }
+
+    public Resource getTrustCertCollection() {
+      return trustCertCollection;
+    }
+
+    public void setTrustCertCollection(Resource trustCertCollection) {
+      this.trustCertCollection = trustCertCollection;
+    }
+
+    public String getTrustStoreFormat() {
+      return trustStoreFormat;
+    }
+
+    public void setTrustStoreFormat(String trustStoreFormat) {
+      this.trustStoreFormat = trustStoreFormat;
+    }
+
+    public Resource getTrustStore() {
+      return trustStore;
+    }
+
+    public void setTrustStore(Resource trustStore) {
+      this.trustStore = trustStore;
+    }
+
+    public String getTrustStorePassword() {
+      return trustStorePassword;
+    }
+
+    public void setTrustStorePassword(String trustStorePassword) {
+      this.trustStorePassword = trustStorePassword;
+    }
+
+    public List<String> getCiphers() {
+      return ciphers;
+    }
+
+    public void setCiphers(List<String> ciphers) {
+      this.ciphers = ciphers;
+    }
+
+    public void setCiphers(final String ciphers) {
+      this.ciphers = Arrays.asList(ciphers.split("[ :,]"));
+    }
+
+    public String[] getProtocols() {
+      return protocols;
+    }
+
+    public void setProtocols(String[] protocols) {
+      this.protocols = protocols;
+    }
+
+    public void setProtocols(final String protocols) {
+      this.protocols = protocols.split("[ :,]");
+    }
   }
 }

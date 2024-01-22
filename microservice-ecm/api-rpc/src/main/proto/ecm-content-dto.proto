@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package oceanstars.ecm.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.dto";
+
+// 内容实体
+message EcmContent {
+  // 内容名称
+  string name = 1;
+  // 内容类型
+  int32 type = 2;
+  // 内容展示名称
+  string display_name = 3;
+  // 内容描述
+  string description = 4;
+  // 内容标签
+  repeated int64 tags = 5;
+  // 内容分类
+  repeated int64 categories = 6;
+  // 不同内容类型特有数据
+  google.protobuf.Any raw_data = 7;
+}
+
+// 内容-WEB功能实体
+message EcmContentWebFunction {
+  // Web功能类型
+  int32 type = 1;
+  // Web功能跳转
+  string href = 2;
+  // Web功能图标
+  string icon = 3;
+  // Web功能隶属 - 通过内容ID关联隶属关系
+  int64 parent = 4;
+}
+
+// 内容分类实体
+message EcmContentCategory {
+  // 内容分类代理唯一识别符
+  int64        id = 1;
+  // 内容分类名称
+  string       name = 2;
+  // 内容分类展示名称
+  string       display_name = 3;
+  // 内容分类描述
+  string       description = 4;
+  // 内容分类链接
+  string       url = 5;
+  // 内容分类父级分类代理唯一识别符列表
+  repeated int64 parents = 6;
+  // 内容分类创建时间
+  google.protobuf.Timestamp created_at = 7;
+  // 内容分类创建者
+  string       created_by = 8;
+  // 内容分类更新时间
+  google.protobuf.Timestamp updated_at = 9;
+  // 内容分类更新者
+  string       updated_by = 10;
+}
+
+// 创建内容命令实体
+message EcmCreateContentCommand {
+  // 内容名称
+  string name = 1;
+  // 内容类型
+  int32 type = 2;
+  // 内容展示名称
+  string display_name = 3;
+  // 内容描述
+  string description = 4;
+  // 内容标签
+  repeated int64 tags = 5;
+  // 内容分类
+  repeated int64 categories = 6;
+  // 不同内容类型特有数据
+  google.protobuf.Any raw_data = 7;
+}
+
+// 创建内容分类命令实体
+message EcmCreateContentCategoryCommand {
+  // 内容分类名称
+  string       name = 1;
+  // 内容分类展示名称
+  string       display_name = 2;
+  // 内容分类描述
+  string       description = 3;
+  // 内容分类链接
+  string       url = 4;
+  // 内容分类父级分类代理唯一识别符列表
+  repeated int64 parents = 5;
+}
+
+// 搜索内容分类查询实体
+message EcmSearchContentCategoryQuery {
+  // 内容分类名称
+  string       name = 1;
+  // 内容分类展示名称
+  string       display_name = 2;
+}
+
+// 获取内容分类查询实体
+message EcmGetContentCategoryQuery {
+  // 内容分类代理唯一识别符
+  int64 id = 1;
+}
+
+// 创建内容返回结果实体
+message EcmCreateContentResult {
+  // 内容代理唯一识别符（自然主键）
+  int64 id = 1;
+}
+
+// 创建内容分类返回结果实体
+message EcmCreateContentCategoryResult {
+  // 内容分类唯一识别符（自然主键）
+  string identifier = 1;
+}
+
+// 根据搜索条件搜索内容分类返回结果实体
+message EcmSearchContentCategoryResult {
+  // 内容分类列表
+  repeated EcmContentCategory categories = 1;
+}
+
+// 根据内容分类ID获取内容分类返回结果实体
+message EcmGetContentCategoryResult {
+  // 内容分类
+  EcmContentCategory categories = 1;
+}

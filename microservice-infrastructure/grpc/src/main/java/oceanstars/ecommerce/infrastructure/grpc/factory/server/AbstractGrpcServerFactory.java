@@ -83,6 +83,8 @@ public abstract class AbstractGrpcServerFactory<T extends ServerBuilder<T>> impl
     configureKeepAlive(builder);
     // 配置连接限制相关属性
     configureConnectionLimits(builder);
+    // 配置安全相关属性
+    configureSecurity(builder);
     // 配置服务器限制相关属性
     configureLimits(builder);
     for (final GrpcServerConfigurer serverConfigurer : this.serverConfigurers) {
@@ -104,16 +106,16 @@ public abstract class AbstractGrpcServerFactory<T extends ServerBuilder<T>> impl
     for (final GrpcServiceDefinition service : this.serviceList) {
 
       // 获取gRPC服务名
-      final String serviceName = service.getDefinition().getServiceDescriptor().getName();
+      final String serviceName = service.definition().getServiceDescriptor().getName();
 
       if (!serviceNames.add(serviceName)) {
         throw new IllegalStateException("发现多个服务实现: " + serviceName);
       }
 
       // 添加gRPC服务
-      builder.addService(service.getDefinition());
+      builder.addService(service.definition());
 
-      logger.debug("已经注册的gRPC服务: {}, bean: {}, class: {}", serviceName, service.getBeanName(), service.getBeanClazz().getName());
+      logger.debug("已经注册的gRPC服务: {}, bean: {}, class: {}", serviceName, service.beanName(), service.beanClazz().getName());
     }
   }
 
@@ -142,6 +144,18 @@ public abstract class AbstractGrpcServerFactory<T extends ServerBuilder<T>> impl
     }
     if (this.properties.getMaxConnectionAgeGrace() != null) {
       throw new IllegalStateException("MaxConnectionAgeGrace已被设置，但当前实现不支持maxConnectionAgeGrace!");
+    }
+  }
+
+  /**
+   * 配置安全相关属性
+   *
+   * @param builder gRPC服务器构建对象实例
+   */
+  protected void configureSecurity(final T builder) {
+    // 如果开启了安全性，但当前实现不支持安全性，则抛出异常
+    if (this.properties.getSecurity().isEnabled()) {
+      throw new IllegalStateException("配置了安全性，但此实现不支持安全性!");
     }
   }
 

@@ -1,6 +1,8 @@
 package oceanstars.ecommerce.common.domain;
 
 import io.protostuff.Exclude;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import oceanstars.ecommerce.common.tools.ReflectUtil;
 
@@ -11,8 +13,10 @@ import oceanstars.ecommerce.common.tools.ReflectUtil;
  * @version 1.0.0
  * @since 2021/12/2 2:59 下午
  */
-public class ValueObject {
+public class ValueObject implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = -5962345425833999918L;
   /**
    * 领域值对象委托者
    */

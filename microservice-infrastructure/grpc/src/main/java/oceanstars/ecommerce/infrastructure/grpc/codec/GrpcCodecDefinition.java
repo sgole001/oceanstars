@@ -7,11 +7,14 @@ import java.util.Collection;
 /**
  * gRPC编解码器定义类
  *
+ * @param codec      编解码器
+ * @param advertised 是否推荐此编解码器
+ * @param codecType  编解码器类型
  * @author Clover
  * @version 1.0.0
  * @since 2021/11/11 1:17 下午
  */
-public class GrpcCodecDefinition {
+public record GrpcCodecDefinition(Codec codec, boolean advertised, CodecType codecType) {
 
   /**
    * gzip的编解码器定义
@@ -19,7 +22,7 @@ public class GrpcCodecDefinition {
   public static final GrpcCodecDefinition GZIP_DEFINITION = new GrpcCodecDefinition(new Codec.Gzip(), true, CodecType.ALL);
 
   /**
-   * Identity (no-op)的编解码器定义
+   * Identity (no-op: 恒等无操作)的编解码器定义
    */
   public static final GrpcCodecDefinition IDENTITY_DEFINITION = new GrpcCodecDefinition(Codec.Identity.NONE, false, CodecType.ALL);
 
@@ -33,42 +36,12 @@ public class GrpcCodecDefinition {
           .build();
 
   /**
-   * 编解码器
-   */
-  private final Codec codec;
-
-  /**
-   * 是否推荐此编解码器
-   */
-  private final boolean advertised;
-
-  /**
-   * 编解码器类型
-   */
-  private final CodecType codecType;
-
-  /**
    * 构造函数
    *
    * @param codec      编解码器
    * @param advertised 是否推荐此编解码器
    * @param codecType  编解码器类型
    */
-  public GrpcCodecDefinition(final Codec codec, final boolean advertised, final CodecType codecType) {
-    this.codec = codec;
-    this.advertised = advertised;
-    this.codecType = codecType;
-  }
-
-  public Codec getCodec() {
-    return codec;
-  }
-
-  public boolean isAdvertised() {
-    return advertised;
-  }
-
-  public CodecType getCodecType() {
-    return codecType;
+  public GrpcCodecDefinition {
   }
 }

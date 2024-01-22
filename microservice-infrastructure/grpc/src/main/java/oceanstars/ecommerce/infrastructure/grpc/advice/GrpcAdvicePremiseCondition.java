@@ -9,7 +9,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.lang.NonNull;
 
 /**
- * Grpc Advice相关内容有效的前提条件
+ * gRPC Advice相关内容有效的前提条件
  *
  * @author Clover
  * @version 1.0.0

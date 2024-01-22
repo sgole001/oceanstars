@@ -22,6 +22,19 @@ public final class InterceptorOrder {
   public static final int ORDER_GLOBAL_EXCEPTION_HANDLING = 0;
 
   /**
+   * 拦截器的顺序值与安全异常处理相关
+   */
+  public static final int ORDER_SECURITY_EXCEPTION_HANDLING = 5000;
+  /**
+   * 与身份验证相关的安全拦截器的顺序值
+   */
+  public static final int ORDER_SECURITY_AUTHENTICATION = 5100;
+  /**
+   * 与授权检查相关的安全拦截器的顺序值
+   */
+  public static final int ORDER_SECURITY_AUTHORISATION = 5200;
+
+  /**
    * 拦截器最后执行的顺序值
    */
   public static final int ORDER_LAST = Ordered.LOWEST_PRECEDENCE;

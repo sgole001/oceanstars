@@ -39,13 +39,13 @@ public class CommonExceptionHandler {
 
       // 系统异常
       message = switch (e) {
-        case SystemException systemException -> new RestResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        case SystemException systemException -> RestResponseMessage.newBuilder(HttpStatus.INTERNAL_SERVER_ERROR).build();
         // 数据库异常
-        case DBException dbException -> new RestResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        case DBException dbException -> RestResponseMessage.newBuilder(HttpStatus.INTERNAL_SERVER_ERROR).build();
         // 业务异常
-        case BusinessException businessException -> new RestResponseMessage(HttpStatus.OK.toString());
+        case BusinessException businessException -> RestResponseMessage.newBuilder(HttpStatus.OK).build();
         // 其他
-        default -> new RestResponseMessage(HttpStatus.OK.toString());
+        default -> RestResponseMessage.newBuilder(HttpStatus.OK).build();
       };
 
       // 异常错误码
@@ -56,7 +56,7 @@ public class CommonExceptionHandler {
       logger.error(e.getMessage(), e);
     } else {
 
-      message = new RestResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+      message = RestResponseMessage.newBuilder(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
       // 异常错误码
       message.setStatus(CommonMessageConstant.MSG_COM_00001);

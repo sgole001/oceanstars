@@ -21,8 +21,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.concurrent.GuardedBy;
 import oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcChannelProperties;
+import oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcChannelProperties.Security;
 import oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcChannelsProperties;
+import oceanstars.ecommerce.infrastructure.grpc.config.client.NegotiationType;
 import oceanstars.ecommerce.infrastructure.grpc.interceptor.client.GlobalClientInterceptorRegistry;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.unit.DataSize;
@@ -238,6 +241,9 @@ public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>>
     // Keep Alive相关属性配置
     this.configureKeepAlive(builder, name);
 
+    // 安全相关配置
+    this.configureSecurity(builder, name);
+
     // 限制相关配置
     this.configureLimits(builder, name);
 
@@ -258,13 +264,36 @@ public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>>
   protected void configureKeepAlive(final T builder, final String name) {
 
     // 根据指定gRPC客户端名获取对应的连接通道属性设定
-    final GrpcChannelProperties grpcChannelProperties = this.properties.getChannel(name);
+    final GrpcChannelProperties grpcChannelProperties = this.getPropertiesFor(name);
 
     // 如果开启Keep Alive
     if (grpcChannelProperties.isEnableKeepAlive()) {
       builder.keepAliveTime(grpcChannelProperties.getKeepAliveTime().toNanos(), TimeUnit.NANOSECONDS)
           .keepAliveTimeout(grpcChannelProperties.getKeepAliveTimeout().toNanos(), TimeUnit.NANOSECONDS)
           .keepAliveWithoutCalls(grpcChannelProperties.isKeepAliveWithoutCalls());
+    }
+  }
+
+  /**
+   * 配置gRPC客户端连接通道安全相关属性
+   *
+   * @param builder gRPC客户端连接通道构建器
+   * @param name    gRPC客户端名
+   */
+  protected void configureSecurity(final T builder, final String name) {
+
+    // 根据指定gRPC客户端名获取对应的连接通道属性设定
+    final GrpcChannelProperties properties = this.getPropertiesFor(name);
+    // 获取相关的安全配置
+    final Security security = properties.getSecurity();
+
+    // 默认情况下，不应该配置安全相关属性，异常抛出，通过具体的实现类来支持安全性
+    if (properties.getNegotiationType() != NegotiationType.TLS
+        || StringUtils.isNotBlank(security.getAuthorityOverride())
+        || security.getCertificateChain() != null
+        || security.getPrivateKey() != null
+        || security.getTrustCertCollection() != null) {
+      throw new IllegalStateException("配置了安全性，但此实现不支持安全性!");
     }
   }
 
@@ -277,7 +306,7 @@ public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>>
   protected void configureLimits(final T builder, final String name) {
 
     // 根据指定gRPC客户端名获取对应的连接通道属性设定
-    final GrpcChannelProperties grpcChannelProperties = this.properties.getChannel(name);
+    final GrpcChannelProperties grpcChannelProperties = this.getPropertiesFor(name);
 
     // 通道允许接收的最大消息大小
     final DataSize maxInboundMessageSize = grpcChannelProperties.getMaxInboundMessageSize();
@@ -295,7 +324,7 @@ public abstract class AbstractChannelFactory<T extends ManagedChannelBuilder<T>>
   protected void configureCompression(final T builder, final String name) {
 
     // 根据指定gRPC客户端名获取对应的连接通道属性设定
-    final GrpcChannelProperties grpcChannelProperties = this.properties.getChannel(name);
+    final GrpcChannelProperties grpcChannelProperties = this.getPropertiesFor(name);
 
     // 是否应启用入站流的全流解压
     if (grpcChannelProperties.isFullStreamDecompression()) {

@@ -47,6 +47,26 @@ public class BaseRestResponseData implements Serializable {
   @Schema(description = "更新者")
   private String updateBy;
 
+  /**
+   * 构造函数：初始化
+   *
+   * @param builder 构建器
+   */
+  private BaseRestResponseData(Builder builder) {
+    setId(builder.id);
+    setCreateAt(builder.createAt);
+    setCreateBy(builder.createBy);
+    setUpdateAt(builder.updateAt);
+    setUpdateBy(builder.updateBy);
+  }
+
+  /**
+   * 构建器
+   */
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+
   public String getId() {
     return id;
   }
@@ -85,5 +105,53 @@ public class BaseRestResponseData implements Serializable {
 
   public void setUpdateBy(String updateBy) {
     this.updateBy = updateBy;
+  }
+
+  /**
+   * 构建器
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/1/17 18:42
+   */
+  public static final class Builder {
+
+    private String id;
+    private LocalDateTime createAt;
+    private String createBy;
+    private LocalDateTime updateAt;
+    private String updateBy;
+
+    public Builder() {
+    }
+
+    public Builder id(String val) {
+      id = val;
+      return this;
+    }
+
+    public Builder createAt(LocalDateTime val) {
+      createAt = val;
+      return this;
+    }
+
+    public Builder createBy(String val) {
+      createBy = val;
+      return this;
+    }
+
+    public Builder updateAt(LocalDateTime val) {
+      updateAt = val;
+      return this;
+    }
+
+    public Builder updateBy(String val) {
+      updateBy = val;
+      return this;
+    }
+
+    public BaseRestResponseData build() {
+      return new BaseRestResponseData(this);
+    }
   }
 }

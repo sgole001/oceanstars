@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 用户对外服务启动接口
+ * ECM对外服务启动接口
  *
  * @author Clover
  * @version 1.0.0

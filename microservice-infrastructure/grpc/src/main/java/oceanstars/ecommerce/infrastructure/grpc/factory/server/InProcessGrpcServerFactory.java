@@ -68,6 +68,10 @@ public class InProcessGrpcServerFactory extends AbstractGrpcServerFactory<InProc
   }
 
   @Override
+  protected void configureSecurity(final InProcessServerBuilder builder) {
+  }
+
+  @Override
   public String getAddress() {
     return "in-process:" + this.name;
   }

@@ -50,8 +50,8 @@ public class GrpcCodecConfiguration {
 
     // 查询获取gRPC编解码器，并遍历注册
     for (final GrpcCodecDefinition definition : codecDiscoverer.findGrpcCodecs()) {
-      if (definition.getCodecType().isCompression()) {
-        registry.register(definition.getCodec());
+      if (definition.codecType().isCompression()) {
+        registry.register(definition.codec());
       }
     }
 
@@ -74,8 +74,8 @@ public class GrpcCodecConfiguration {
 
     // 查询获取gRPC编解码器，并遍历注册
     for (final GrpcCodecDefinition definition : codecDiscoverer.findGrpcCodecs()) {
-      if (definition.getCodecType().isDecompression()) {
-        registry = registry.with(definition.getCodec(), definition.isAdvertised());
+      if (definition.codecType().isDecompression()) {
+        registry = registry.with(definition.codec(), definition.advertised());
       }
     }
 
