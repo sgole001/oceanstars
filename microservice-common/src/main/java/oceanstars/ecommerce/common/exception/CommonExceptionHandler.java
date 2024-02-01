@@ -1,12 +1,10 @@
 package oceanstars.ecommerce.common.exception;
 
 import oceanstars.ecommerce.common.constant.CommonMessageConstant;
-import oceanstars.ecommerce.common.messages.MessageSourceConfig;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.common.tools.MessageUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 2021/11/3 4:50 下午
  */
 @ControllerAdvice()
-@AutoConfigureAfter(value = MessageSourceConfig.class)
 public class CommonExceptionHandler {
 
   /**

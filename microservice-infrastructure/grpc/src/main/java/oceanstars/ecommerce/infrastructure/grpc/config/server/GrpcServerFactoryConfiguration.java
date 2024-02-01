@@ -12,14 +12,13 @@ import oceanstars.ecommerce.infrastructure.grpc.service.provider.GrpcServiceDefi
 import oceanstars.ecommerce.infrastructure.grpc.service.provider.GrpcServiceDiscoverer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * grpc服务器工厂配置类
@@ -28,9 +27,8 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0.0
  * @since 2021/11/11 5:10 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {GrpcServerConfiguration.class})
 @ConditionalOnMissingBean({GrpcServerFactory.class, GrpcServerLifecycle.class})
-@AutoConfigureAfter(GrpcServerConfiguration.class)
 public class GrpcServerFactoryConfiguration {
 
   /**

@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.GenericTypeResolver;
 
@@ -17,8 +18,8 @@ import org.springframework.core.GenericTypeResolver;
  * @version 1.0.0
  * @since 2023/12/10 14:34
  */
-@Configuration(proxyBeanMethods = false)
-@DependsOn("applicationContextProvider")
+@AutoConfiguration
+@DependsOn(value = {"applicationContextProvider"})
 @SuppressWarnings("unchecked")
 public class EventConfiguration {
 
@@ -65,5 +66,16 @@ public class EventConfiguration {
     });
 
     return eventPublisherMap;
+  }
+
+  /**
+   * 事件网关Bean
+   *
+   * @param publishProvider 事件发布器映射表
+   * @return 事件网关
+   */
+  @Bean(value = "eventGateway")
+  public EventGateway eventGateway(ObjectProvider<Map<Class<? extends DomainEvent<?, ?>>, ? extends IEventPublisher<?, ?>>> publishProvider) {
+    return new EventGateway(publishProvider);
   }
 }

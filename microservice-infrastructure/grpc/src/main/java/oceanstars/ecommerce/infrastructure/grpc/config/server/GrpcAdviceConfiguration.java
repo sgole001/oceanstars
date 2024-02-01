@@ -7,10 +7,9 @@ import oceanstars.ecommerce.infrastructure.grpc.advice.GrpcExceptionHandlerMetho
 import oceanstars.ecommerce.infrastructure.grpc.error.GrpcExceptionInterceptor;
 import oceanstars.ecommerce.infrastructure.grpc.interceptor.server.GrpcGlobalServerInterceptor;
 import oceanstars.ecommerce.infrastructure.grpc.util.InterceptorOrder;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -20,9 +19,8 @@ import org.springframework.core.annotation.Order;
  * @version 1.0.0
  * @since 2021/11/11 5:57 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(before = {GrpcServerFactoryConfiguration.class})
 @Conditional(GrpcAdvicePremiseCondition.class)
-@AutoConfigureBefore(GrpcServerFactoryConfiguration.class)
 public class GrpcAdviceConfiguration {
 
   /**

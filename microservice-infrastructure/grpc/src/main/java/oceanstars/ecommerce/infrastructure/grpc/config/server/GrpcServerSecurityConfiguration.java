@@ -9,12 +9,11 @@ import oceanstars.ecommerce.infrastructure.grpc.security.server.authentication.G
 import oceanstars.ecommerce.infrastructure.grpc.security.server.check.AccessPredicateManager;
 import oceanstars.ecommerce.infrastructure.grpc.security.server.check.GrpcSecurityMetadataSource;
 import oceanstars.ecommerce.infrastructure.grpc.util.InterceptorOrder;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -25,9 +24,8 @@ import org.springframework.security.authentication.AuthenticationManager;
  * @version 1.0.0
  * @since 2024/1/21 21:10
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {SecurityAutoConfiguration.class})
 @ConditionalOnBean(AuthenticationManager.class)
-@AutoConfigureAfter(SecurityAutoConfiguration.class)
 public class GrpcServerSecurityConfiguration {
 
   @Bean

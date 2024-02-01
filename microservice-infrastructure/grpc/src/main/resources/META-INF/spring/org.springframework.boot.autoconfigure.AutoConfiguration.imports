@@ -1,5 +1,7 @@
 oceanstars.ecommerce.infrastructure.grpc.config.common.GrpcCodecConfiguration
+oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcClientSecurityConfiguration
 oceanstars.ecommerce.infrastructure.grpc.config.client.GrpcClientConfiguration
 oceanstars.ecommerce.infrastructure.grpc.config.server.GrpcAdviceConfiguration
 oceanstars.ecommerce.infrastructure.grpc.config.server.GrpcServerConfiguration
 oceanstars.ecommerce.infrastructure.grpc.config.server.GrpcServerFactoryConfiguration
+oceanstars.ecommerce.infrastructure.grpc.config.server.GrpcServerSecurityConfiguration

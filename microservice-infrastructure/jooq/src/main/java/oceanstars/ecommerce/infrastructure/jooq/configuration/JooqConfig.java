@@ -2,11 +2,9 @@ package oceanstars.ecommerce.infrastructure.jooq.configuration;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.sql.DataSource;
 import oceanstars.ecommerce.infrastructure.jooq.listener.AuditProducer;
 import oceanstars.ecommerce.infrastructure.jooq.listener.ExceptionTranslator;
@@ -14,6 +12,7 @@ import oceanstars.ecommerce.infrastructure.jooq.listener.PkProducer;
 import oceanstars.ecommerce.infrastructure.jooq.page.AdvancedHandlerMethodArgumentResolver;
 import oceanstars.ecommerce.infrastructure.jooq.provider.JsonConverterProvider;
 import oceanstars.ecommerce.infrastructure.jooq.spi.DataSourceConfigurationSpi;
+import oceanstars.ecommerce.infrastructure.pool.configuration.OceanStarsDataSourceAutoConfig;
 import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,17 +25,19 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.jooq.SpringTransactionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.data.web.config.SpringDataWebConfiguration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 
 /**
@@ -46,24 +47,17 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
  * @version 1.0.0
  * @since 2021/11/25 2:51 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {OceanStarsDataSourceAutoConfig.class})
 public class JooqConfig extends SpringDataWebConfiguration {
-
-  /**
-   * 多数据源配置信息
-   */
-  private final OceanstarsDataSource dataSources;
 
   /**
    * 日志管理器
    */
   private final Logger logger = LogManager.getLogger(JooqConfig.class.getName());
 
-  public JooqConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService,
-      ObjectProvider<OceanstarsDataSource> dataSources) {
+  public JooqConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {
     super(context, conversionService);
     logger.info("Jooq Config...");
-    this.dataSources = dataSources.getIfUnique();
   }
 
   /**
@@ -81,91 +75,98 @@ public class JooqConfig extends SpringDataWebConfiguration {
   }
 
   /**
-   * 配置单数据源数据库操作服务上下文
-   *
-   * @return 单数据源数据库操作服务上下文
-   */
-  @Bean
-  public DefaultDSLContext dsl() {
-
-    // 获取单数据源信息
-    final DataSource dataSource = this.dataSources.getSource();
-
-    if (null != dataSource) {
-
-      logger.info("Single Jooq DSL Init Start...");
-
-      final DefaultDSLContext dsl = new DefaultDSLContext(configuration(dataSource));
-
-      logger.info("Single Jooq DSL Init Completed...");
-
-      return dsl;
-    }
-
-    return null;
-  }
-
-  /**
    * 配置多数据源数据库操作服务上下文
    *
    * @return 多数据源数据库操作服务上下文
    */
   @Bean
-  public Map<String, DefaultDSLContext> multiDsl() {
+  public CompositeDSLContext dslContexts(OceanstarsDataSource dataSources) {
 
-    if (null != this.dataSources) {
+    logger.info("Jooq DSLs Init Start...");
 
-      logger.info("Multi Jooq DSL Init Start...");
+    // 创建多数据源数据库操作服务上下文对象
+    final Map<String, DefaultDSLContext> dslContexts = HashMap.newHashMap(1);
 
-      final Map<String, DefaultDSLContext> dslContexts = HashMap.newHashMap(this.dataSources.getSources().size());
+    // 获取单数据源
+    final DataSource source = dataSources.getSource();
 
-      // 遍历数据源信息，初始化构建数据库链接上下文对象
-      for (Entry<String, ? extends DataSource> dataSource : dataSources.getSources().entrySet()) {
-        // 构建数据库链接上下文对象
-        dslContexts.put(dataSource.getKey(), new DefaultDSLContext(this.configuration(dataSource.getValue())));
-      }
-
-      logger.info("Multi Jooq DSL Init Completed...");
-
-      return dslContexts;
+    // 单数据源的场合下，使用单数据源
+    if (null != source) {
+      dslContexts.put(OceanstarsDataSource.DEFAULT_DATASOURCE_NAME, new DefaultDSLContext(this.configuration(source)));
     }
 
-    return Collections.emptyMap();
+    // 获取多数据源信息
+    final Map<String, DataSource> sources = dataSources.getSources();
+
+    // 多数据源的场合下，使用多数据源
+    if (!CollectionUtils.isEmpty(sources)) {
+      // 遍历数据源信息，初始化构建数据库链接上下文对象
+      sources.forEach((key, value) -> {
+        dslContexts.put(key, new DefaultDSLContext(this.configuration(value)));
+      });
+    }
+
+    logger.info("Jooq DSLs Contexts Init Completed...");
+
+    return new CompositeDSLContext(dslContexts);
   }
+
+  /**
+   * 配置默认数据源数据库操作服务上下文
+   *
+   * @param dslContexts 多数据源数据库操作服务上下文
+   * @return 默认据源数据库操作服务上下文
+   */
+  @Bean
+  public DefaultDSLContext dsl(CompositeDSLContext dslContexts) {
+
+    // 单数据源的场合下，使用单数据源
+    return dslContexts.dslContexts().get(OceanstarsDataSource.DEFAULT_DATASOURCE_NAME);
+  }
+
+//  /**
+//   * 配置事务管理器 - 多数据源事务处理@See {@link OceanstarsTransactionManagementConfiguration}
+//   */
+//  @ConditionalOnBean(OceanstarsDataSource.class)
+//  @Bean
+//  public DataSourceTransactionManager transactionManager(OceanstarsDataSource dataSources) {
+//    return new DataSourceTransactionManager(dataSources.getSource());
+//  }
 
   @Bean
   @Primary
   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public DefaultConfiguration configuration(final ObjectProvider<DefaultDSLContext> dslObjectProvider,
-      ObjectProvider<Map<String, DefaultDSLContext>> multiDslObjectProvider, InjectionPoint injectionPoint) {
+  public DefaultConfiguration configuration(CompositeDSLContext dslContexts, InjectionPoint injectionPoint) {
 
-    // 单数据源的场合下
-    final DefaultDSLContext dsl = dslObjectProvider.getIfAvailable();
-    if (null != dsl) {
-      return (DefaultConfiguration) dsl.configuration();
+    // 获取多数据源操作上下文
+    final Map<String, DefaultDSLContext> dslMap = dslContexts.dslContexts();
+
+    // 数据源为空的场合下，抛出异常
+    if (CollectionUtils.isEmpty(dslMap)) {
+      throw new NoSuchBeanDefinitionException("No Configuration for Jooq.");
     }
 
-    // 多数据源的场合下
-    final Map<String, DefaultDSLContext> multiDsl = multiDslObjectProvider.getIfAvailable();
-    if (null != multiDsl) {
+    // 单数据源的场合下，直接返回默认数据源配置
+    if (dslMap.size() == 1) {
+      return (DefaultConfiguration) dslMap.get(OceanstarsDataSource.DEFAULT_DATASOURCE_NAME).configuration();
+    }
 
-      // 根据Configuration自动注入点获取对应元素
-      final AnnotatedElement annotatedElement = injectionPoint.getAnnotatedElement();
+    // 根据Configuration自动注入点获取对应元素
+    final AnnotatedElement annotatedElement = injectionPoint.getAnnotatedElement();
 
-      // 构造函数为自动注入点
-      if (Constructor.class.isAssignableFrom(annotatedElement.getClass())) {
+    // 构造函数为自动注入点
+    if (Constructor.class.isAssignableFrom(annotatedElement.getClass())) {
 
-        // 获取构造函数所在类
-        final Class<?> declaringClass = ((Constructor<?>) annotatedElement).getDeclaringClass();
-        // 获取类包名
-        final String packageName = declaringClass.getPackage().getName();
+      // 获取构造函数所在类
+      final Class<?> declaringClass = ((Constructor<?>) annotatedElement).getDeclaringClass();
+      // 获取类包名
+      final String packageName = declaringClass.getPackage().getName();
 
-        // 获取数据源配置SPI接口信息
-        final List<DataSourceConfigurationSpi> configurationSpiList = SpringFactoriesLoader.loadFactories(DataSourceConfigurationSpi.class,
-            Thread.currentThread().getContextClassLoader());
+      // 获取数据源配置SPI接口信息
+      final List<DataSourceConfigurationSpi> configurationSpiList = SpringFactoriesLoader.loadFactories(DataSourceConfigurationSpi.class,
+          Thread.currentThread().getContextClassLoader());
 
-        return (DefaultConfiguration) configurationSpiList.get(0).getConfiguration(packageName, multiDsl);
-      }
+      return (DefaultConfiguration) configurationSpiList.getFirst().getConfiguration(packageName, dslMap);
     }
 
     throw new NoSuchBeanDefinitionException("No Configuration for Jooq.");
@@ -182,6 +183,8 @@ public class JooqConfig extends SpringDataWebConfiguration {
 
     // 数据库连接配置
     jooqConfiguration.set(connectionProvider(dataSource));
+    // 事务管理器
+    jooqConfiguration.set(new SpringTransactionProvider(new DataSourceTransactionManager(dataSource)));
     // 数据库方言
     jooqConfiguration.set(SQLDialect.MYSQL);
     // 数据库操作异常监听配置
@@ -227,12 +230,4 @@ public class JooqConfig extends SpringDataWebConfiguration {
   private ExceptionTranslator exceptionTransformer() {
     return new ExceptionTranslator();
   }
-
-//  /***
-//   * 配置事务管理器
-//   */
-//  @Bean(name = "transactionManager")
-//  public DataSourceTransactionManager transactionManager() {
-//    return new DataSourceTransactionManager(this.connectionProvider().dataSource());
-//  }
 }

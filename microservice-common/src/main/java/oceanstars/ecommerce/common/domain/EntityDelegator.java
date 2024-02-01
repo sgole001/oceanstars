@@ -19,12 +19,12 @@ public class EntityDelegator {
   /**
    * 实体委托者审计-创建时间
    */
-  private final LocalDateTime createAt;
+  private LocalDateTime createAt;
 
   /**
    * 实体委托者审计-创建者
    */
-  private final String createBy;
+  private String createBy;
 
   /**
    * 实体委托者审计-更新时间
@@ -53,13 +53,11 @@ public class EntityDelegator {
   /**
    * 创建领域实体代理构造器
    *
-   * @param id       代理键
-   * @param createAt 代理创建时间
-   * @param createBy 代理创建者
+   * @param id 代理键
    * @return 领域实体代理构造器
    */
-  public static Builder newBuilder(Long id, LocalDateTime createAt, String createBy) {
-    return new Builder(id, createAt, createBy);
+  public static Builder newBuilder(Long id) {
+    return new Builder(id);
   }
 
   public Long getId() {
@@ -89,6 +87,13 @@ public class EntityDelegator {
   //***********************************************
   //*****   消息实体可变属性开放对象属性设定接口    *****
   //***********************************************
+  public void setCreateAt(LocalDateTime createAt) {
+    this.createAt = createAt;
+  }
+
+  public void setCreateBy(String createBy) {
+    this.createBy = createBy;
+  }
 
   public void setUpdateAt(LocalDateTime updateAt) {
     this.updateAt = updateAt;
@@ -112,16 +117,24 @@ public class EntityDelegator {
   public static final class Builder {
 
     private final Long id;
-    private final LocalDateTime createAt;
-    private final String createBy;
+    private LocalDateTime createAt;
+    private String createBy;
     private LocalDateTime updateAt;
     private String updateBy;
     private Integer version;
 
-    public Builder(Long id, LocalDateTime createAt, String createBy) {
+    public Builder(Long id) {
       this.id = id;
-      this.createAt = createAt;
-      this.createBy = createBy;
+    }
+
+    public Builder createAt(LocalDateTime val) {
+      createAt = val;
+      return this;
+    }
+
+    public Builder createBy(String val) {
+      createBy = val;
+      return this;
     }
 
     public Builder updateAt(LocalDateTime val) {

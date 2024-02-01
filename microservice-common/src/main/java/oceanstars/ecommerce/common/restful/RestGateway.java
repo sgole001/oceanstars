@@ -2,7 +2,6 @@ package oceanstars.ecommerce.common.restful;
 
 import java.util.Map;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Component;
 
 /**
  * Restful网关：负责接收Restful API请求，根据请求消息类型，调用对应的Restful API程序处理接口，返回Restful API响应消息
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since 2024/1/16 13:58
  */
-@Component(value = "restGateway")
 @SuppressWarnings("unchecked")
 public class RestGateway implements RestBus {
 

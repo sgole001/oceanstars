@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package oceanstars.ecm.protobuf;
+
+import "ecm-category-dto.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.service.category";
+
+// ECM内容应用服务
+service EcmCategoryAppService {
+
+  // 创建分类服务接口
+  rpc createCategory(EcmCreateCategoryCommand) returns (EcmCreateCategoryResult);
+
+  // 搜索分类服务接口
+  rpc searchCategory(EcmSearchCategoryQuery) returns (EcmSearchCategoryResult);
+
+  // 根据分类ID获取内容分类服务接口
+  rpc getCategory(EcmGetCategoryQuery) returns (EcmGetCategoryResult);
+}
+

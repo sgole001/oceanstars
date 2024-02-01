@@ -6,8 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.GenericTypeResolver;
 
@@ -18,8 +19,8 @@ import org.springframework.core.GenericTypeResolver;
  * @version 1.0.0
  * @since 2021/12/8 2:21 下午
  */
-@Configuration(proxyBeanMethods = false)
-@DependsOn("applicationContextProvider")
+@AutoConfiguration
+@DependsOn(value = {"applicationContextProvider"})
 @SuppressWarnings("unchecked")
 public class CqrsConfiguration {
 
@@ -109,5 +110,18 @@ public class CqrsConfiguration {
     });
 
     return queryHandleMap;
+  }
+
+  /**
+   * CQRS网关Bean
+   *
+   * @param commandProvider 命令处理集合
+   * @param queryProvider   查询处理集合
+   * @return CQRS网关
+   */
+  @Bean(value = "cqrsGateway")
+  Bus cqrsGateway(ObjectProvider<Map<Class<? extends GeneratedMessageV3>, ? extends ICommandHandler<?, ?>>> commandProvider,
+      ObjectProvider<Map<Class<? extends GeneratedMessageV3>, ? extends IQueryHandler<?, ?>>> queryProvider) {
+    return new CqrsGateway(commandProvider, queryProvider);
   }
 }

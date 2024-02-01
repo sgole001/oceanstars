@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.ssl.SslOptions;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration.MaybeSecureClientConfigurationBuilder;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchClients;
@@ -29,7 +28,6 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 @AutoConfiguration(
     after = {SslAutoConfiguration.class}
 )
-@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ElasticsearchProperties.class})
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
 
@@ -76,7 +74,7 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
       // 获取SSL绑定信息
       final String sslBundleName = this.elasticsearchProperties.getRestclient().getSsl().getBundle();
       if (StringUtils.isNotBlank(sslBundleName)) {
-        
+
         builder.usingSsl().withClientConfigurer(ElasticsearchClients.ElasticsearchHttpClientConfigurationCallback.from(httpAsyncClientBuilder -> {
           // 绑定HttpAsyncClient的SSL配置
           final SslBundle sslBundle = this.sslBundles.getBundle(sslBundleName);

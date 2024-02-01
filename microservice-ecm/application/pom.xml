@@ -31,8 +31,8 @@
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>ecm-domain</artifactId>
-      <version>${ecm.domain.version}</version>
+      <artifactId>ecm-repository</artifactId>
+      <version>${ecm.repository.version}</version>
     </dependency>
   </dependencies>
 

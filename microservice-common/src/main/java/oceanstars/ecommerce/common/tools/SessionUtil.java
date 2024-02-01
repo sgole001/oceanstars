@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.common.tools;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.UUID;
 import oceanstars.ecommerce.common.session.BaseSessionAttribute;
 import oceanstars.ecommerce.common.session.SessionThreadLocal;
 import oceanstars.ecommerce.common.session.Sessions;
@@ -51,6 +52,12 @@ public class SessionUtil {
       sessions = SessionThreadLocal.getSessions();
     }
 
+    // 此逻辑仅在测试环境中弥补环境不完整的参数依赖
+    if (null == sessions) {
+      // Mock Session
+      sessions = mockSessions();
+    }
+
     return sessions;
   }
 
@@ -61,5 +68,27 @@ public class SessionUtil {
    */
   public static BaseSessionAttribute getSessionAttribute() {
     return getSessions().attribute();
+  }
+
+  /**
+   * Mock Session
+   *
+   * @return Session属性信息
+   */
+  private static Sessions mockSessions() {
+
+    // 创建Session属性信息
+    final BaseSessionAttribute attributes = new BaseSessionAttribute();
+    // Mock用户ID
+    attributes.setUserId("Simulator");
+    // Mock会话调用链ID
+    attributes.setTraceId(UUID.randomUUID().toString());
+    // Mock会话发起方
+    attributes.setTraceConsumer(PropertyUtil.BINDER.bind("spring.application.name", String.class).get());
+    // Mock会话接受方
+    attributes.setTraceProvider(PropertyUtil.BINDER.bind("spring.application.name", String.class).get());
+
+    // 创建Session信息
+    return new Sessions(attributes);
   }
 }

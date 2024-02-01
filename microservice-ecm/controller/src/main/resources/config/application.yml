@@ -7,9 +7,3 @@ spring:
     time-zone: Asia/Shanghai
   profiles:
     include: server,redis,mysql
-grpc:
-  #  server:
-  #    in-process-name: ecm-grpc
-  client:
-    content:
-      address: localhost:9090

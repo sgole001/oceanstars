@@ -5,21 +5,12 @@ package oceanstars.ecm.protobuf;
 import "ecm-content-dto.proto";
 
 option java_multiple_files = true;
-option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.service";
+option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.service.content";
 
 // ECM内容应用服务
 service EcmContentAppService {
 
   // 创建内容服务接口
   rpc createContent(EcmCreateContentCommand) returns (EcmCreateContentResult);
-
-  // 创建内容分类服务接口
-  rpc createContentCategory(EcmCreateContentCategoryCommand) returns (EcmCreateContentCategoryResult);
-
-  // 搜索内容分类服务接口
-  rpc searchContentCategory(EcmSearchContentCategoryQuery) returns (EcmSearchContentCategoryResult);
-
-  // 根据内容分类ID获取内容分类服务接口
-  rpc getContentCategory(EcmGetContentCategoryQuery) returns (EcmGetContentCategoryResult);
 }
 

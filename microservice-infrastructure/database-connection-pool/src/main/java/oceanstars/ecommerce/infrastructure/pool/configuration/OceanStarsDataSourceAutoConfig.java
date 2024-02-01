@@ -14,10 +14,11 @@ import javax.sql.DataSource;
 import oceanstars.ecommerce.common.exception.SystemException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.util.StringUtils;
 
 /**
  * 数据源信息配置
@@ -26,7 +27,7 @@ import org.springframework.context.annotation.Import;
  * @version 1.0.0
  * @since 2023/11/20 21:03
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties({OceanstarsDataSourceProperties.class, DruidStatProperties.class})
 @Import({DruidSpringAopConfiguration.class, DruidStatViewServletConfiguration.class, DruidWebStatFilterConfiguration.class,
     DruidFilterConfiguration.class})
@@ -72,7 +73,21 @@ public class OceanStarsDataSourceAutoConfig {
 
     // 多数据源的情况
     if (dataSourcesProperties.size() > 1) {
+
+      // 获取默认数据源配置
+      final String defaultDataSource = oceanstarsDataSource.getDefaultDataSource();
+
+      if (!StringUtils.hasText(defaultDataSource)) {
+        throw new SystemException("多数据源配置的情况下，必须指定默认数据源，请配置参数[default-datasource]！");
+      }
+
       for (Entry<String, ? extends DataSource> properties : dataSourcesProperties.entrySet()) {
+
+        // 默认数据源
+        if (defaultDataSource.equals(properties.getKey())) {
+          dataSource.getSources().put(OceanstarsDataSource.DEFAULT_DATASOURCE_NAME, properties.getValue());
+        }
+
         dataSource.getSources().put(properties.getKey(), properties.getValue());
       }
     }

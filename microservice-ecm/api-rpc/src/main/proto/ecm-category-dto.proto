@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package oceanstars.ecm.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.dto.category";
+
+// 分类实体
+message EcmCategory {
+  // 分类代理唯一识别符
+  int64        id = 1;
+  // 分类名称
+  string       name = 2;
+  // 分类展示名称
+  string       display_name = 3;
+  // 分类描述
+  string       description = 4;
+  // 分类链接
+  string       url = 5;
+  // 分类父级分类代理唯一识别符列表
+  repeated int64 parents = 6;
+  // 分类创建时间
+  google.protobuf.Timestamp created_at = 7;
+  // 分类创建者
+  string       created_by = 8;
+  // 分类更新时间
+  google.protobuf.Timestamp updated_at = 9;
+  // 分类更新者
+  string       updated_by = 10;
+}
+
+// 创建分类命令实体
+message EcmCreateCategoryCommand {
+  // 分类名称
+  string       name = 1;
+  // 分类展示名称
+  string       display_name = 2;
+  // 分类描述
+  string       description = 3;
+  // 分类链接
+  string       url = 4;
+  // 分类父级分类代理唯一识别符列表
+  repeated int64 parents = 5;
+}
+
+// 搜索分类查询实体
+message EcmSearchCategoryQuery {
+  // 分类名称
+  string       name = 1;
+  // 分类展示名称
+  string       display_name = 2;
+}
+
+// 获取分类查询实体
+message EcmGetCategoryQuery {
+  // 分类代理唯一识别符
+  int64 id = 1;
+}
+
+// 创建分类返回结果实体
+message EcmCreateCategoryResult {
+  // 分类代理唯一识别符（物理主键）
+  int64 id = 1;
+}
+
+// 根据搜索条件搜索分类返回结果实体
+message EcmSearchCategoryResult {
+  // 分类列表
+  repeated EcmCategory categories = 1;
+}
+
+// 根据分类ID获取分类返回结果实体
+message EcmGetCategoryResult {
+  // 分类
+  EcmCategory categories = 1;
+}

@@ -1,8 +1,8 @@
 package oceanstars.ecommerce.infrastructure.shiro.configuration;
 
 import java.util.List;
-import jakarta.annotation.Resource;
 import oceanstars.ecommerce.infrastructure.shiro.builder.ShiroBuilder;
+import oceanstars.ecommerce.infrastructure.shiro.builder.impl.DefaultShiroBuilder;
 import oceanstars.ecommerce.infrastructure.shiro.filter.JwtSubjectFactory;
 import oceanstars.ecommerce.infrastructure.shiro.filter.OceanStarsShiroFilterFactoryBean;
 import org.apache.shiro.SecurityUtils;
@@ -12,8 +12,8 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -23,11 +23,16 @@ import org.springframework.util.CollectionUtils;
  * @version 1.0.0
  * @since 2021/11/4 1:32 下午
  */
-@Configuration
+@AutoConfiguration
 public class ShiroConfig {
 
-  @Resource
-  private ShiroBuilder shiroBuilder;
+  /**
+   * Shiro构建器
+   */
+  @Bean(name = "shiroBuilder")
+  public ShiroBuilder shiroBuilder() {
+    return new DefaultShiroBuilder();
+  }
 
   /**
    * 配置shiro过滤器
@@ -36,7 +41,7 @@ public class ShiroConfig {
    * @return shiro过滤器
    */
   @Bean(name = "MarriottShiroFilterFactoryBean")
-  public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+  public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, ShiroBuilder shiroBuilder) {
 
     // 1.定义shiroFactoryBean
     OceanStarsShiroFilterFactoryBean shiroFilterFactoryBean = new OceanStarsShiroFilterFactoryBean();
@@ -56,7 +61,7 @@ public class ShiroConfig {
    * @return shiro安全管理器
    */
   @Bean
-  public SecurityManager securityManager() {
+  public SecurityManager securityManager(ShiroBuilder shiroBuilder) {
 
     DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 

@@ -13,14 +13,13 @@ import oceanstars.ecommerce.infrastructure.grpc.interceptor.server.AnnotationGlo
 import oceanstars.ecommerce.infrastructure.grpc.interceptor.server.GlobalServerInterceptorRegistry;
 import oceanstars.ecommerce.infrastructure.grpc.service.provider.AnnotationGrpcServiceDiscoverer;
 import oceanstars.ecommerce.infrastructure.grpc.service.provider.GrpcServiceDiscoverer;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
@@ -30,10 +29,9 @@ import org.springframework.context.annotation.Lazy;
  * @version 1.0.0
  * @since 2021/11/11 2:22 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {GrpcCodecConfiguration.class})
 @EnableConfigurationProperties
 @ConditionalOnClass(Server.class)
-@AutoConfigureAfter(GrpcCodecConfiguration.class)
 public class GrpcServerConfiguration {
 
   /**

@@ -18,14 +18,13 @@ import oceanstars.ecommerce.infrastructure.grpc.interceptor.client.GlobalClientI
 import oceanstars.ecommerce.infrastructure.grpc.service.consumer.GrpcClientBeanPostProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
@@ -35,9 +34,8 @@ import org.springframework.context.annotation.Lazy;
  * @version 1.0.0
  * @since 2021/11/16 1:46 上午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {GrpcCodecConfiguration.class})
 @EnableConfigurationProperties
-@AutoConfigureAfter(GrpcCodecConfiguration.class)
 public class GrpcClientConfiguration {
 
   /**

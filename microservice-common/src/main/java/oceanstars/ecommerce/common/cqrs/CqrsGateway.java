@@ -3,7 +3,6 @@ package oceanstars.ecommerce.common.cqrs;
 import com.google.protobuf.GeneratedMessageV3;
 import java.util.Map;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Component;
 
 /**
  * CQRS网关：路由命令和查询处理
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since 2021/12/8 3:55 下午
  */
-@Component(value = "cqrsGateway")
 @SuppressWarnings("unchecked")
 public class CqrsGateway implements Bus {
 
@@ -25,6 +23,18 @@ public class CqrsGateway implements Bus {
    * 查询处理器映射表
    */
   private final Map<Class<? extends GeneratedMessageV3>, ? extends IQueryHandler<?, ?>> queryProvider;
+
+  /**
+   * 构造函数
+   *
+   * @param commandProvider 命令处理器映射表
+   * @param queryProvider   查询处理器映射表
+   */
+  public CqrsGateway(Map<Class<? extends GeneratedMessageV3>, ? extends ICommandHandler<?, ?>> commandProvider,
+      Map<Class<? extends GeneratedMessageV3>, ? extends IQueryHandler<?, ?>> queryProvider) {
+    this.commandProvider = commandProvider;
+    this.queryProvider = queryProvider;
+  }
 
   public CqrsGateway(ObjectProvider<Map<Class<? extends GeneratedMessageV3>, ? extends ICommandHandler<?, ?>>> commandProvider,
       ObjectProvider<Map<Class<? extends GeneratedMessageV3>, ? extends IQueryHandler<?, ?>>> queryProvider) {

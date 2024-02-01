@@ -6,11 +6,11 @@ import io.grpc.DecompressorRegistry;
 import oceanstars.ecommerce.infrastructure.grpc.codec.AnnotationGrpcCodecDiscoverer;
 import oceanstars.ecommerce.infrastructure.grpc.codec.GrpcCodecDefinition;
 import oceanstars.ecommerce.infrastructure.grpc.codec.GrpcCodecDiscoverer;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * gRPC编解码器配置类
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0.0
  * @since 2021/11/11 1:56 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass(Codec.class)
 public class GrpcCodecConfiguration {
 

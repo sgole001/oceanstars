@@ -3,11 +3,11 @@ package oceanstars.ecommerce.infrastructure.kafka.configuration;
 import java.util.List;
 import oceanstars.ecommerce.infrastructure.kafka.interceptor.Record4SessionInterceptor;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
@@ -25,7 +25,7 @@ import org.springframework.util.CollectionUtils;
  * @since 2021/11/3 11:55 下午
  */
 @EnableKafka
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties({KafkaProperties.class, KafkaTopicsProperties.class})
 @Import({KafkaAutoConfiguration.class})
 public class KafkaConfig {

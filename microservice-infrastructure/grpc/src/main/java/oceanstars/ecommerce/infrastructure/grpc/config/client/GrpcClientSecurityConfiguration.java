@@ -5,11 +5,10 @@ import oceanstars.ecommerce.infrastructure.grpc.security.client.CallCredentialsH
 import oceanstars.ecommerce.infrastructure.grpc.service.consumer.StubTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * gRPC客户端安全配置
@@ -18,8 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0.0
  * @since 2024/1/19 15:36
  */
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureBefore(GrpcClientConfiguration.class)
+@AutoConfiguration(before = {GrpcClientConfiguration.class})
 public class GrpcClientSecurityConfiguration {
 
   /**

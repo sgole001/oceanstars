@@ -1,8 +1,7 @@
 package oceanstars.ecommerce.common.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-import oceanstars.ecommerce.common.tools.ReflectUtil;
+import oceanstars.ecommerce.common.tools.PkWorker;
 
 /**
  * 领域模型实体基类
@@ -31,6 +30,7 @@ public class Entity<T extends IEntityIdentifier<?>> implements IEntity {
    */
   protected Entity(T identifier) {
     this.identifier = identifier;
+    this.delegator = EntityDelegator.newBuilder(PkWorker.build().nextId()).build();
   }
 
   public T getIdentifier() {
@@ -41,26 +41,32 @@ public class Entity<T extends IEntityIdentifier<?>> implements IEntity {
     return delegator;
   }
 
-  /**
-   * 委托实体对象
-   *
-   * @param tablePojo 委托者信息
-   */
-  public void delegate(Object tablePojo) {
-
-    // 反射持久层数据对象，获取委托者数据
-    final Long id = (Long) ReflectUtil.getFieldValue(tablePojo, "id");
-    final String createBy = (String) ReflectUtil.getFieldValue(tablePojo, "createBy");
-    final LocalDateTime createAt = (LocalDateTime) ReflectUtil.getFieldValue(tablePojo, "createAt");
-    final String updateBy = (String) ReflectUtil.getFieldValue(tablePojo, "updateBy");
-    final LocalDateTime updateAt = (LocalDateTime) ReflectUtil.getFieldValue(tablePojo, "updateAt");
-    final Integer version = (Integer) ReflectUtil.getFieldValue(tablePojo, "version");
-
-    this.delegator = EntityDelegator.newBuilder(id, createAt, createBy)
-        .updateAt(updateAt)
-        .updateBy(updateBy)
-        .version(version).build();
+  public void setDelegator(EntityDelegator delegator) {
+    this.delegator = delegator;
   }
+
+//  /**
+//   * 委托实体对象
+//   *
+//   * @param tablePojo 委托者信息
+//   */
+//  public void delegate(Object tablePojo) {
+//
+//    // 反射持久层数据对象，获取委托者数据
+//    final Long id = (Long) ReflectUtil.getFieldValue(tablePojo, "id");
+//    final String createBy = (String) ReflectUtil.getFieldValue(tablePojo, "createBy");
+//    final LocalDateTime createAt = (LocalDateTime) ReflectUtil.getFieldValue(tablePojo, "createAt");
+//    final String updateBy = (String) ReflectUtil.getFieldValue(tablePojo, "updateBy");
+//    final LocalDateTime updateAt = (LocalDateTime) ReflectUtil.getFieldValue(tablePojo, "updateAt");
+//    final Integer version = (Integer) ReflectUtil.getFieldValue(tablePojo, "version");
+//
+//    this.delegator = EntityDelegator.newBuilder(id)
+//        .createAt(createAt)
+//        .createBy(createBy)
+//        .updateAt(updateAt)
+//        .updateBy(updateBy)
+//        .version(version).build();
+//  }
 
   @Override
   public boolean equals(Object obj) {

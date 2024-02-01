@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package oceanstars.ecm.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.ecm.api.rpc.v1.dto.tag";
+
+// 标签实体
+message EcmTag {
+  // 标签名称
+  string name = 1;
+  // 标签展示名称
+  string display_name = 2;
+  // 标签描述
+  string description = 3;
+  // 标签URL
+  string url = 4;
+  // 标签图标
+  string icon = 5;
+}
+
+// 创建标签命令实体
+message EcmCreateTagCommand {
+  // 标签名称
+  string name = 1;
+  // 标签展示名称
+  string display_name = 2;
+  // 标签描述
+  string description = 3;
+  // 标签URL
+  string url = 4;
+  // 标签图标
+  string icon = 5;
+}
+
+// 创建内容返回结果实体
+message EcmCreateTagResult {
+  // 标签代理唯一识别符（物理主键）
+  int64 id = 1;
+}

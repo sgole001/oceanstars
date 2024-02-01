@@ -14,6 +14,11 @@ import javax.sql.DataSource;
 public class OceanstarsDataSource {
 
   /**
+   * 默认数据源名称
+   */
+  public static final String DEFAULT_DATASOURCE_NAME = "default";
+
+  /**
    * 单数据源
    */
   private DataSource source;

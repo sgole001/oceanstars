@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.GenericTypeResolver;
 
@@ -17,8 +18,8 @@ import org.springframework.core.GenericTypeResolver;
  * @version 1.0.0
  * @since 2022/1/17 11:44 AM
  */
-@Configuration(proxyBeanMethods = false)
-@DependsOn("applicationContextProvider")
+@AutoConfiguration
+@DependsOn(value = {"applicationContextProvider"})
 @SuppressWarnings("unchecked")
 public class RestConfiguration {
 
@@ -57,5 +58,10 @@ public class RestConfiguration {
     });
 
     return restHandleMap;
+  }
+
+  @Bean(value = "restGateway")
+  public RestBus restGateway(ObjectProvider<Map<Class<? extends RestRequestMessage>, ? extends IRestHandler<?, ?>>> handleProvider) {
+    return new RestGateway(handleProvider);
   }
 }

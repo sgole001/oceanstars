@@ -2,7 +2,6 @@ package oceanstars.ecommerce.common.domain;
 
 import java.util.Map;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Component;
 
 /**
  * 事件网关：事件发布
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since 2023/12/10 14:09
  */
-@Component(value = "eventGateway")
 @SuppressWarnings("unchecked")
 public class EventGateway implements EventBus {
 

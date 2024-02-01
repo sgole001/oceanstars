@@ -7,11 +7,9 @@ import oceanstars.ecommerce.common.restful.BaseRestHandler;
 import oceanstars.ecommerce.common.restful.BaseRestResponseData;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.ecm.api.rest.v1.request.content.CreateContentRequestMessage;
-import oceanstars.ecommerce.ecm.api.rpc.v1.dto.EcmCreateContentCommand;
-import oceanstars.ecommerce.ecm.api.rpc.v1.dto.EcmCreateContentResult;
-import oceanstars.ecommerce.ecm.api.rpc.v1.service.EcmContentAppServiceGrpc.EcmContentAppServiceBlockingStub;
-import oceanstars.ecommerce.ecm.controller.v1.content.handle.strategy.impl.ContentRawDataStrategyContext;
-import oceanstars.ecommerce.infrastructure.grpc.service.consumer.GrpcClient;
+import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentCommand;
+import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentResult;
+import oceanstars.ecommerce.ecm.application.cqrs.handler.strategy.impl.ContentRawDataStrategyContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +29,6 @@ public class CreateContentRestHandler extends BaseRestHandler<CreateContentReque
   @Resource(name = "cqrsGateway")
   private CqrsGateway cqrsGateway;
 
-  @GrpcClient("content")
-  private EcmContentAppServiceBlockingStub contentAppServiceBlockingStub;
-
   @Override
   public GeneratedMessageV3[] parsingRequestMessage(CreateContentRequestMessage restRequestMessage) {
 
@@ -52,7 +47,7 @@ public class CreateContentRestHandler extends BaseRestHandler<CreateContentReque
         // 内容分类
         .addAllCategories(restRequestMessage.getCategories())
         // 不同内容类型特有数据
-        .setRawData(new ContentRawDataStrategyContext(restRequestMessage.getType()).parsingRequestMessage(restRequestMessage.getRawData()))
+        .setRawData(new ContentRawDataStrategyContext(restRequestMessage.getType()).pack(restRequestMessage.getRawData()))
         // 执行构建
         .build();
 
@@ -61,7 +56,6 @@ public class CreateContentRestHandler extends BaseRestHandler<CreateContentReque
 
   @Override
   public GeneratedMessageV3[] process(GeneratedMessageV3[] messages) {
-    EcmCreateContentResult createContentResult = contentAppServiceBlockingStub.createContent((EcmCreateContentCommand) messages[0]);
     return cqrsGateway.executeCommand(messages[0]);
   }
 

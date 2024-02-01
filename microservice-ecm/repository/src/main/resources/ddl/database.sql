@@ -18,7 +18,6 @@ CREATE TABLE `ecm_content`
     `shares`       bigint(0)    NOT NULL DEFAULT 0 COMMENT '内容分享数量',
     `downloads`    bigint(0)    NOT NULL DEFAULT 0 COMMENT '内容下载数量',
     `status`       smallint(0)  NOT NULL COMMENT '内容状态: 0-草稿, 1-待审核, 2-审核通过, 3-审核不通过, 4-已发布, 5-已下架, 6-已删除',
-    `rawid`        bigint(0)    NOT NULL COMMENT '原生内容ID',
     `create_by`    varchar(255) NOT NULL COMMENT '创建者',
     `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
     `update_by`    varchar(255) NOT NULL COMMENT '更新者',
@@ -40,47 +39,6 @@ CREATE INDEX `idx_favorites` ON `ecm_content` (`favorites` ASC);
 CREATE INDEX `idx_shares` ON `ecm_content` (`shares` ASC);
 CREATE INDEX `idx_downloads` ON `ecm_content` (`downloads` ASC);
 CREATE INDEX `idx_status` ON `ecm_content` (`status` ASC);
-
-/******************************************/
-/*   数据库全名 = oceanstars_ecm           */
-/*   表名称 = 内容分类                      */
-/******************************************/
-CREATE TABLE `ecm_content_category`
-(
-    `id`           bigint(0)    NOT NULL COMMENT 'id',
-    `name`         varchar(32)  NOT NULL COMMENT '内容分类名称-自然键',
-    `display_name` varchar(255) NOT NULL COMMENT '内容分类展示名称',
-    `description`  text(4096) COMMENT '内容分类描述',
-    `url`          varchar(255) COMMENT '内容分类链接',
-    `create_by`    varchar(255) NOT NULL COMMENT '创建者',
-    `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
-    `update_by`    varchar(255) NOT NULL COMMENT '更新者',
-    `update_at`    datetime(0)  NOT NULL COMMENT '更新时间',
-    `version`      int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_content_category_identifier` (`name`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `idx_content_category_display_name` ON `ecm_content_category` (`display_name` ASC);
-
-/******************************************/
-/*   数据库全名 = oceanstars_ecm           */
-/*   表名称 = 内容分类隶属关系              */
-/******************************************/
-CREATE TABLE `ecm_content_category_hierarchy`
-(
-    `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `cid`       bigint(0)    NOT NULL COMMENT '内容分类ID',
-    `pid`       bigint(0)    NOT NULL COMMENT '隶属内容分类ID',
-    `create_by` varchar(255) NOT NULL COMMENT '创建者',
-    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_rel_content_category_category` (`cid`, `pid`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
 
 /******************************************/
 /*   数据库全名 = oceanstars_ecm           */
@@ -110,16 +68,42 @@ CREATE INDEX `idx_content_web_function_parent` ON `ecm_content_web_function` (`p
 
 /******************************************/
 /*   数据库全名 = oceanstars_ecm           */
-/*   表名称 = 内容标签                      */
+/*   表名称 = 分类                         */
 /******************************************/
-CREATE TABLE `ecm_content_tag`
+CREATE TABLE `ecm_category`
 (
     `id`           bigint(0)    NOT NULL COMMENT 'id',
-    `name`         varchar(32)  NOT NULL COMMENT '内容标签名称-自然键',
-    `display_name` varchar(255) NOT NULL COMMENT '内容标签展示名称',
-    `description`  text(4096) COMMENT '内容标签描述',
-    `icon`         varchar(255) COMMENT '内容标签图标',
-    `url`          varchar(255) COMMENT '内容标签链接',
+    `name`         varchar(32)  NOT NULL COMMENT '分类名称-自然键',
+    `display_name` varchar(255) NOT NULL COMMENT '分类展示名称',
+    `description`  text(4096) COMMENT '分类描述',
+    `url`          varchar(255) COMMENT '分类链接',
+    `status`       smallint(0)  NOT NULL COMMENT '分类状态: 0-草稿, 1-待审核, 2-审核通过, 3-审核不通过, 4-已发布, 5-已下架, 6-已删除',
+    `create_by`    varchar(255) NOT NULL COMMENT '创建者',
+    `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by`    varchar(255) NOT NULL COMMENT '更新者',
+    `update_at`    datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`      int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_content_category_identifier` (`name`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_content_category_display_name` ON `ecm_category` (`display_name` ASC);
+
+/******************************************/
+/*   数据库全名 = oceanstars_ecm           */
+/*   表名称 = 标签                         */
+/******************************************/
+CREATE TABLE `ecm_tag`
+(
+    `id`           bigint(0)    NOT NULL COMMENT 'id',
+    `name`         varchar(32)  NOT NULL COMMENT '标签名称-自然键',
+    `display_name` varchar(255) NOT NULL COMMENT '标签展示名称',
+    `description`  text(4096) COMMENT '标签描述',
+    `icon`         varchar(255) COMMENT '标签图标',
+    `url`          varchar(255) COMMENT '标签链接',
+    `status`       smallint(0)  NOT NULL COMMENT '标签状态: 0-草稿, 1-待审核, 2-审核通过, 3-审核不通过, 4-已发布, 5-已下架, 6-已删除',
     `create_by`    varchar(255) NOT NULL COMMENT '创建者',
     `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
     `update_by`    varchar(255) NOT NULL COMMENT '更新者',
@@ -131,7 +115,24 @@ CREATE TABLE `ecm_content_tag`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `idx_content_tag_display_name` ON `ecm_content_tag` (`display_name` ASC);
+CREATE INDEX `idx_content_tag_display_name` ON `ecm_tag` (`display_name` ASC);
+
+/******************************************/
+/*   数据库全名 = oceanstars_ecm           */
+/*   表名称 = 分类隶属关系                  */
+/******************************************/
+CREATE TABLE `rel_category_category`
+(
+    `id`        bigint(0)    NOT NULL COMMENT 'id',
+    `cid`       bigint(0)    NOT NULL COMMENT '分类ID',
+    `pid`       bigint(0)    NOT NULL COMMENT '隶属分类ID',
+    `create_by` varchar(255) NOT NULL COMMENT '创建者',
+    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_rel_category_category` (`cid`, `pid`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 /******************************************/
 /*   数据库全名 = oceanstars_ecm           */
@@ -141,7 +142,7 @@ CREATE TABLE `rel_content_category`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
     `cid`       bigint(0)    NOT NULL COMMENT '内容ID',
-    `catid`     bigint(0)    NOT NULL COMMENT '内容分类ID',
+    `catid`     bigint(0)    NOT NULL COMMENT '分类ID',
     `create_by` varchar(255) NOT NULL COMMENT '创建者',
     `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
@@ -149,7 +150,6 @@ CREATE TABLE `rel_content_category`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-
 
 /******************************************/
 /*   数据库全名 = oceanstars_ecm           */
@@ -159,7 +159,7 @@ CREATE TABLE `rel_content_tag`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
     `cid`       bigint(0)    NOT NULL COMMENT '内容ID',
-    `tid`       bigint(0)    NOT NULL COMMENT '内容标签ID',
+    `tid`       bigint(0)    NOT NULL COMMENT '标签ID',
     `create_by` varchar(255) NOT NULL COMMENT '创建者',
     `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,

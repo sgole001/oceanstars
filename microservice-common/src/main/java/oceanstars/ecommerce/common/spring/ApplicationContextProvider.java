@@ -4,7 +4,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 /**
  * SpringBoot获取上下文
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since 2021/11/3 5:14 下午
  */
-@Component
 public class ApplicationContextProvider implements ApplicationContextAware {
 
   /**

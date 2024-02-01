@@ -13,16 +13,16 @@ import oceanstars.ecommerce.common.tools.MessageUtil;
 
 public class EcmEnums {
 
-  public enum ContentType implements IEnum<Short, String, ContentType> {
+  public enum ContentType implements IEnum<Integer, String, ContentType> {
 
     // WEB功能
-    WEB_FUNCTION(Short.valueOf("0"), "WEB_FUNCTION"),
+    WEB_FUNCTION(0, "WEB_FUNCTION"),
     ;
 
     /**
      * 枚举编号
      */
-    private final Short code;
+    private final Integer code;
 
     /**
      * 枚举显示名
@@ -35,7 +35,7 @@ public class EcmEnums {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    ContentType(Short code, String name) {
+    ContentType(Integer code, String name) {
       this.code = code;
       this.name = name;
     }
@@ -46,7 +46,7 @@ public class EcmEnums {
      * @param key 枚举项KEY
      * @return 枚举对象
      */
-    public static ContentType of(Short key) {
+    public static ContentType of(Integer key) {
       for (ContentType item : ContentType.values()) {
         if (item.code.equals(key)) {
           return item;
@@ -61,7 +61,7 @@ public class EcmEnums {
     }
 
     @Override
-    public Short key() {
+    public Integer key() {
       return this.code;
     }
 
@@ -71,7 +71,7 @@ public class EcmEnums {
     }
   }
 
-  public enum ContentStatus implements IEnum<Integer, String, ContentStatus> {
+  public enum AuditProcessStatus implements IEnum<Integer, String, AuditProcessStatus> {
 
     // 草稿
     DRAFT(0, "DRAFT"),
@@ -111,7 +111,7 @@ public class EcmEnums {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    ContentStatus(Integer code, String name) {
+    AuditProcessStatus(Integer code, String name) {
       this.code = code;
       this.name = name;
     }
@@ -122,8 +122,8 @@ public class EcmEnums {
      * @param key 枚举项KEY
      * @return 枚举对象
      */
-    public static ContentStatus of(Integer key) {
-      for (ContentStatus item : ContentStatus.values()) {
+    public static AuditProcessStatus of(Integer key) {
+      for (AuditProcessStatus item : AuditProcessStatus.values()) {
         if (item.code.equals(key)) {
           return item;
         }
@@ -132,7 +132,7 @@ public class EcmEnums {
     }
 
     @Override
-    public ContentStatus get() {
+    public AuditProcessStatus get() {
       return this;
     }
 
@@ -284,8 +284,18 @@ public class EcmEnums {
    */
   public enum Message implements IEnum<String, String, Message> {
 
-    // 编码为{0}的权限操作数据已经存在！
+    /**
+     * 分类创建失败，名称为{0}的分类已经存在！
+     */
     MSG_BIZ_00000("MSG_BIZ_00000"),
+    /**
+     * 标签创建失败，名称为{0}的标签已经存在！
+     */
+    MSG_BIZ_00001("MSG_BIZ_00001"),
+    /**
+     * 内容创建失败，{0}类型的名称为{1}的内容已经存在！
+     */
+    MSG_BIZ_00002("MSG_BIZ_00002"),
     ;
 
     /**

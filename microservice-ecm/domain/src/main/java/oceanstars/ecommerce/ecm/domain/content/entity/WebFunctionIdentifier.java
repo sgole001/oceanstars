@@ -16,12 +16,12 @@ public class WebFunctionIdentifier extends BaseEntityIdentifier<Long> {
   @Serial
   private static final long serialVersionUID = -137581853277226038L;
 
-  public WebFunctionIdentifier(Long identifier) {
-    super(identifier);
+  public WebFunctionIdentifier(Long delegator) {
+    super(delegator);
   }
 
   @Override
   public Long generateIdentifier() {
-    throw new BusinessException("Web功能实体唯一标识符非自动生成，需初始化关联内容实体数据物理PK");
+    throw new BusinessException("Web功能实体唯一标识符非自动生成，需初始化关联内容实体数据委托者ID");
   }
 }

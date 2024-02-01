@@ -2,7 +2,6 @@ package oceanstars.ecommerce.infrastructure.jooq.strategy;
 
 import org.jooq.codegen.DefaultGeneratorStrategy;
 import org.jooq.meta.Definition;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 代码生成策略
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0.0
  * @since 2021/11/4 1:48 下午
  */
-@Configuration
 public class OceanStarsGeneratorStrategy extends DefaultGeneratorStrategy {
 
   @Override

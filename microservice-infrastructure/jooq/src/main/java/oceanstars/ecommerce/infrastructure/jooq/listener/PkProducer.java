@@ -49,6 +49,10 @@ public class PkProducer implements RecordListener {
 
     for (Record record : records) {
 
+      if (record.get(fieldId) != null) {
+        continue;
+      }
+
       // 生成PK
       final long pk = pkWorker.nextId();
 

@@ -17,7 +17,6 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
-import org.springframework.stereotype.Component;
 
 /**
  * 默认Shiro构建器
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since 2021/11/4 1:34 下午
  */
-@Component
 public class DefaultShiroBuilder implements ShiroBuilder {
 
   /**

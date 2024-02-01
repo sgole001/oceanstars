@@ -6,9 +6,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import oceanstars.ecommerce.common.constant.CommonConstant;
 import oceanstars.ecommerce.common.tools.PropertyUtil;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
@@ -24,7 +24,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @version 1.0.0
  * @since 2021/11/4 11:09 上午
  */
-@Configuration
+@AutoConfiguration
 public class RedisConfig {
 
   /**

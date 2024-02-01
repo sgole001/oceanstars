@@ -21,13 +21,13 @@
   <dependencies>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>ecm-constant</artifactId>
-      <version>${ecm.constant.version}</version>
+      <artifactId>jooq</artifactId>
+      <version>${infrastructure.jooq.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>jooq</artifactId>
-      <version>${infrastructure.jooq.version}</version>
+      <artifactId>ecm-domain</artifactId>
+      <version>${ecm.domain.version}</version>
     </dependency>
   </dependencies>
 

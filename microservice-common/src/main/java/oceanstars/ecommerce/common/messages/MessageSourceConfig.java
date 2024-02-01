@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -26,7 +26,7 @@ import org.springframework.util.CollectionUtils;
  * @version 1.0.0
  * @since 2021/11/3 4:56 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 public class MessageSourceConfig {
 
   /**
@@ -51,8 +51,8 @@ public class MessageSourceConfig {
   }
 
   @Bean(name = "messageAccessor")
-  public MessageSourceAccessor messageAccessor(ReloadableResourceBundleMessageSource advancedMessageSource) {
-    advancedMessageSource.setResourceLoader(new PathMatchingResourcePatternResolver());
+  public MessageSourceAccessor messageAccessor(MessageSource advancedMessageSource) {
+    ((ReloadableResourceBundleMessageSource) advancedMessageSource).setResourceLoader(new PathMatchingResourcePatternResolver());
     return new MessageSourceAccessor(advancedMessageSource, LocaleContextHolder.getLocale());
   }
 

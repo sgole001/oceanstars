@@ -39,6 +39,6 @@ public class ContentIdentifier extends BaseEntityIdentifier<String> {
 
   @Override
   public String generateIdentifier() {
-    return type.value() + "-" + name;
+    return type.value() + "#" + name;
   }
 }

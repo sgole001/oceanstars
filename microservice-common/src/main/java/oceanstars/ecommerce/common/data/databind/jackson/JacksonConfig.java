@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Primary;
  * @version 1.0.0
  * @since 2021/11/3 3:56 下午
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 public class JacksonConfig {
 
   @Bean(value = "objectMapper")

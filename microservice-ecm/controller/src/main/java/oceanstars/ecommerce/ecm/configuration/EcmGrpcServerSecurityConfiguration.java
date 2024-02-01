@@ -1,8 +1,7 @@
 package oceanstars.ecommerce.ecm.configuration;
 
 import oceanstars.ecommerce.infrastructure.grpc.config.server.GrpcServerSecurityConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
  * <此类的功能说明>
@@ -11,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0.0
  * @since 2024/1/22 11:45
  */
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureBefore(GrpcServerSecurityConfiguration.class)
+@AutoConfiguration(before = {GrpcServerSecurityConfiguration.class})
 public class EcmGrpcServerSecurityConfiguration {
 
 //  @Bean

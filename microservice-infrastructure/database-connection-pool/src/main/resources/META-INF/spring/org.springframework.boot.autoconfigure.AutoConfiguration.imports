@@ -1,1 +1,2 @@
 oceanstars.ecommerce.infrastructure.pool.configuration.OceanStarsDataSourceAutoConfig
+oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsTransactionManagementConfiguration
