@@ -4,19 +4,15 @@ import static java.util.Objects.requireNonNull;
 
 import jakarta.annotation.Resource;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import oceanstars.ecommerce.common.domain.EntityDelegator;
+import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.Message;
 import oceanstars.ecommerce.ecm.domain.tag.entity.Tag;
-import oceanstars.ecommerce.ecm.domain.tag.entity.TagIdentifier;
 import oceanstars.ecommerce.ecm.domain.tag.repository.TagRepository;
 import oceanstars.ecommerce.ecm.repository.generate.tables.daos.EcmTagDao;
 import oceanstars.ecommerce.ecm.repository.generate.tables.pojos.EcmTagPojo;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 标签聚合资源库接口实现(JOOQ基础设施)
@@ -32,114 +28,8 @@ public class JooqTagRepository implements TagRepository {
   private EcmTagDao tagDao;
 
   @Override
-  public Optional<Tag> findByIdentifier(TagIdentifier identifier) {
-
-    // 校验参数
-    requireNonNull(identifier, "identifier");
-
-    // 根据标签唯一识别码查询标签实体
-    final EcmTagPojo tagPojo = this.tagDao.fetchOneByName(identifier.getIdentifier());
-
-    // 判断标签实体是否存在
-    if (null == tagPojo) {
-      return Optional.empty();
-    }
-
-    // 构建标签实体并返回实体Optional
-    return Optional.of(this.buildTagEntity(tagPojo));
-  }
-
-  @Override
-  public Optional<Tag> findByDelegator(EntityDelegator delegator) {
-
-    // 校验参数
-    requireNonNull(delegator, "delegator");
-
-    // 根据标签委托者唯一识别码查询标签实体
-    final EcmTagPojo tagPojo = this.tagDao.fetchOneById(delegator.getId());
-
-    // 判断标签实体是否存在
-    if (null == tagPojo) {
-      return Optional.empty();
-    }
-
-    // 构建标签实体并返回实体Optional
-    return Optional.of(this.buildTagEntity(tagPojo));
-  }
-
-  @Override
-  public Optional<Tag> findByDelegator(Long id) {
-
-    // 校验参数
-    requireNonNull(id, "id");
-
-    // 根据标签委托者唯一识别码查询标签实体
-    final EcmTagPojo tagPojo = this.tagDao.fetchOneById(id);
-
-    // 判断标签实体是否存在
-    if (null == tagPojo) {
-      return Optional.empty();
-    }
-
-    // 构建标签实体并返回实体Optional
-    return Optional.of(this.buildTagEntity(tagPojo));
-  }
-
-  @Override
-  public List<Tag> find(Tag conditions) {
-    return null;
-  }
-
-  @Override
-  public List<Tag> findByDelegators(List<EntityDelegator> delegators) {
-
-    // 校验参数
-    requireNonNull(delegators, "delegators");
-
-    // 根据标签委托者唯一识别码集合查询标签实体
-    final List<EcmTagPojo> tagPojoList = this.tagDao.fetchById(delegators.stream().map(EntityDelegator::getId).toArray(Long[]::new));
-
-    // 判断标签实体是否存在
-    if (CollectionUtils.isEmpty(tagPojoList)) {
-      return null;
-    }
-
-    return tagPojoList.stream().map(this::buildTagEntity).collect(Collectors.toList());
-  }
-
-  @Override
-  public List<Tag> findByDelegatorIds(List<Long> ids) {
-
-    // 校验参数
-    requireNonNull(ids, "ids");
-
-    // 根据标签委托者唯一识别码集合查询标签实体
-    final List<EcmTagPojo> tagPojoList = this.tagDao.fetchById(ids.toArray(new Long[0]));
-
-    // 判断标签实体是否存在
-    if (CollectionUtils.isEmpty(tagPojoList)) {
-      return null;
-    }
-
-    return tagPojoList.stream().map(this::buildTagEntity).collect(Collectors.toList());
-  }
-
-  @Override
-  public List<Tag> findByIdentifiers(List<TagIdentifier> identifiers) {
-
-    // 校验参数
-    requireNonNull(identifiers, "identifiers");
-
-    // 根据标签唯一标识符集合查询标签实体数据
-    final List<EcmTagPojo> tagPojoList =
-        this.tagDao.fetchByName(identifiers.stream().map(TagIdentifier::getIdentifier).toArray(String[]::new));
-
-    // 判断标签实体是否存在
-    if (CollectionUtils.isEmpty(tagPojoList)) {
-      return null;
-    }
-
-    return tagPojoList.stream().map(this::buildTagEntity).collect(Collectors.toList());
+  public List<Tag> find(ICondition condition) {
+    return List.of();
   }
 
   @Override
@@ -149,11 +39,11 @@ public class JooqTagRepository implements TagRepository {
     requireNonNull(aggregator, "aggregator");
 
     // 根据标签唯一识别码查询标签实体
-    EcmTagPojo tagPojo = this.tagDao.fetchOneByName(aggregator.getName());
+    EcmTagPojo tagPojo = this.tagDao.fetchOneByName(aggregator.getIdentifier().getIdentifier());
     // 校验标签实体是否存在，存在则抛出业务异常
     if (null != tagPojo) {
       // 业务异常：标签创建失败，名称为{0}的标签已经存在！
-      throw new BusinessException(Message.MSG_BIZ_00001, aggregator.getName());
+      throw new BusinessException(Message.MSG_BIZ_00001, aggregator.getIdentifier().getIdentifier());
     }
 
     // 保存标签数据
@@ -203,7 +93,7 @@ public class JooqTagRepository implements TagRepository {
     // 标签ID
     tagPojo.setId(tag.getDelegator().getId());
     // 标签名称
-    tagPojo.setName(tag.getName());
+    tagPojo.setName(tag.getIdentifier().getIdentifier());
     // 标签展示名称
     tagPojo.setDisplayName(tag.getDisplayName());
     // 标签描述

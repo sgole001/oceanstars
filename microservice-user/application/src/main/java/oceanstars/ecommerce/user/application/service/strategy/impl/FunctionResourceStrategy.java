@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.user.application.service.strategy.impl;
 
 import java.util.List;
-import oceanstars.ecommerce.common.domain.Entity;
+import oceanstars.ecommerce.common.domain.entity.Entity;
 import oceanstars.ecommerce.user.application.service.strategy.ResourceStrategy;
 
 /**

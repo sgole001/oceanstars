@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.message.domain.aggregate.event.entity;
 
 import java.util.List;
-import oceanstars.ecommerce.common.domain.AggregateRoot;
+import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.message.constant.enums.MessageEnum.MessageBus;
 import oceanstars.ecommerce.message.domain.aggregate.event.entity.strategy.EventContext;

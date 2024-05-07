@@ -29,15 +29,15 @@ message EcmContent {
   google.protobuf.Any raw_data = 7;
 }
 
-// 内容-WEB功能实体
-message EcmContentWebFunction {
-  // Web功能类型
-  int32 type = 1;
-  // Web功能跳转
-  string href = 2;
-  // Web功能图标
+// 内容原始信息 - 功能菜单
+message EcmContentFunctionMenu {
+  // 功能菜单对应的功能ID
+  int64 func = 1;
+  // 功能菜单动作：点击菜单后的执行脚本
+  string action = 2;
+  // 功能菜单图标
   string icon = 3;
-  // Web功能隶属 - 通过内容ID关联隶属关系
+  // 功能菜单隶属 - 通过内容ID关联隶属关系
   int64 parent = 4;
 }
 

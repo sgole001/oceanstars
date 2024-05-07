@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity.valueobject;
 
 import io.protostuff.Exclude;
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import oceanstars.ecommerce.common.tools.JsonUtil;
 import oceanstars.ecommerce.integration.domain.gateway.entity.ServiceEntity;
 

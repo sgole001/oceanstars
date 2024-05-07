@@ -3,7 +3,7 @@ package oceanstars.ecommerce.message.domain.aggregate.event.event;
 import java.io.Serial;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import oceanstars.ecommerce.common.domain.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
 import oceanstars.ecommerce.message.domain.aggregate.event.entity.EventMetaEntity;
 import oceanstars.ecommerce.message.domain.aggregate.event.event.data.EventData;
 

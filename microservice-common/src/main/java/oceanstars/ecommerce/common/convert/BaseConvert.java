@@ -2,7 +2,7 @@ package oceanstars.ecommerce.common.convert;
 
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.EntityDelegator;
+import oceanstars.ecommerce.common.domain.entity.EntityDelegator;
 import oceanstars.ecommerce.common.dto.BaseDto;
 import oceanstars.ecommerce.common.exception.SystemException;
 

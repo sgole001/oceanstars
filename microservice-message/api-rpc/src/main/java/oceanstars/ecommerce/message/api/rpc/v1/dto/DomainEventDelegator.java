@@ -3,7 +3,7 @@ package oceanstars.ecommerce.message.api.rpc.v1.dto;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import java.util.Map;
-import oceanstars.ecommerce.common.domain.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
 import oceanstars.ecommerce.common.tools.SerializeUtil;
 
 /**

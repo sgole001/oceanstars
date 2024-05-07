@@ -2,7 +2,7 @@ package oceanstars.ecommerce.ecm.domain.content.event;
 
 import java.io.Serial;
 import java.time.Clock;
-import oceanstars.ecommerce.common.domain.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
 import oceanstars.ecommerce.ecm.api.message.payload.content.ContentCreatedPayload;
 import oceanstars.ecommerce.ecm.domain.content.entity.Content;
 

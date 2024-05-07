@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.ecm.domain.category.entity;
 
 import java.util.List;
-import oceanstars.ecommerce.common.domain.AggregateRoot;
+import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 
 /**
@@ -12,11 +12,6 @@ import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
  * @since 2024/1/11 16:27
  */
 public class Category extends AggregateRoot<CategoryIdentifier> {
-
-  /**
-   * 分类名称
-   */
-  private final String name;
 
   /**
    * 分类展示名称
@@ -55,7 +50,6 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
    */
   private Category(Builder builder) {
     super(new CategoryIdentifier(builder.name));
-    name = builder.name;
     displayName = builder.displayName;
     description = builder.description;
     url = builder.url;
@@ -72,10 +66,6 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
    */
   public static Builder newBuilder(String name) {
     return new Builder(name);
-  }
-
-  public String getName() {
-    return name;
   }
 
   public String getDisplayName() {

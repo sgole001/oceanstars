@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.ecm.domain.tag.entity;
 
-import oceanstars.ecommerce.common.domain.AggregateRoot;
+import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 
 /**
@@ -11,11 +11,6 @@ import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
  * @since 2024/1/11 16:07
  */
 public class Tag extends AggregateRoot<TagIdentifier> {
-
-  /**
-   * 内容标签名称
-   */
-  private final String name;
 
   /**
    * 内容标签展示名称
@@ -49,7 +44,6 @@ public class Tag extends AggregateRoot<TagIdentifier> {
    */
   private Tag(Builder builder) {
     super(new TagIdentifier(builder.name));
-    name = builder.name;
     displayName = builder.displayName;
     description = builder.description;
     icon = builder.icon;
@@ -65,10 +59,6 @@ public class Tag extends AggregateRoot<TagIdentifier> {
    */
   public static Builder newBuilder(String name) {
     return new Builder(name);
-  }
-
-  public String getName() {
-    return name;
   }
 
   public String getDisplayName() {

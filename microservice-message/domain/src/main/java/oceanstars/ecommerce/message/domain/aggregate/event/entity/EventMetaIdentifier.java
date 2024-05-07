@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.message.domain.aggregate.event.entity;
 
 import oceanstars.ecommerce.common.constant.CommonConstant;
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.message.constant.enums.MessageEnum.MessageBus;
 
 /**

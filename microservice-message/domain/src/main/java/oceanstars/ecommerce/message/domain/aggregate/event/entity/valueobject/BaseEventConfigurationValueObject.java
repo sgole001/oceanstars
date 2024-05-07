@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.message.domain.aggregate.event.entity.valueobject;
 
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 
 /**
  * 事件元数据配置基础类

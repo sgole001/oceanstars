@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.ecm.domain.tag.entity;
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.common.exception.BusinessException;
 
 /**

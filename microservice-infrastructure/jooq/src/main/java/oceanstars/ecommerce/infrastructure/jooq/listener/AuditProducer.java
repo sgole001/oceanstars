@@ -25,27 +25,27 @@ public class AuditProducer implements RecordListener {
   /**
    * 日志管理器
    */
-  private static Logger logger = LogManager.getLogger(AuditProducer.class.getName());
+  private static final Logger logger = LogManager.getLogger(AuditProducer.class.getName());
 
   /**
    * 审计字段创建时间列名
    */
-  private static String COLUMN_NAME_AUDIT_CREATE_AT = "create_at";
+  private static final String COLUMN_NAME_AUDIT_CREATE_AT = "create_at";
 
   /**
    * 审计字段创建者列名
    */
-  private static String COLUMN_NAME_AUDIT_CREATE_BY = "create_by";
+  private static final String COLUMN_NAME_AUDIT_CREATE_BY = "create_by";
 
   /**
    * 审计字段更新时间列名
    */
-  private static String COLUMN_NAME_AUDIT_UPDATE_AT = "update_at";
+  private static final String COLUMN_NAME_AUDIT_UPDATE_AT = "update_at";
 
   /**
    * 审计字段更新者列名
    */
-  private static String COLUMN_NAME_AUDIT_UPDATE_BY = "update_by";
+  private static final String COLUMN_NAME_AUDIT_UPDATE_BY = "update_by";
 
   @Override
   public void insertStart(RecordContext recordContext) {
@@ -82,8 +82,13 @@ public class AuditProducer implements RecordListener {
     for (Record record : records) {
       record.with(fieldCreateAt, now);
       record.with(fieldCreateBy, auditId);
-      record.with(fieldUpdateAt, now);
-      record.with(fieldUpdateBy, auditId);
+      // 对于那些只做插入和删除操作的数据而已，不需要更新时间和更新者（更新操作通过删除后插入替代）
+      if (null != fieldUpdateAt) {
+        record.with(fieldUpdateAt, now);
+      }
+      if (null != fieldUpdateBy) {
+        record.with(fieldUpdateBy, auditId);
+      }
     }
   }
 

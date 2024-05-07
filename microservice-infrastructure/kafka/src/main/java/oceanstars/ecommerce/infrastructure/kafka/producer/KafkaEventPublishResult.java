@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.infrastructure.kafka.producer;
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.BaseEventPublishResult;
+import oceanstars.ecommerce.common.domain.event.BaseEventPublishResult;
 
 /**
  * Kafka事件发布同步返回结果

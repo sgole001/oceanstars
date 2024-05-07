@@ -2,7 +2,7 @@ package oceanstars.ecommerce.message.domain.aggregate.event.entity.valueobject;
 
 import java.util.Collections;
 import java.util.Map;
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import oceanstars.ecommerce.common.tools.SerializeUtil.Serialization;
 
 /**

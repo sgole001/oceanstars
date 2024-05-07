@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.ecm.domain.content.entity.valueobject;
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 
 /**
  * 内容统计值对象

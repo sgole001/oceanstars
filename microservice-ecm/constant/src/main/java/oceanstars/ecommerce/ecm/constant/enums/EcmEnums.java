@@ -13,10 +13,168 @@ import oceanstars.ecommerce.common.tools.MessageUtil;
 
 public class EcmEnums {
 
+  /**
+   * 资产类型枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/4/3 10:51
+   */
+  public enum AssetType implements IEnum<Integer, String, AssetType> {
+
+    // 多媒体: 图片
+    MEDIA_IMAGE(0, "MEDIA - IMAGE"),
+
+    // 多媒体: 视频
+    MEDIA_VIDEO(1, "MEDIA - VIDEO"),
+
+    // 多媒体: 音频
+    MEDIA_AUDIO(2, "MEDIA - AUDIO"),
+
+    // 软件: 文档
+    SOFTWARE_DOCUMENT(3, "SOFTWARE - DOCUMENT"),
+
+    // 软件: 源代码
+    SOFTWARE_SOURCE_CODE(4, "SOFTWARE - SOURCE CODE"),
+
+    // 数据
+    DATA(5, "DATA"),
+
+    // 知识产权: 功能列表
+    INTELLECTUAL_PROPERTY_FUNCTION(6, "INTELLECTUAL PROPERTY - FUNCTION"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Integer code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    /**
+     * 构造函数
+     *
+     * @param code 枚举编号
+     * @param name 枚举显示名
+     */
+    AssetType(Integer code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param key 枚举项KEY
+     * @return 枚举对象
+     */
+    public static AssetType of(Integer key) {
+      for (AssetType item : AssetType.values()) {
+        if (item.code.equals(key)) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    @Override
+    public AssetType get() {
+      return this;
+    }
+
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 分类类型枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/4/17 16:26
+   */
+  public enum CategoryType implements IEnum<Integer, String, CategoryType> {
+
+    // 默认分类
+    DEFAULT(0, "Default"),
+
+    // 内容空间分类
+    CONTENT_SPACE(1, "Content Space"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Integer code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    /**
+     * 构造函数
+     *
+     * @param code 枚举编号
+     * @param name 枚举显示名
+     */
+    CategoryType(Integer code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param key 枚举项KEY
+     * @return 枚举对象
+     */
+    public static CategoryType of(Integer key) {
+      for (CategoryType item : CategoryType.values()) {
+        if (item.code.equals(key)) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    @Override
+    public CategoryType get() {
+      return this;
+    }
+
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 内容类型枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/4/3 10:51
+   */
   public enum ContentType implements IEnum<Integer, String, ContentType> {
 
-    // WEB功能
-    WEB_FUNCTION(0, "WEB_FUNCTION"),
+    // 功能菜单
+    FUNCTION_MENU(0, "FUNCTION MENU"),
     ;
 
     /**
@@ -71,6 +229,13 @@ public class EcmEnums {
     }
   }
 
+  /**
+   * 审核流程状态枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/4/3 10:52
+   */
   public enum AuditProcessStatus implements IEnum<Integer, String, AuditProcessStatus> {
 
     // 草稿
@@ -147,7 +312,14 @@ public class EcmEnums {
     }
   }
 
-  public enum ContentTagStatus implements IEnum<Integer, String, ContentTagStatus> {
+  /**
+   * 资产状态枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/4/3 17:06
+   */
+  public enum AssetStatus implements IEnum<Integer, String, AssetStatus> {
 
     // 已删除
     DELETED(0, "DELETED"),
@@ -156,72 +328,6 @@ public class EcmEnums {
     PUBLISHED(1, "PUBLISHED"),
     ;
 
-    /**
-     * 枚举编号
-     */
-    private final Integer code;
-
-    /**
-     * 枚举显示名
-     */
-    private final String name;
-
-    /**
-     * 构造函数
-     *
-     * @param code 枚举编号
-     * @param name 枚举显示名
-     */
-    ContentTagStatus(Integer code, String name) {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * 根据枚举KEY获取枚举对象
-     *
-     * @param key 枚举项KEY
-     * @return 枚举对象
-     */
-    public static ContentTagStatus of(Integer key) {
-      for (ContentTagStatus item : ContentTagStatus.values()) {
-        if (item.code.equals(key)) {
-          return item;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public ContentTagStatus get() {
-      return this;
-    }
-
-    @Override
-    public Integer key() {
-      return this.code;
-    }
-
-    @Override
-    public String value() {
-      return this.name;
-    }
-  }
-
-  public enum WebFunctionType implements IEnum<Integer, String, WebFunctionType> {
-
-    // 页面
-    SITE(0, "PAGE"),
-
-    // 内联页面（弹出|抽屉）
-    CHANNEL(1, "INLINE PAGE"),
-
-    // 跳转(外部跳转 | 内部锚点)
-    PAGE(2, "HREF"),
-
-    // 交互事件 (按钮 | KEYBOARD | MOUSE | 音视频流)
-    COMPONENT(3, "EVENT"),
-    ;
 
     /**
      * 枚举编号
@@ -239,7 +345,7 @@ public class EcmEnums {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    WebFunctionType(Integer code, String name) {
+    AssetStatus(Integer code, String name) {
       this.code = code;
       this.name = name;
     }
@@ -250,8 +356,8 @@ public class EcmEnums {
      * @param key 枚举项KEY
      * @return 枚举对象
      */
-    public static WebFunctionType of(Integer key) {
-      for (WebFunctionType item : WebFunctionType.values()) {
+    public static AssetStatus of(Integer key) {
+      for (AssetStatus item : AssetStatus.values()) {
         if (item.code.equals(key)) {
           return item;
         }
@@ -260,7 +366,7 @@ public class EcmEnums {
     }
 
     @Override
-    public WebFunctionType get() {
+    public AssetStatus get() {
       return this;
     }
 
@@ -276,7 +382,7 @@ public class EcmEnums {
   }
 
   /**
-   * 消息
+   * 消息枚举
    *
    * @author Clover
    * @version 1.0.0
@@ -296,6 +402,18 @@ public class EcmEnums {
      * 内容创建失败，{0}类型的名称为{1}的内容已经存在！
      */
     MSG_BIZ_00002("MSG_BIZ_00002"),
+    /**
+     * 指定的排序位置{0}不存在，无法进行排序！
+     */
+    MSG_BIZ_00003("MSG_BIZ_00003"),
+    /**
+     * 指定的排序对象{0}不存在，无法进行排序！
+     */
+    MSG_BIZ_00004("MSG_BIZ_00004"),
+    /**
+     * 指定的排序对象{0}中{1}不存在，无法进行排序！
+     */
+    MSG_BIZ_00005("MSG_BIZ_0005"),
     ;
 
     /**

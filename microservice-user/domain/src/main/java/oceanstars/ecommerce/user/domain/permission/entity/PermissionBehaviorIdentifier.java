@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.user.domain.permission.entity;
 
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.common.exception.BusinessException;
 
 /**

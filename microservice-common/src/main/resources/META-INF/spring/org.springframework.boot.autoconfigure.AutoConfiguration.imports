@@ -3,7 +3,7 @@ oceanstars.ecommerce.common.messages.MessageSourceConfig
 oceanstars.ecommerce.common.cqrs.CqrsConfiguration
 oceanstars.ecommerce.common.data.databind.fastjson.FastjsonConfig
 oceanstars.ecommerce.common.data.databind.jackson.JacksonConfig
-oceanstars.ecommerce.common.domain.EventConfiguration
+oceanstars.ecommerce.common.domain.event.EventConfiguration
 oceanstars.ecommerce.common.exception.CommonExceptionHandler
 oceanstars.ecommerce.common.restful.RestConfiguration
 oceanstars.ecommerce.common.restful.Swagger3Config

@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.infrastructure.kafka.spi;
 
-import oceanstars.ecommerce.common.domain.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
 
 /**
  * Kafka事件存储SPI

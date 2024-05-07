@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity;
 
-import oceanstars.ecommerce.common.domain.Entity;
+import oceanstars.ecommerce.common.domain.entity.Entity;
 
 /**
  * 集成路由实体

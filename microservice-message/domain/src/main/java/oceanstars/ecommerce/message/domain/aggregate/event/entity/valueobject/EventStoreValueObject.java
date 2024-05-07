@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.message.domain.aggregate.event.entity.valueobject;
 
 import java.time.LocalDateTime;
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import org.springframework.lang.NonNull;
 
 /**

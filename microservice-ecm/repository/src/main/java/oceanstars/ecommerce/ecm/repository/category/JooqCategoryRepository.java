@@ -4,13 +4,11 @@ import static java.util.Objects.requireNonNull;
 
 import jakarta.annotation.Resource;
 import java.util.List;
-import java.util.Optional;
-import oceanstars.ecommerce.common.domain.EntityDelegator;
+import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.Message;
 import oceanstars.ecommerce.ecm.domain.category.entity.Category;
-import oceanstars.ecommerce.ecm.domain.category.entity.CategoryIdentifier;
 import oceanstars.ecommerce.ecm.domain.category.repository.CategoryRepository;
 import oceanstars.ecommerce.ecm.repository.generate.tables.daos.EcmCategoryDao;
 import oceanstars.ecommerce.ecm.repository.generate.tables.daos.RelCategoryCategoryDao;
@@ -37,120 +35,16 @@ public class JooqCategoryRepository implements CategoryRepository {
   private RelCategoryCategoryDao relCategoryCategoryDao;
 
   @Override
-  public Optional<Category> findByIdentifier(CategoryIdentifier identifier) {
-
-    // 校验参数
-    requireNonNull(identifier, "identifier");
-
-    // 根据分类唯一识别码查询分类实体
-    final EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneByName(identifier.getIdentifier());
-    // 判断分类实体是否存在
-    if (null == categoryPojo) {
-      return Optional.empty();
-    }
-
-    // 构建分类实体并返回实体Optional
-    return Optional.of(this.buildCategoryEntity(categoryPojo));
+  public List<Category> find(ICondition condition) {
+    return List.of();
   }
 
-  @Override
-  public Optional<Category> findByDelegator(EntityDelegator delegator) {
-
-    // 校验参数
-    requireNonNull(delegator, "delegator");
-
-    // 根据分类委托者唯一识别码查询分类实体
-    final EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneById(delegator.getId());
-    // 判断分类实体是否存在
-    if (null == categoryPojo) {
-      return Optional.empty();
-    }
-
-    // 构建分类实体并返回实体Optional
-    return Optional.of(this.buildCategoryEntity(categoryPojo));
-  }
-
-  @Override
-  public Optional<Category> findByDelegator(Long id) {
-
-    // 校验参数
-    requireNonNull(id, "delegator id");
-
-    // 根据分类委托者唯一识别码查询分类实体
-    final EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneById(id);
-    // 判断分类实体是否存在
-    if (null == categoryPojo) {
-      return Optional.empty();
-    }
-
-    // 构建分类实体并返回实体Optional
-    return Optional.of(this.buildCategoryEntity(categoryPojo));
-  }
-
-  @Override
-  public List<Category> find(Category conditions) {
-    return null;
-  }
-
-  @Override
-  public List<Category> findByDelegators(List<EntityDelegator> delegators) {
-
-    // 校验参数
-    requireNonNull(delegators, "delegators");
-
-    // 根据分类委托者集合查询分类实体数据
-    final List<EcmCategoryPojo> categoryPojoList =
-        this.categoryDao.fetchById(delegators.stream().map(EntityDelegator::getId).toArray(Long[]::new));
-
-    if (CollectionUtils.isEmpty(categoryPojoList)) {
-      return null;
-    }
-
-    return categoryPojoList.stream().map(this::buildCategoryEntity).toList();
-  }
-
-  @Override
-  public List<Category> findByDelegatorIds(List<Long> ids) {
-
-    // 校验参数
-    requireNonNull(ids, "delegator ids");
-
-    // 根据分类委托者唯一识别码集合查询分类实体数据
-    final List<EcmCategoryPojo> categoryPojoList = this.categoryDao.fetchById(ids.toArray(Long[]::new));
-
-    if (CollectionUtils.isEmpty(categoryPojoList)) {
-      return null;
-    }
-
-    return categoryPojoList.stream().map(this::buildCategoryEntity).toList();
-  }
-
-  @Override
-  public List<Category> findByIdentifiers(List<CategoryIdentifier> identifiers) {
-
-    // 校验参数
-    requireNonNull(identifiers, "identifiers");
-
-    // 根据分类唯一标识符集合查询分类实体数据
-    final List<EcmCategoryPojo> categoryPojoList = this.categoryDao.fetchByName(
-        identifiers.stream().map(CategoryIdentifier::getIdentifier).toArray(String[]::new));
-
-    if (CollectionUtils.isEmpty(categoryPojoList)) {
-      return null;
-    }
-
-    return categoryPojoList.stream().map(this::buildCategoryEntity).toList();
-  }
-
-  @OceanstarsTransactional(datasource = "ecm", rollbackFor = Exception.class)
+  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   public void save(Category aggregator) {
 
     // 校验参数
     requireNonNull(aggregator, "aggregator");
-
-//    JooqTest transactionManager = ApplicationContextProvider.getBean("test",
-//        JooqTest.class);
 
     // 根据分类唯一标识符查询分类数据
     EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneByName(aggregator.getIdentifier().getIdentifier());
@@ -165,7 +59,7 @@ public class JooqCategoryRepository implements CategoryRepository {
     this.categoryDao.insert(categoryPojo);
 
     // 判断分类是否有父级分类
-    if (!aggregator.getParents().isEmpty()) {
+    if (!CollectionUtils.isEmpty(aggregator.getParents())) {
       // 获取分类委托者ID
       final Long categoryId = categoryPojo.getId();
       // 构建分类隶属关系数据
@@ -203,13 +97,7 @@ public class JooqCategoryRepository implements CategoryRepository {
         .build();
 
     // 构建分类委托者实体
-    category.setDelegator(EntityDelegator.newBuilder(categoryPojo.getId())
-        .createAt(categoryPojo.getCreateAt())
-        .createBy(categoryPojo.getCreateBy())
-        .updateAt(categoryPojo.getUpdateAt())
-        .updateBy(categoryPojo.getUpdateBy())
-        .version(categoryPojo.getVersion())
-        .build());
+    category.delegate(categoryPojo);
 
     return category;
   }
@@ -227,7 +115,7 @@ public class JooqCategoryRepository implements CategoryRepository {
     // 分类ID
     categoryPojo.setId(category.getDelegator().getId());
     // 分类名称
-    categoryPojo.setName(category.getName());
+    categoryPojo.setName(category.getIdentifier().getIdentifier());
     // 分类展示名称
     categoryPojo.setDisplayName(category.getDisplayName());
     // 分类描述
@@ -252,9 +140,9 @@ public class JooqCategoryRepository implements CategoryRepository {
     // 初始化创建分类隶属关系数据库实体
     final RelCategoryCategoryPojo categoryCategoryPojo = new RelCategoryCategoryPojo();
     // 分类ID
-    categoryCategoryPojo.setCid(cid);
+    categoryCategoryPojo.setCategory(cid);
     // 父级分类ID
-    categoryCategoryPojo.setPid(pid);
+    categoryCategoryPojo.setParent(pid);
 
     return categoryCategoryPojo;
   }

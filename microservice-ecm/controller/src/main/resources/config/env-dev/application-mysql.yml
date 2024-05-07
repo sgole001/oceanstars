@@ -1,36 +1,8 @@
 oceanstars:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    default-datasource: ecm
     hikari:
       ecm:
-        # 数据库驱动完整类名
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        # 数据库连接url
-        jdbc-url: jdbc:mysql://${MYSQL_SERVICE_HOST}:3306/${MYSQL_SERVICE_DB_NAME}?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
-        # 数据库用户名
-        username: ${MYSQL_SERVICE_USER}
-        # 数据库密码
-        password: ${MYSQL_SERVICE_PASSWORD}
-        # 连接超时时间：毫秒，小于250毫秒，否则被重置为默认值30秒
-        connection-timeout: 30000
-        # 空闲连接最大存活时间，默认值600000（10分钟），大于等于max-lifetime且max-lifetime>0，会被重置为0；不等于0且小于10秒，会被重置为10秒。
-        idle-timeout: 200000
-        # 连接最大存活时间，不等于0且小于30秒，会被重置为默认值30分钟.设置应该比mysql设置的超时时间短
-        max-lifetime: 1800000
-        # 最大连接数，小于等于0会被重置为默认值10；大于零小于1会被重置为minimum-idle的值
-        maximum-pool-size: 20
-        # 最小空闲连接，默认值10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
-        minimum-idle: 5
-        # 连接池名字，可以通过MBean查看该属性
-        pool-name: HikariCP-Oceanstars-User
-        # 连接池属性，用来控制驱动程序等待来自池的连接的最大毫秒数。如果这个时间被超过，任何等待连接的线程都将被抛出SQLException。最小值：250
-        validation-timeout: 5000
-        # 连接池返回的连接默认自动提交，默认只 true
-        auto-commit: true
-        # 用于测试连接是否可用的查询语句
-        connection-test-query: select 1
-      user:
         # 数据库驱动完整类名
         driver-class-name: com.mysql.cj.jdbc.Driver
         # 数据库连接url

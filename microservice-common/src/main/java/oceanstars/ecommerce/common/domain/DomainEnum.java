@@ -1,5 +1,7 @@
 package oceanstars.ecommerce.common.domain;
 
+import oceanstars.ecommerce.common.constant.IEnum;
+
 /**
  * 领域枚举
  *
@@ -7,49 +9,86 @@ package oceanstars.ecommerce.common.domain;
  * @version 1.0.0
  * @since 2021/12/15 4:37 下午
  */
-public interface DomainEnum {
+public class DomainEnum {
 
   /**
-   * 消息总线类型
+   * 领域对象查询：字段条件类型
    *
    * @author Clover
    * @version 1.0.0
-   * @since 2021/12/1 6:12 下午
+   * @since 2024/5/3 15:03
    */
-  enum Domain implements DomainEnum {
+  public enum FieldConditionType implements IEnum<Integer, String, FieldConditionType> {
 
     /**
-     * 消息领域
+     * 等于
      */
-    MESSAGE(0, "message"),
+    EQ(0, "equal"),
+
     /**
-     * 购物车领域
+     * 不等于
      */
-    CART(1, "cart"),
+    NE(1, "not equal"),
+
     /**
-     * 订单领域
+     * 大于
      */
-    ORDER(2, "order"),
+    GT(2, "greater than"),
+
     /**
-     * 商品领域
+     * 大于等于
      */
-    PRODUCT(3, "product"),
+    GE(3, "greater than or equal to"),
+
     /**
-     * 促销领域
+     * 小于
      */
-    PROMOTION(4, "promotion"),
+    LT(4, "less than"),
+
     /**
-     * 用户领域
+     * 小于等于
      */
-    USER(5, "user"),
+    LE(5, "less than or equal to"),
+
     /**
-     * 认证领域
+     * 包含(in)
      */
-    AUTH(6, "auth"),
+    IN(6, "in"),
+
     /**
-     * 集成领域
+     * 不包含(not in
      */
-    INTEGRATION(7, "integration");
+    N_IN(7, "not in"),
+
+    /**
+     * 包含(like)
+     */
+    LIKE(8, "like"),
+
+    /**
+     * 不包含(not like)
+     */
+    N_LIKE(9, "not like"),
+
+    /**
+     * 包含(is null)
+     */
+    IS_NULL(10, "is null"),
+
+    /**
+     * 不包含(is not null)
+     */
+    IS_NOTNULL(11, "is not null"),
+
+    /**
+     * 包含(between)
+     */
+    BETWEEN(12, "between"),
+
+    /**
+     * 不包含(not between)
+     */
+    N_BETWEEN(13, "not between");
 
     /**
      * 枚举编号
@@ -67,27 +106,131 @@ public interface DomainEnum {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    Domain(Integer code, String name) {
+    FieldConditionType(Integer code, String name) {
       this.code = code;
       this.name = name;
     }
 
-    public static Domain of(Integer code) {
-      for (Domain value : Domain.values()) {
-
-        if (code.equals(value.getCode())) {
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param code 枚举项KEY
+     * @return 枚举对象
+     */
+    public static FieldConditionType of(Integer code) {
+      for (FieldConditionType value : FieldConditionType.values()) {
+        if (code.equals(value.key())) {
           return value;
         }
       }
       return null;
     }
 
-    public Integer getCode() {
-      return code;
+    @Override
+    public FieldConditionType get() {
+      return this;
     }
 
-    public String getName() {
-      return name;
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 领域对象查询：条件关系
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/5/3 15:17
+   */
+  public enum ConditionRelation implements IEnum<Integer, String, ConditionRelation> {
+
+    /**
+     * 与
+     */
+    AND(0, "and"),
+
+    /**
+     * 或
+     */
+    OR(1, "or"),
+
+    /**
+     * 异或
+     */
+    XOR(2, "xor"),
+
+    /**
+     * 非
+     */
+    NOT(3, "not"),
+
+    /**
+     * 与非
+     */
+    AND_NOT(4, "and not"),
+
+    /**
+     * 或非
+     */
+    OR_NOT(5, "or not"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Integer code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    /**
+     * 构造函数
+     *
+     * @param code 枚举编号
+     * @param name 枚举显示名
+     */
+    ConditionRelation(Integer code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param code 枚举项KEY
+     * @return 枚举对象
+     */
+    public static ConditionRelation of(Integer code) {
+      for (ConditionRelation value : ConditionRelation.values()) {
+        if (code.equals(value.key())) {
+          return value;
+        }
+      }
+      return null;
+    }
+
+    @Override
+    public ConditionRelation get() {
+      return this;
+    }
+
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
     }
   }
 }

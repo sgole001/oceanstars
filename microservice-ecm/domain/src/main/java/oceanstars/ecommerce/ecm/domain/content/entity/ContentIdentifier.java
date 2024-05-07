@@ -1,7 +1,8 @@
 package oceanstars.ecommerce.ecm.domain.content.entity;
 
 import java.io.Serial;
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentType;
 
 /**
@@ -15,6 +16,7 @@ public class ContentIdentifier extends BaseEntityIdentifier<String> {
 
   @Serial
   private static final long serialVersionUID = -8734552560365655928L;
+
   /**
    * 内容类型
    */
@@ -32,13 +34,21 @@ public class ContentIdentifier extends BaseEntityIdentifier<String> {
    * @param name 内容名称
    */
   public ContentIdentifier(ContentType type, String name) {
-    super(null);
+    super(type.value() + "#" + name.hashCode());
     this.type = type;
     this.name = name;
   }
 
+  public ContentType getType() {
+    return type;
+  }
+
+  public String getName() {
+    return name;
+  }
+
   @Override
   public String generateIdentifier() {
-    return type.value() + "#" + name;
+    throw new BusinessException("内容实体唯一标识符非自动生成，内容类型和内容名称组合唯一");
   }
 }

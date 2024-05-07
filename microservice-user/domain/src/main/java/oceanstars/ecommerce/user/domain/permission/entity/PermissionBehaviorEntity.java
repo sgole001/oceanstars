@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.user.domain.permission.entity;
 
-import oceanstars.ecommerce.common.domain.Entity;
+import oceanstars.ecommerce.common.domain.entity.Entity;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionOperationType;
 
 /**

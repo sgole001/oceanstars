@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.infrastructure.kafka.spi.elasticsearch;
 
-import oceanstars.ecommerce.common.domain.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.common.tools.JsonUtil;
 import oceanstars.ecommerce.infrastructure.kafka.spi.KafkaEventSourcingStorageSPI;

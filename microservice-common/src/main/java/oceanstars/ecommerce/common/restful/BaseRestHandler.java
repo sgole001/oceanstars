@@ -18,10 +18,10 @@ public abstract class BaseRestHandler<E extends RestRequestMessage> implements I
     final GeneratedMessageV3[] messages = this.parsingRequestMessage(restRequestMessage);
 
     // 业务处理
-    final GeneratedMessageV3[] results = this.process(messages);
+    final GeneratedMessageV3 result = this.process(messages);
 
     // 封装响应参数
-    return this.packageResponseMessage(results);
+    return this.packageResponseMessage(result);
   }
 
   /**
@@ -36,15 +36,15 @@ public abstract class BaseRestHandler<E extends RestRequestMessage> implements I
    * 业务处理
    *
    * @param messages 业务处理所需数据集
-   * @return 业务处理结果数据集
+   * @return 业务处理结果数据
    */
-  public abstract GeneratedMessageV3[] process(final GeneratedMessageV3[] messages);
+  public abstract GeneratedMessageV3 process(final GeneratedMessageV3[] messages);
 
   /**
    * 封装响应参数
    *
-   * @param results 业务处理结果数据集
+   * @param result 业务处理结果数据
    * @return 响应参数
    */
-  public abstract RestResponseMessage packageResponseMessage(final GeneratedMessageV3[] results);
+  public abstract RestResponseMessage packageResponseMessage(final GeneratedMessageV3 result);
 }

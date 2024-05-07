@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity;
 
-import oceanstars.ecommerce.common.domain.Entity;
+import oceanstars.ecommerce.common.domain.entity.Entity;
 import oceanstars.ecommerce.integration.constant.enums.IntegrationEnum.IntegrationType;
 import oceanstars.ecommerce.integration.domain.gateway.entity.valueobject.AuthenticationValueObject;
 import oceanstars.ecommerce.integration.domain.gateway.entity.valueobject.BaseIntegrationRequestValueObject;

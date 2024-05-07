@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity.valueobject;
 
-import oceanstars.ecommerce.common.domain.ValueObject;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 
 /**
  * 集成目标服务认证信息实体

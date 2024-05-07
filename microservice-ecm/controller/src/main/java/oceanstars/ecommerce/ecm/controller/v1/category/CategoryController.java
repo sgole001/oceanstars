@@ -1,9 +1,8 @@
 package oceanstars.ecommerce.ecm.controller.v1.category;
 
-import jakarta.annotation.Resource;
 import oceanstars.ecommerce.common.exception.BaseException;
 import oceanstars.ecommerce.common.restful.RestApiController;
-import oceanstars.ecommerce.common.restful.RestGateway;
+import oceanstars.ecommerce.common.restful.RestBus;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.ecm.api.rest.v1.controller.ICategoryController;
 import oceanstars.ecommerce.ecm.api.rest.v1.request.category.CreateCategoryRequestMessage;
@@ -26,13 +25,21 @@ public class CategoryController extends RestApiController implements ICategoryCo
   /**
    * Restful API网关
    */
-  @Resource
-  private RestGateway restGateway;
+  private final RestBus restGateway;
 
   /**
    * 日志管理器
    */
   private final Logger logger = LoggerFactory.getLogger(CategoryController.class);
+
+  /**
+   * 构造函数
+   *
+   * @param restGateway Restful API网关
+   */
+  public CategoryController(RestBus restGateway) {
+    this.restGateway = restGateway;
+  }
 
   @Override
   public RestResponseMessage createCategory(CreateCategoryRequestMessage requestMessage) throws BaseException {

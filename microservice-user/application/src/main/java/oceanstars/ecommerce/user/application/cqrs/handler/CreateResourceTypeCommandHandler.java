@@ -2,7 +2,7 @@ package oceanstars.ecommerce.user.application.cqrs.handler;
 
 import jakarta.annotation.Resource;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;
-import oceanstars.ecommerce.common.domain.EventGateway;
+import oceanstars.ecommerce.common.domain.event.EventGateway;
 import oceanstars.ecommerce.user.api.message.payload.resource.ResourceTypeCreatedPayload;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.CreateResourceTypeCommand;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.CreateResourceTypeResult;

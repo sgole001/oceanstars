@@ -1,8 +1,7 @@
 package oceanstars.ecommerce.ecm.controller.v1.tag;
 
-import jakarta.annotation.Resource;
 import oceanstars.ecommerce.common.exception.BaseException;
-import oceanstars.ecommerce.common.restful.RestGateway;
+import oceanstars.ecommerce.common.restful.RestBus;
 import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.ecm.api.rest.v1.controller.ITagController;
 import oceanstars.ecommerce.ecm.api.rest.v1.request.tag.CreateTagRequestMessage;
@@ -23,13 +22,21 @@ public class TagController implements ITagController {
   /**
    * Restful API网关
    */
-  @Resource
-  private RestGateway restGateway;
+  private final RestBus restGateway;
 
   /**
    * 日志管理器
    */
   private final Logger logger = LoggerFactory.getLogger(TagController.class);
+
+  /**
+   * 构造函数
+   *
+   * @param restGateway Restful API网关
+   */
+  public TagController(RestBus restGateway) {
+    this.restGateway = restGateway;
+  }
 
   @Override
   public RestResponseMessage createTag(CreateTagRequestMessage requestMessage) throws BaseException {

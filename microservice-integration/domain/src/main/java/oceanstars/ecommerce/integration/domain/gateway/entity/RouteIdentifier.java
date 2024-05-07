@@ -1,7 +1,7 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity;
 
 import oceanstars.ecommerce.common.constant.CommonConstant;
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 
 /**
  * 集成路由实体唯一识别符对象

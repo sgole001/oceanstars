@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity;
 
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.integration.constant.enums.IntegrationEnum.IntegrationSystem;
 
 /**

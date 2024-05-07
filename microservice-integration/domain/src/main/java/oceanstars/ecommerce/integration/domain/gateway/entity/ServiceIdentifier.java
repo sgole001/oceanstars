@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.integration.domain.gateway.entity;
 
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 
 /**
  * 集成目标系统服务实体唯一识别符对象

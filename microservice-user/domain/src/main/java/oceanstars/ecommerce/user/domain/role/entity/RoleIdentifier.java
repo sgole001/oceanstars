@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.user.domain.role.entity;
 
-import oceanstars.ecommerce.common.domain.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 
 /**
  * 角色实体唯一标识符生成器

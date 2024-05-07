@@ -1,8 +1,8 @@
 package oceanstars.ecommerce.infrastructure.kafka.producer;
 
 import java.util.concurrent.CompletableFuture;
-import oceanstars.ecommerce.common.domain.DomainEvent;
-import oceanstars.ecommerce.common.domain.IEventPublisher;
+import oceanstars.ecommerce.common.domain.event.DomainEvent;
+import oceanstars.ecommerce.common.domain.event.IEventPublisher;
 import oceanstars.ecommerce.infrastructure.kafka.spi.KafkaEventSourcingStorageSPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

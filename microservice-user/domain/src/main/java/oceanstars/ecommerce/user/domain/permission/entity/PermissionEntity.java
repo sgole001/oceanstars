@@ -2,7 +2,7 @@ package oceanstars.ecommerce.user.domain.permission.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import oceanstars.ecommerce.common.domain.AggregateRoot;
+import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionOperationType;

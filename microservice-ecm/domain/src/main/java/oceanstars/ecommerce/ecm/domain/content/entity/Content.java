@@ -1,8 +1,8 @@
 package oceanstars.ecommerce.ecm.domain.content.entity;
 
 import java.util.List;
-import oceanstars.ecommerce.common.domain.AggregateRoot;
-import oceanstars.ecommerce.common.domain.Entity;
+import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
+import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentType;
 import oceanstars.ecommerce.ecm.domain.content.entity.valueobject.ContentStatisticsValueObject;
@@ -15,16 +15,6 @@ import oceanstars.ecommerce.ecm.domain.content.entity.valueobject.ContentStatist
  * @since 2024/1/11 13:56
  */
 public class Content extends AggregateRoot<ContentIdentifier> {
-
-  /**
-   * 内容名称
-   */
-  private final String name;
-
-  /**
-   * 内容类型
-   */
-  private final ContentType type;
 
   /**
    * 内容展示名称
@@ -57,9 +47,9 @@ public class Content extends AggregateRoot<ContentIdentifier> {
   private AuditProcessStatus status;
 
   /**
-   * 原生内容实体
+   * 内容原始信息
    */
-  private Entity<?> raw;
+  private ValueObject raw;
 
   /**
    * 构造函数：初始化成员变量
@@ -68,34 +58,24 @@ public class Content extends AggregateRoot<ContentIdentifier> {
    */
   private Content(Builder builder) {
     super(new ContentIdentifier(builder.type, builder.name));
-    name = builder.name;
-    type = builder.type;
-    displayName = builder.displayName;
-    description = builder.description;
-    tags = builder.tags;
-    categories = builder.categories;
-    statistics = builder.statistics;
-    status = builder.status;
-    raw = builder.raw;
+    this.displayName = builder.displayName;
+    this.description = builder.description;
+    this.tags = builder.tags;
+    this.categories = builder.categories;
+    this.statistics = builder.statistics;
+    this.status = builder.status;
+    this.raw = builder.raw;
   }
 
   /**
    * 创建内容构建器
    *
-   * @param name 内容名称
    * @param type 内容类型
+   * @param name 内容名称
    * @return 内容构建器
    */
-  public static Builder newBuilder(String name, ContentType type) {
-    return new Builder(name, type);
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public ContentType getType() {
-    return type;
+  public static Builder newBuilder(ContentType type, String name) {
+    return new Builder(type, name);
   }
 
   public String getDisplayName() {
@@ -146,11 +126,11 @@ public class Content extends AggregateRoot<ContentIdentifier> {
     this.status = status;
   }
 
-  public Entity<?> getRaw() {
+  public ValueObject getRaw() {
     return raw;
   }
 
-  public void setRaw(Entity<?> raw) {
+  public void setRaw(ValueObject raw) {
     this.raw = raw;
   }
 
@@ -163,19 +143,20 @@ public class Content extends AggregateRoot<ContentIdentifier> {
    */
   public static final class Builder {
 
-    private final String name;
     private final ContentType type;
+    private final String name;
+
     private String displayName;
     private String description;
     private List<Long> tags;
     private List<Long> categories;
     private ContentStatisticsValueObject statistics;
     private AuditProcessStatus status;
-    private Entity<?> raw;
+    private ValueObject raw;
 
-    public Builder(String name, ContentType type) {
-      this.name = name;
+    public Builder(ContentType type, String name) {
       this.type = type;
+      this.name = name;
     }
 
     public Builder displayName(String val) {
@@ -208,7 +189,7 @@ public class Content extends AggregateRoot<ContentIdentifier> {
       return this;
     }
 
-    public Builder raw(Entity<?> val) {
+    public Builder raw(ValueObject val) {
       raw = val;
       return this;
     }
