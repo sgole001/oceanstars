@@ -1,7 +1,6 @@
 package oceanstars.ecommerce.ecm.application.content.cqrs.strategy.impl;
 
 import com.google.protobuf.Any;
-import java.util.Map;
 import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import oceanstars.ecommerce.ecm.application.content.cqrs.strategy.ContentRawDataStrategy;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentType;
@@ -35,20 +34,10 @@ public class ContentRawDataStrategyContext {
     }
 
     switch (contentType) {
-      case FUNCTION_MENU:
-        this.strategy = new FunctionMenuStrategy();
+      case MENU:
+        this.strategy = new MenuStrategy();
         break;
     }
-  }
-
-  /**
-   * 打包请求消息
-   *
-   * @param message 请求消息
-   * @return 打包后的请求消息
-   */
-  public Any pack(Map<String, String> message) {
-    return this.strategy.pack(message);
   }
 
   /**

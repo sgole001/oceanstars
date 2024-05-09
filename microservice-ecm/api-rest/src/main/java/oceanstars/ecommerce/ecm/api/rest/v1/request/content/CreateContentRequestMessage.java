@@ -1,9 +1,8 @@
 package oceanstars.ecommerce.ecm.api.rest.v1.request.content;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.google.protobuf.Message;
 import java.io.Serial;
 import java.util.List;
-import java.util.Map;
 import oceanstars.ecommerce.common.restful.RestRequestMessage;
 
 /**
@@ -13,8 +12,7 @@ import oceanstars.ecommerce.common.restful.RestRequestMessage;
  * @version 1.0.0
  * @since 2024/1/17 15:27
  */
-@Schema(name = "CreateContentRequestMessage", description = "创建内容接口请求参数")
-public class CreateContentRequestMessage extends RestRequestMessage {
+public class CreateContentRequestMessage<T extends Message> extends RestRequestMessage {
 
   @Serial
   private static final long serialVersionUID = -7452551592352900855L;
@@ -22,45 +20,37 @@ public class CreateContentRequestMessage extends RestRequestMessage {
   /**
    * 内容名称
    */
-  @Schema(description = "内容名称")
   private String name;
 
   /**
    * 内容类型
    */
-  @Schema(description = "内容类型")
   private Integer type;
-
 
   /**
    * 内容展示名称
    */
-  @Schema(description = "内容展示名称")
   private String displayName;
 
   /**
    * 内容描述
    */
-  @Schema(description = "内容描述")
   private String description;
 
   /**
    * 内容标签
    */
-  @Schema(description = "内容标签")
   private List<Long> tags;
 
   /**
    * 内容分类
    */
-  @Schema(description = "内容分类")
   private List<Long> categories;
 
   /**
    * 不同内容类型特有数据
    */
-  @Schema(description = "不同内容类型特有数据")
-  private Map<String, String> rawData;
+  private T rawData;
 
   public String getName() {
     return name;
@@ -110,11 +100,11 @@ public class CreateContentRequestMessage extends RestRequestMessage {
     this.categories = categories;
   }
 
-  public Map<String, String> getRawData() {
+  public T getRawData() {
     return rawData;
   }
 
-  public void setRawData(Map<String, String> rawData) {
+  public void setRawData(T rawData) {
     this.rawData = rawData;
   }
 }

@@ -25,20 +25,24 @@ message EcmContent {
   repeated int64 tags = 5;
   // 内容分类
   repeated int64 categories = 6;
-  // 不同内容类型特有数据
+  // 内容原生信息（不同内容类型属性差异）
   google.protobuf.Any raw_data = 7;
 }
 
-// 内容原始信息 - 功能菜单
-message EcmContentFunctionMenu {
-  // 功能菜单对应的功能ID
-  int64 func = 1;
-  // 功能菜单动作：点击菜单后的执行脚本
-  string action = 2;
-  // 功能菜单图标
-  string icon = 3;
-  // 功能菜单隶属 - 通过内容ID关联隶属关系
-  int64 parent = 4;
+// 内容原生信息 - 菜单
+message EcmContentMenu {
+  // 菜单类型
+  int32 type = 1;
+  // 菜单对应的功能ID
+  int64 func = 2;
+  // 菜单动作：点击菜单后的执行脚本
+  string action = 3;
+  // 菜单图标
+  string icon = 4;
+  // 菜单隶属
+  int64 parent = 5;
+  // 菜单是否可见
+  bool visible = 6;
 }
 
 // 创建内容命令实体
@@ -55,7 +59,7 @@ message EcmCreateContentCommand {
   repeated int64 tags = 5;
   // 内容分类
   repeated int64 categories = 6;
-  // 不同内容类型特有数据
+  // 内容原生信息（不同内容类型属性差异）
   google.protobuf.Any raw_data = 7;
 }
 

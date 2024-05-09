@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.ecm.domain.content.entity;
 
-import java.util.List;
+import java.util.Set;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.common.domain.entity.ValueObject;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
@@ -29,12 +29,12 @@ public class Content extends AggregateRoot<ContentIdentifier> {
   /**
    * 内容标签
    */
-  private List<Long> tags;
+  private Set<Long> tags;
 
   /**
    * 内容分类
    */
-  private List<Long> categories;
+  private Set<Long> categories;
 
   /**
    * 内容统计值对象
@@ -94,19 +94,19 @@ public class Content extends AggregateRoot<ContentIdentifier> {
     this.description = description;
   }
 
-  public List<Long> getTags() {
+  public Set<Long> getTags() {
     return tags;
   }
 
-  public void setTags(List<Long> tags) {
+  public void setTags(Set<Long> tags) {
     this.tags = tags;
   }
 
-  public List<Long> getCategories() {
+  public Set<Long> getCategories() {
     return categories;
   }
 
-  public void setCategories(List<Long> categories) {
+  public void setCategories(Set<Long> categories) {
     this.categories = categories;
   }
 
@@ -148,8 +148,8 @@ public class Content extends AggregateRoot<ContentIdentifier> {
 
     private String displayName;
     private String description;
-    private List<Long> tags;
-    private List<Long> categories;
+    private Set<Long> tags;
+    private Set<Long> categories;
     private ContentStatisticsValueObject statistics;
     private AuditProcessStatus status;
     private ValueObject raw;
@@ -169,12 +169,12 @@ public class Content extends AggregateRoot<ContentIdentifier> {
       return this;
     }
 
-    public Builder tags(List<Long> val) {
+    public Builder tags(Set<Long> val) {
       tags = val;
       return this;
     }
 
-    public Builder categories(List<Long> val) {
+    public Builder categories(Set<Long> val) {
       categories = val;
       return this;
     }

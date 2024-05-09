@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.ecm.controller.v1.content.restful.handle;
 
+import com.google.protobuf.Any;
 import com.google.protobuf.GeneratedMessageV3;
 import oceanstars.ecommerce.common.cqrs.Bus;
 import oceanstars.ecommerce.common.restful.BaseRestHandler;
@@ -8,7 +9,6 @@ import oceanstars.ecommerce.common.restful.RestResponseMessage;
 import oceanstars.ecommerce.ecm.api.rest.v1.request.content.CreateContentRequestMessage;
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentCommand;
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentResult;
-import oceanstars.ecommerce.ecm.application.content.cqrs.strategy.impl.ContentRawDataStrategyContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @since 2024/1/17 15:34
  */
 @Component
-public class CreateContentRestHandler extends BaseRestHandler<CreateContentRequestMessage> {
+public class CreateContentRestHandler extends BaseRestHandler<CreateContentRequestMessage<?>> {
 
   /**
    * CQRS处理总线
@@ -37,7 +37,7 @@ public class CreateContentRestHandler extends BaseRestHandler<CreateContentReque
   }
 
   @Override
-  public GeneratedMessageV3[] parsingRequestMessage(CreateContentRequestMessage restRequestMessage) {
+  public GeneratedMessageV3[] parsingRequestMessage(CreateContentRequestMessage<?> restRequestMessage) {
 
     // 构建创建内容命令请求参数
     final EcmCreateContentCommand createContentCommand = EcmCreateContentCommand.newBuilder()
@@ -53,8 +53,8 @@ public class CreateContentRestHandler extends BaseRestHandler<CreateContentReque
         .addAllTags(restRequestMessage.getTags())
         // 内容分类
         .addAllCategories(restRequestMessage.getCategories())
-        // 不同内容类型特有数据
-        .setRawData(new ContentRawDataStrategyContext(restRequestMessage.getType()).pack(restRequestMessage.getRawData()))
+        // 内容原生信息
+        .setRawData(Any.pack(restRequestMessage.getRawData()))
         // 执行构建
         .build();
 

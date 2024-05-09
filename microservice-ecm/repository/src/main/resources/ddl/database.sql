@@ -9,6 +9,7 @@ CREATE TABLE `ecm_content_menu`
     `display_name` varchar(255) NOT NULL COMMENT '菜单展示名称',
     `description`  text(4096) COMMENT '菜单描述',
     `status`       smallint(0)  NOT NULL COMMENT '菜单状态: 0-草稿, 1-待审核, 2-审核通过, 3-审核不通过, 4-已发布, 5-已下架, 6-已删除',
+    `type`         smallint(0)  NOT NULL COMMENT '菜单功能类型: 0-菜单, 1-功能',
     `icon`         varchar(255) COMMENT '菜单图标',
     `func`         bigint(0)    NOT NULL COMMENT '菜单功能ID',
     `action`       text(4096) COMMENT '菜单动作：点击菜单后的执行脚本',
@@ -31,6 +32,7 @@ CREATE TABLE `ecm_content_menu`
 CREATE FULLTEXT INDEX `idx_content_menu_name` ON `ecm_content_menu` (`name`);
 CREATE FULLTEXT INDEX `idx_content_menu_display_name` ON `ecm_content_menu` (`display_name`);
 CREATE INDEX `idx_content_menu_status` ON `ecm_content_menu` (`status` ASC);
+CREATE INDEX `idx_content_menu_type` ON `ecm_content_menu` (`type` ASC);
 CREATE INDEX `idx_content_menu_func` ON `ecm_content_menu` (`func` ASC);
 CREATE INDEX `idx_content_menu_parent` ON `ecm_content_menu` (`parent` ASC);
 CREATE INDEX `idx_content_menu_prev` ON `ecm_content_menu` (`prev` ASC);

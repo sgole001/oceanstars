@@ -173,8 +173,8 @@ public class EcmEnums {
    */
   public enum ContentType implements IEnum<Integer, String, ContentType> {
 
-    // 功能菜单
-    FUNCTION_MENU(0, "FUNCTION MENU"),
+    // 菜单
+    MENU(0, "MENU"),
     ;
 
     /**
@@ -215,6 +215,157 @@ public class EcmEnums {
 
     @Override
     public ContentType get() {
+      return this;
+    }
+
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 内容统计类型枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/5/9 16:09
+   */
+  public enum ContentStatisticsType implements IEnum<Integer, String, ContentStatisticsType> {
+
+    // 访问次数
+    VISITS(0, "visits"),
+
+    // 评论数量
+    COMMENTS(1, "comments"),
+
+    // 点赞数量
+    LIKES(2, "likes"),
+
+    // 点踩数量
+    DISLIKES(3, "dislikes"),
+
+    // 收藏数量
+    FAVORITES(4, "favorites"),
+
+    // 分享数量
+    SHARES(5, "shares"),
+
+    // 下载数量
+    DOWNLOADS(6, "downloads"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Integer code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    /**
+     * 构造函数
+     *
+     * @param code 枚举编号
+     * @param name 枚举显示名
+     */
+    ContentStatisticsType(Integer code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param key 枚举项KEY
+     * @return 枚举对象
+     */
+    public static ContentStatisticsType of(Integer key) {
+      for (ContentStatisticsType item : ContentStatisticsType.values()) {
+        if (item.code.equals(key)) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    @Override
+    public ContentStatisticsType get() {
+      return this;
+    }
+
+    @Override
+    public Integer key() {
+      return this.code;
+    }
+
+    @Override
+    public String value() {
+      return this.name;
+    }
+  }
+
+  /**
+   * 内容菜单类型枚举
+   *
+   * @author Clover
+   * @version 1.0.0
+   * @since 2024/5/7 17:36
+   */
+  public enum ContentMenuType implements IEnum<Integer, String, ContentMenuType> {
+
+    // 菜单
+    MENU(0, "MENU"),
+
+    // 功能
+    FUNC(1, "Function"),
+    ;
+
+    /**
+     * 枚举编号
+     */
+    private final Integer code;
+
+    /**
+     * 枚举显示名
+     */
+    private final String name;
+
+    /**
+     * 构造函数
+     *
+     * @param code 枚举编号
+     * @param name 枚举显示名
+     */
+    ContentMenuType(Integer code, String name) {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * 根据枚举KEY获取枚举对象
+     *
+     * @param key 枚举项KEY
+     * @return 枚举对象
+     */
+    public static ContentMenuType of(Integer key) {
+      for (ContentMenuType item : ContentMenuType.values()) {
+        if (item.code.equals(key)) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    @Override
+    public ContentMenuType get() {
       return this;
     }
 
