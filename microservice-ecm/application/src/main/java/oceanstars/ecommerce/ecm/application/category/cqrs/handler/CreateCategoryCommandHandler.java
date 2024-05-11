@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.ecm.application.category.cqrs.handler;
 
+import java.util.HashSet;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;
 import oceanstars.ecommerce.common.domain.event.EventBus;
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.category.EcmCreateCategoryCommand;
@@ -8,7 +9,6 @@ import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 import oceanstars.ecommerce.ecm.domain.category.entity.Category;
 import oceanstars.ecommerce.ecm.domain.category.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 创建分类命令处理器
@@ -52,15 +52,12 @@ public class CreateCategoryCommandHandler implements ICommandHandler<EcmCreateCa
         .description(command.getDescription())
         // 分类URL
         .url(command.getUrl())
+        // 父级分类
+        .parents(new HashSet<>(command.getParentsList()))
         // 审核流程状态
         .status(AuditProcessStatus.DRAFT)
         // 构建分类实体
         .build();
-
-    // 查询父级分类
-    if (!CollectionUtils.isEmpty(command.getParentsList())) {
-//      category.setParents(this.categoryRepository.findByDelegatorIds(command.getParentsList()));
-    }
 
     // 保存分类
     this.categoryRepository.save(category);

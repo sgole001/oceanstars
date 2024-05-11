@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import jakarta.annotation.Resource;
 import java.util.List;
+import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Repository;
  * @since 2024/1/25 15:29
  */
 @Repository
-public class JooqTagRepository implements TagRepository {
+public class JooqTagRepository extends BaseDomainRepository<Tag> implements TagRepository {
 
   @Resource
   private EcmTagDao tagDao;
@@ -33,26 +34,31 @@ public class JooqTagRepository implements TagRepository {
   }
 
   @Override
-  public void save(Tag aggregator) {
+  protected void create(Tag tag) {
 
     // 校验参数
-    requireNonNull(aggregator, "aggregator");
+    requireNonNull(tag, "tag");
 
     // 根据标签唯一识别码查询标签实体
-    EcmTagPojo tagPojo = this.tagDao.fetchOneByName(aggregator.getIdentifier().getIdentifier());
+    EcmTagPojo tagPojo = this.tagDao.fetchOneByName(tag.getIdentifier().getIdentifier());
     // 校验标签实体是否存在，存在则抛出业务异常
     if (null != tagPojo) {
       // 业务异常：标签创建失败，名称为{0}的标签已经存在！
-      throw new BusinessException(Message.MSG_BIZ_00001, aggregator.getIdentifier().getIdentifier());
+      throw new BusinessException(Message.MSG_BIZ_00001, tag.getIdentifier().getIdentifier());
     }
 
     // 保存标签数据
-    tagPojo = this.buildTagPojo(aggregator);
+    tagPojo = this.buildTagPojo(tag);
     tagDao.insert(tagPojo);
   }
 
   @Override
-  public void delete(Tag aggregator) {
+  protected void modify(Tag tag) {
+
+  }
+
+  @Override
+  public void delete(Tag tag) {
 
   }
 
@@ -90,8 +96,6 @@ public class JooqTagRepository implements TagRepository {
 
     // 初始化创建标签数据库实体
     final EcmTagPojo tagPojo = new EcmTagPojo();
-    // 标签ID
-    tagPojo.setId(tag.getDelegator().getId());
     // 标签名称
     tagPojo.setName(tag.getIdentifier().getIdentifier());
     // 标签展示名称

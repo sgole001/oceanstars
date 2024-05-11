@@ -6,6 +6,7 @@ import java.util.List;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
+import oceanstars.ecommerce.common.tools.PkWorker;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentMenuType;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentType;
@@ -47,6 +48,145 @@ public class MenuStrategy extends BaseContentRepositoryStrategy {
 
     // 校验参数
     requireNonNull(condition, "condition");
+
+    // 构建内容实体
+    final List<EcmContentMenuPojo> results = this.query(condition);
+
+    // 判断查询结果是否为空
+    if (CollectionUtils.isEmpty(results)) {
+      return List.of();
+    }
+
+    // 构建内容实体并返回
+    return results.stream().map(this::buildContentEntity).toList();
+  }
+
+  @Override
+  public void create(Content content) {
+
+    // 校验参数
+    requireNonNull(content, "content");
+
+    // 根据资产唯一识别码查询内容实体
+    EcmContentMenuPojo contentPojo = DAO.fetchOneByName(content.getIdentifier().getName());
+
+    // 判断内容实体是否存在, 存在则抛出业务异常
+    if (null != contentPojo) {
+      // 获取内容唯一识别对象
+      final ContentIdentifier identifier = content.getIdentifier();
+      // 业务异常：内容创建失败，{0}类型的名称为{1}的内容已经存在！
+      throw new BusinessException(Message.MSG_BIZ_00002, identifier.getType().value(), identifier.getName());
+    }
+
+    // 构建内容菜单Pojo
+    contentPojo = (EcmContentMenuPojo) this.buildContentPojo(content);
+    // 构建查询条件：相同层级菜单下最后一个菜单
+    final MenuFetchCondition condition = MenuFetchCondition.newBuilder().parent(contentPojo.getParent()).next(-1L).build();
+    // 执行查询并获取相同层级菜单下最后一个菜单
+    final EcmContentMenuPojo lastMenu = this.query(condition).getFirst();
+
+    if (null != lastMenu) {
+      // 相邻（前）菜单ID
+      contentPojo.setPrev(lastMenu.getId());
+      // 菜单排序
+      contentPojo.setSeq(lastMenu.getSeq() + SEQ_STEP);
+      // 相邻（后）菜单ID
+      lastMenu.setNext(contentPojo.getId());
+      // 更新相邻（前）菜单
+      DAO.update(lastMenu);
+    }
+    // 保存内容菜单数据
+    DAO.insert(contentPojo);
+
+    // 委托资产实体
+    content.delegate(contentPojo);
+  }
+
+  @Override
+  public void modify(Content content) {
+
+  }
+
+  @Override
+  public Content buildContentEntity(Object contentPojo) {
+
+    // 转换内容Pojo
+    final EcmContentMenuPojo menuPojo = (EcmContentMenuPojo) contentPojo;
+
+    // 构建内容原生信息值对象
+    final ContentMenuValueObject raw = ContentMenuValueObject.newBuilder()
+        // 菜单类型
+        .type(ContentMenuType.of(menuPojo.getType().intValue()))
+        // 菜单对应的功能ID
+        .func(menuPojo.getFunc())
+        // 菜单动作：点击菜单后的执行脚本
+        .action(menuPojo.getAction())
+        // 菜单图标
+        .icon(menuPojo.getIcon())
+        // 菜单隶属
+        .parent(menuPojo.getParent())
+        // 菜单是否可见
+        .visible(menuPojo.getVisible())
+        // 实施构建
+        .build();
+
+    // 构建内容菜单值对象
+    return Content.newBuilder(ContentType.MENU, menuPojo.getName())
+        // 菜单展示名称
+        .displayName(menuPojo.getDisplayName())
+        // 菜单描述
+        .description(menuPojo.getDescription())
+        // 菜单状态
+        .status(AuditProcessStatus.of(menuPojo.getStatus().intValue()))
+        // 菜单原生信息
+        .raw(raw)
+        // 实施构建
+        .build();
+  }
+
+  @Override
+  public Object buildContentPojo(Content content) {
+
+    // 初始化创建内容菜单Pojo
+    final EcmContentMenuPojo menuPojo = new EcmContentMenuPojo();
+
+    // 菜单ID
+    menuPojo.setId(PkWorker.build().nextId());
+    // 菜单名称
+    menuPojo.setName(content.getIdentifier().getName());
+    // 菜单展示名称
+    menuPojo.setDisplayName(content.getDisplayName());
+    // 菜单描述
+    menuPojo.setDescription(content.getDescription());
+    // 菜单状态
+    menuPojo.setStatus(content.getStatus().key().shortValue());
+
+    // 转换菜单原生信息
+    final ContentMenuValueObject raw = (ContentMenuValueObject) content.getRaw();
+
+    // 菜单类型
+    menuPojo.setType(raw.getType().key().shortValue());
+    // 菜单对应的功能ID
+    menuPojo.setFunc(raw.getFunc());
+    // 菜单动作：点击菜单后的执行脚本
+    menuPojo.setAction(raw.getAction());
+    // 菜单图标
+    menuPojo.setIcon(raw.getIcon());
+    // 菜单隶属
+    menuPojo.setParent(raw.getParent());
+    // 菜单是否可见
+    menuPojo.setVisible(raw.getVisible());
+
+    return menuPojo;
+  }
+
+  /**
+   * 根据查询条件查询内容菜单信息
+   *
+   * @param condition 查询条件
+   * @return 内容菜单信息
+   */
+  private List<EcmContentMenuPojo> query(final ICondition condition) {
 
     // 转换查询条件为菜单查询条件
     final MenuFetchCondition fetchCondition = (MenuFetchCondition) condition;
@@ -133,125 +273,10 @@ public class MenuStrategy extends BaseContentRepositoryStrategy {
     }
 
     // 构建内容实体
-    final List<EcmContentMenuPojo> results = query
+    return query
         // 查询条件
         .where(searchCondition)
         // 排序
         .orderBy(T_CONTENT.PARENT, T_CONTENT.SEQ.asc()).fetchInto(EcmContentMenuPojo.class);
-
-    // 判断查询结果是否为空
-    if (CollectionUtils.isEmpty(results)) {
-      return List.of();
-    }
-
-    // 构建内容实体并返回
-    return results.stream().map(this::buildContentEntity).toList();
-  }
-
-  @Override
-  public void save(Content content) {
-
-    // 校验参数
-    requireNonNull(content, "content");
-
-    // 根据资产唯一识别码查询内容实体
-    EcmContentMenuPojo contentPojo = DAO.fetchOneByName(content.getIdentifier().getName());
-
-    // 判断内容实体是否存在, 存在则抛出业务异常
-    if (null != contentPojo) {
-      // 获取内容唯一识别对象
-      final ContentIdentifier identifier = content.getIdentifier();
-      // 业务异常：内容创建失败，{0}类型的名称为{1}的内容已经存在！
-      throw new BusinessException(Message.MSG_BIZ_00002, identifier.getType().value(), identifier.getName());
-    }
-
-    // 保存资产数据
-    contentPojo = (EcmContentMenuPojo) this.buildContentPojo(content);
-    DAO.insert(contentPojo);
-
-    // 委托资产实体
-    content.delegate(contentPojo);
-  }
-
-  @Override
-  public Content buildContentEntity(Object contentPojo) {
-
-    // 转换内容Pojo
-    final EcmContentMenuPojo menuPojo = (EcmContentMenuPojo) contentPojo;
-
-    // 构建内容原生信息值对象
-    final ContentMenuValueObject raw = ContentMenuValueObject.newBuilder()
-        // 菜单类型
-        .type(ContentMenuType.of(menuPojo.getType().intValue()))
-        // 菜单对应的功能ID
-        .func(menuPojo.getFunc())
-        // 菜单动作：点击菜单后的执行脚本
-        .action(menuPojo.getAction())
-        // 菜单图标
-        .icon(menuPojo.getIcon())
-        // 菜单隶属
-        .parent(menuPojo.getParent())
-        // 菜单是否可见
-        .visible(menuPojo.getVisible())
-        // 实施构建
-        .build();
-
-    // 构建内容菜单值对象
-    return Content.newBuilder(ContentType.MENU, menuPojo.getName())
-        // 菜单展示名称
-        .displayName(menuPojo.getDisplayName())
-        // 菜单描述
-        .description(menuPojo.getDescription())
-        // 菜单状态
-        .status(AuditProcessStatus.of(menuPojo.getStatus().intValue()))
-        // 菜单原生信息
-        .raw(raw)
-        // 实施构建
-        .build();
-  }
-
-  @Override
-  public Object buildContentPojo(Content content) {
-
-    // 初始化创建内容菜单Pojo
-    final EcmContentMenuPojo menuPojo = new EcmContentMenuPojo();
-
-    // 菜单名称
-    menuPojo.setName(content.getIdentifier().getName());
-    // 菜单展示名称
-    menuPojo.setDisplayName(content.getDisplayName());
-    // 菜单描述
-    menuPojo.setDescription(content.getDescription());
-    // 菜单状态
-    menuPojo.setStatus(content.getStatus().key().shortValue());
-
-    // 转换菜单原生信息
-    final ContentMenuValueObject raw = (ContentMenuValueObject) content.getRaw();
-
-    // 菜单类型
-    menuPojo.setType(raw.getType().key().shortValue());
-    // 菜单对应的功能ID
-    menuPojo.setFunc(raw.getFunc());
-    // 菜单动作：点击菜单后的执行脚本
-    menuPojo.setAction(raw.getAction());
-    // 菜单图标
-    menuPojo.setIcon(raw.getIcon());
-    // 菜单隶属
-    menuPojo.setParent(raw.getParent());
-    // 菜单是否可见
-    menuPojo.setVisible(raw.getVisible());
-
-    //
-    final MenuFetchCondition condition = MenuFetchCondition.newBuilder().parent(raw.getParent()).next(-1L).build();
-    //
-    final Content lastMenu = this.fetch(condition).getFirst();
-    //
-    menuPojo.setPrev(lastMenu.getDelegator().getId());
-    // 相邻（后）菜单ID
-    menuPojo.setNext(-1L);
-    //
-    menuPojo.setSeq();
-
-    return menuPojo;
   }
 }

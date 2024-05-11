@@ -75,11 +75,20 @@ public class AssetRepositoryStrategyContext {
   }
 
   /**
-   * 保存资产
+   * 创建资产
    *
    * @param asset 资产实体
    */
-  public void save(final Asset asset) {
-    this.strategy.save(asset);
+  public void create(final Asset asset) {
+    this.strategy.create(asset);
+  }
+
+  /**
+   * 修改资产
+   *
+   * @param asset 资产实体
+   */
+  public void modify(final Asset asset) {
+    this.strategy.modify(asset);
   }
 }

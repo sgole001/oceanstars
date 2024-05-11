@@ -1,8 +1,9 @@
 package oceanstars.ecommerce.ecm.application.content.cqrs.handler;
 
+import java.util.HashSet;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;
-import oceanstars.ecommerce.common.domain.event.EventBus;
 import oceanstars.ecommerce.common.domain.entity.ValueObject;
+import oceanstars.ecommerce.common.domain.event.EventBus;
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentCommand;
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.content.EcmCreateContentResult;
 import oceanstars.ecommerce.ecm.application.content.cqrs.strategy.impl.ContentRawDataStrategyContext;
@@ -58,9 +59,9 @@ public class CreateContentCommandHandler implements ICommandHandler<EcmCreateCon
         // 内容描述
         .description(command.getDescription())
         // 内容标签
-        .tags(command.getTagsList())
+        .tags(new HashSet<>(command.getTagsList()))
         // 内容分类
-        .categories(command.getCategoriesList())
+        .categories(new HashSet<>(command.getCategoriesList()))
         // 审核流程状态
         .status(AuditProcessStatus.DRAFT)
         // 内容原生信息

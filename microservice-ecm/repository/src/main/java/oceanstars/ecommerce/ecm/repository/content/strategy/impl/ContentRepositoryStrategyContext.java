@@ -49,12 +49,21 @@ public class ContentRepositoryStrategyContext {
   }
 
   /**
-   * 保存内容
+   * 创建内容
    *
    * @param content 内容实体
    */
-  public void save(final Content content) {
-    this.strategy.save(content);
+  public void create(final Content content) {
+    this.strategy.create(content);
+  }
+
+  /**
+   * 修改内容
+   *
+   * @param content 内容实体
+   */
+  public void modify(final Content content) {
+    this.strategy.modify(content);
   }
 
 }

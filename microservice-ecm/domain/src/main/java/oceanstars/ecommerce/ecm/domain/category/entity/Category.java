@@ -1,6 +1,6 @@
 package oceanstars.ecommerce.ecm.domain.category.entity;
 
-import java.util.List;
+import java.util.Set;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
 
@@ -31,12 +31,7 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
   /**
    * 父级分类
    */
-  private List<Category> parents;
-
-  /**
-   * 子级分类
-   */
-  private List<Category> children;
+  private Set<Long> parents;
 
   /**
    * 审核流程状态
@@ -54,7 +49,6 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
     description = builder.description;
     url = builder.url;
     parents = builder.parents;
-    children = builder.children;
     status = builder.status;
   }
 
@@ -92,20 +86,12 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
     this.url = url;
   }
 
-  public List<Category> getParents() {
+  public Set<Long> getParents() {
     return parents;
   }
 
-  public void setParents(List<Category> parents) {
+  public void setParents(Set<Long> parents) {
     this.parents = parents;
-  }
-
-  public List<Category> getChildren() {
-    return children;
-  }
-
-  public void setChildren(List<Category> children) {
-    this.children = children;
   }
 
   public AuditProcessStatus getStatus() {
@@ -129,8 +115,7 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
     private String displayName;
     private String description;
     private String url;
-    private List<Category> parents;
-    private List<Category> children;
+    private Set<Long> parents;
     private AuditProcessStatus status;
 
     public Builder(String name) {
@@ -152,13 +137,8 @@ public class Category extends AggregateRoot<CategoryIdentifier> {
       return this;
     }
 
-    public Builder parents(List<Category> val) {
+    public Builder parents(Set<Long> val) {
       parents = val;
-      return this;
-    }
-
-    public Builder children(List<Category> val) {
-      children = val;
       return this;
     }
 

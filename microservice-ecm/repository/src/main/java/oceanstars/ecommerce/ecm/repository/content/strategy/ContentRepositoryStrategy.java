@@ -41,11 +41,18 @@ public interface ContentRepositoryStrategy {
   List<Content> fetch(final ICondition condition);
 
   /**
-   * 保存资产
+   * 创建内容
    *
    * @param content 内容实体
    */
-  void save(final Content content);
+  void create(final Content content);
+
+  /**
+   * 修改内容
+   *
+   * @param content 内容实体
+   */
+  void modify(final Content content);
 
   /**
    * 构建内容实体

@@ -29,11 +29,18 @@ public interface AssetRepositoryStrategy {
   List<Asset> fetch(final ICondition condition);
 
   /**
-   * 保存资产
+   * 创建资产
    *
    * @param asset 资产实体
    */
-  void save(final Asset asset);
+  void create(final Asset asset);
+
+  /**
+   * 修改资产
+   *
+   * @param asset 资产实体
+   */
+  void modify(final Asset asset);
 
   /**
    * 构建资产实体

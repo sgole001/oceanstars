@@ -106,7 +106,7 @@ public class FunctionStrategy implements AssetRepositoryStrategy {
   }
 
   @Override
-  public void save(Asset asset) {
+  public void create(Asset asset) {
 
     // 校验参数
     requireNonNull(asset, "asset");
@@ -128,6 +128,11 @@ public class FunctionStrategy implements AssetRepositoryStrategy {
 
     // 委托资产实体
     asset.delegate(assetPojo);
+  }
+
+  @Override
+  public void modify(Asset asset) {
+
   }
 
   @Override

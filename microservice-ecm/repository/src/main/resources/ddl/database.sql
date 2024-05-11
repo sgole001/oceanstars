@@ -17,7 +17,7 @@ CREATE TABLE `ecm_content_menu`
     `visible`      tinyint      NOT NULL DEFAULT 1 COMMENT '菜单是否可见：0-不可见，1-可见',
     `prev`         bigint(0) COMMENT '相邻（前）菜单ID',
     `next`         bigint(0) COMMENT '相邻（后）菜单ID',
-    `seq`          bigint(0) COMMENT '相同隶属下菜单排序序列号（升序）',
+    `seq`          bigint(0)    NOT NULL DEFAULT 0 COMMENT '相同隶属下菜单排序序列号（升序）',
     `create_by`    varchar(255) NOT NULL COMMENT '创建者',
     `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
     `update_by`    varchar(255) NOT NULL COMMENT '更新者',

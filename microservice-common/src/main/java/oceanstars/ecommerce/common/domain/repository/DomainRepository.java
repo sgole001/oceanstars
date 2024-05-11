@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 领域资源库接口
@@ -21,23 +20,7 @@ public interface DomainRepository<T extends AggregateRoot<?>> {
    * @param condition 查询条件
    * @return 聚合根
    */
-  default Optional<T> findOne(ICondition condition) {
-
-    // 根据条件查找聚合根(唯一查询结果)
-    final List<T> result = this.find(condition);
-
-    // 如果查询结果为空，则返回null
-    if (CollectionUtils.isEmpty(result)) {
-      return Optional.empty();
-    }
-
-    // 如果查询结果不唯一，则抛出异常
-    if (result.size() > 1) {
-      throw new RuntimeException("查询结果不唯一");
-    }
-
-    return Optional.of(result.getFirst());
-  }
+  Optional<T> findOne(ICondition condition);
 
   /**
    * 根据条件查找聚合根(复数查询结果)

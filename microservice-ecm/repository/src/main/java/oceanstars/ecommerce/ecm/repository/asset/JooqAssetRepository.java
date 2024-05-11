@@ -3,6 +3,7 @@ package oceanstars.ecommerce.ecm.repository.asset;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.ecm.domain.asset.entity.Asset;
 import oceanstars.ecommerce.ecm.domain.asset.repository.AssetRepository;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Repository;
  * @since 2024/4/18 11:07
  */
 @Repository
-public class JooqAssetRepository implements AssetRepository {
+public class JooqAssetRepository extends BaseDomainRepository<Asset> implements AssetRepository {
 
   @Override
   public List<Asset> find(ICondition condition) {
@@ -39,7 +40,7 @@ public class JooqAssetRepository implements AssetRepository {
 
   @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
-  public void save(Asset asset) {
+  protected void create(Asset asset) {
 
     // 校验参数
     requireNonNull(asset, "asset");
@@ -48,11 +49,18 @@ public class JooqAssetRepository implements AssetRepository {
     final AssetRepositoryStrategyContext repositoryStrategy = new AssetRepositoryStrategyContext(asset.getIdentifier().getType());
 
     // 保存资产
-    repositoryStrategy.save(asset);
+    repositoryStrategy.create(asset);
   }
 
+  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
-  public void delete(Asset aggregator) {
+  protected void modify(Asset asset) {
+
+  }
+
+  @OceanstarsTransactional(rollbackFor = Exception.class)
+  @Override
+  public void delete(Asset asset) {
 
   }
 }

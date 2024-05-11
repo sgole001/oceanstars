@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentStatisticsType;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentType;
@@ -35,7 +36,7 @@ import org.springframework.util.CollectionUtils;
  * @since 2024/1/23 14:29
  */
 @Repository
-public class JooqContentRepository implements ContentRepository {
+public class JooqContentRepository extends BaseDomainRepository<Content> implements ContentRepository {
 
   /**
    * 内容分类关联DAO
@@ -110,7 +111,7 @@ public class JooqContentRepository implements ContentRepository {
 
   @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
-  public void save(Content content) {
+  protected void create(Content content) {
 
     // 校验参数
     requireNonNull(content, "content");
@@ -118,8 +119,8 @@ public class JooqContentRepository implements ContentRepository {
     // 初始化创建内容资源库策略上下文
     final ContentRepositoryStrategyContext repositoryStrategy = new ContentRepositoryStrategyContext(content.getIdentifier().getType());
 
-    // 保存内容
-    repositoryStrategy.save(content);
+    // 创建内容
+    repositoryStrategy.create(content);
 
     // 保存内容与标签关系
     this.saveContentTags(content);
@@ -128,6 +129,13 @@ public class JooqContentRepository implements ContentRepository {
     this.saveContentCategories(content);
   }
 
+  @OceanstarsTransactional(rollbackFor = Exception.class)
+  @Override
+  protected void modify(Content aggregator) {
+
+  }
+
+  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   public void delete(Content content) {
 

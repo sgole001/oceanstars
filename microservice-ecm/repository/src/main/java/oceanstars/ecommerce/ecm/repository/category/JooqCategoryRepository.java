@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import jakarta.annotation.Resource;
 import java.util.List;
+import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.AuditProcessStatus;
@@ -26,7 +27,7 @@ import org.springframework.util.CollectionUtils;
  * @since 2024/1/25 15:29
  */
 @Repository
-public class JooqCategoryRepository implements CategoryRepository {
+public class JooqCategoryRepository extends BaseDomainRepository<Category> implements CategoryRepository {
 
   @Resource
   private EcmCategoryDao categoryDao;
@@ -41,35 +42,45 @@ public class JooqCategoryRepository implements CategoryRepository {
 
   @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
-  public void save(Category aggregator) {
+  protected void create(Category category) {
 
     // 校验参数
-    requireNonNull(aggregator, "aggregator");
+    requireNonNull(category, "category");
 
     // 根据分类唯一标识符查询分类数据
-    EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneByName(aggregator.getIdentifier().getIdentifier());
+    EcmCategoryPojo categoryPojo = this.categoryDao.fetchOneByName(category.getIdentifier().getIdentifier());
     // 判断分类数据是否存在, 存在则抛出业务异常
     if (null != categoryPojo) {
       // 业务异常：分类创建失败，名称为{0}的分类已经存在！
-      throw new BusinessException(Message.MSG_BIZ_00000, aggregator.getIdentifier().getIdentifier());
+      throw new BusinessException(Message.MSG_BIZ_00000, category.getIdentifier().getIdentifier());
     }
 
     // 保存分类数据
-    categoryPojo = this.buildCategoryPojo(aggregator);
+    categoryPojo = this.buildCategoryPojo(category);
     this.categoryDao.insert(categoryPojo);
 
     // 判断分类是否有父级分类
-    if (!CollectionUtils.isEmpty(aggregator.getParents())) {
+    if (!CollectionUtils.isEmpty(category.getParents())) {
       // 获取分类委托者ID
       final Long categoryId = categoryPojo.getId();
+      // 获取父级分类数据,过滤掉不存在的父级分类数据
+      final List<EcmCategoryPojo> parents = this.categoryDao.fetchById(category.getParents().toArray(new Long[0]));
+
       // 构建分类隶属关系数据
-      final List<RelCategoryCategoryPojo> categoryCategoryPojoList = aggregator.getParents().stream()
-          .map(parent -> this.buildRelCategoryCategoryPojo(categoryId, parent.getDelegator().getId())).toList();
+      final List<RelCategoryCategoryPojo> categoryCategoryPojoList = parents.stream()
+          .map(parent -> this.buildRelCategoryCategoryPojo(categoryId, parent.getId())).toList();
       // 保存分类隶属关系数据
       this.relCategoryCategoryDao.insert(categoryCategoryPojoList);
     }
   }
 
+  @OceanstarsTransactional(rollbackFor = Exception.class)
+  @Override
+  protected void modify(Category aggregator) {
+
+  }
+
+  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   public void delete(Category aggregator) {
 
@@ -112,8 +123,6 @@ public class JooqCategoryRepository implements CategoryRepository {
 
     // 初始化创建分类数据库实体
     final EcmCategoryPojo categoryPojo = new EcmCategoryPojo();
-    // 分类ID
-    categoryPojo.setId(category.getDelegator().getId());
     // 分类名称
     categoryPojo.setName(category.getIdentifier().getIdentifier());
     // 分类展示名称

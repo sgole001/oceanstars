@@ -22,4 +22,9 @@ public abstract class BaseContentRepositoryStrategy implements ContentRepository
    * 内容分类关联表
    */
   final static RelContentCategory REL_CONTENT_CATEGORY = RelContentCategory.REL_CONTENT_CATEGORY.as("rel_content_category");
+
+  /**
+   * 内容序列步长
+   */
+  final static Long SEQ_STEP = 1000L;
 }
