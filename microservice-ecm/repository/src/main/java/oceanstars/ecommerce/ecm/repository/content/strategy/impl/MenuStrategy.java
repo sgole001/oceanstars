@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
+import oceanstars.ecommerce.common.domain.repository.condition.NullCondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import oceanstars.ecommerce.common.tools.PkWorker;
@@ -80,10 +81,17 @@ public class MenuStrategy extends BaseContentRepositoryStrategy {
 
     // 构建内容菜单Pojo
     contentPojo = (EcmContentMenuPojo) this.buildContentPojo(content);
+
     // 构建查询条件：相同层级菜单下最后一个菜单
-    final MenuFetchCondition condition = MenuFetchCondition.newBuilder().parent(contentPojo.getParent()).next(-1L).build();
+    final MenuFetchCondition.Builder conditionBuilder = MenuFetchCondition.newBuilder().next(new NullCondition<>(Boolean.TRUE));
+    // 判断是否为根菜单
+    if (null == contentPojo.getParent()) {
+      conditionBuilder.parent(new NullCondition<>(Boolean.TRUE));
+    } else {
+      conditionBuilder.parent(new NullCondition<>(contentPojo.getParent()));
+    }
     // 执行查询并获取相同层级菜单下最后一个菜单
-    final EcmContentMenuPojo lastMenu = this.query(condition).getFirst();
+    final EcmContentMenuPojo lastMenu = this.queryOne(conditionBuilder.build());
 
     if (null != lastMenu) {
       // 相邻（前）菜单ID
@@ -181,6 +189,31 @@ public class MenuStrategy extends BaseContentRepositoryStrategy {
   }
 
   /**
+   * 根据查询条件查询内容菜单信息(唯一)
+   *
+   * @param condition 查询条件
+   * @return 内容菜单信息(唯一)
+   */
+  private EcmContentMenuPojo queryOne(final ICondition condition) {
+
+    // 根据查询条件查询内容菜单信息
+    final List<EcmContentMenuPojo> results = this.query(condition);
+
+    // 判断查询结果是否为空
+    if (CollectionUtils.isEmpty(results)) {
+      return null;
+    }
+
+    // 判断查询结果是否为多个
+    if (results.size() != 1) {
+      // 业务异常：内容查询失败，查询结果不唯一！
+      throw new BusinessException(Message.MSG_BIZ_00004);
+    }
+
+    return results.getFirst();
+  }
+
+  /**
    * 根据查询条件查询内容菜单信息
    *
    * @param condition 查询条件
@@ -192,66 +225,79 @@ public class MenuStrategy extends BaseContentRepositoryStrategy {
     final MenuFetchCondition fetchCondition = (MenuFetchCondition) condition;
 
     // 初始化查询条件
-    final Condition searchCondition = DSL.trueCondition();
+    Condition searchCondition = DSL.trueCondition();
     // 菜单ID
     if (null != fetchCondition.getId()) {
-      searchCondition.and(T_CONTENT.ID.eq(fetchCondition.getId()));
+      searchCondition = searchCondition.and(T_CONTENT.ID.eq(fetchCondition.getId()));
     }
     // 菜单名称
     if (StringUtils.hasText(fetchCondition.getName())) {
-      searchCondition.and(T_CONTENT.NAME.likeIgnoreCase(fetchCondition.getName().trim()));
+      searchCondition = searchCondition.and(T_CONTENT.NAME.likeIgnoreCase(fetchCondition.getName().trim()));
     }
     // 菜单展示名称
     if (StringUtils.hasText(fetchCondition.getDisplayName())) {
-      searchCondition.and(T_CONTENT.DISPLAY_NAME.likeIgnoreCase(fetchCondition.getDisplayName().trim()));
+      searchCondition = searchCondition.and(T_CONTENT.DISPLAY_NAME.likeIgnoreCase(fetchCondition.getDisplayName().trim()));
     }
     // 菜单状态
     if (null != fetchCondition.getStatus()) {
-      searchCondition.and(T_CONTENT.STATUS.eq(fetchCondition.getStatus().key().shortValue()));
+      searchCondition = searchCondition.and(T_CONTENT.STATUS.eq(fetchCondition.getStatus().key().shortValue()));
     }
     // 菜单类型
     if (null != fetchCondition.getMenuType()) {
-      searchCondition.and(T_CONTENT.TYPE.eq(fetchCondition.getMenuType().key().shortValue()));
+      searchCondition = searchCondition.and(T_CONTENT.TYPE.eq(fetchCondition.getMenuType().key().shortValue()));
     }
     // 菜单对应的功能ID
     if (!CollectionUtils.isEmpty(fetchCondition.getFunctions())) {
       if (fetchCondition.getFunctions().size() == 1) {
-        searchCondition.and(T_CONTENT.FUNC.eq(fetchCondition.getFunctions().stream().findFirst().orElseThrow()));
+        searchCondition = searchCondition.and(T_CONTENT.FUNC.eq(fetchCondition.getFunctions().stream().findFirst().orElseThrow()));
       } else {
-        searchCondition.and(T_CONTENT.FUNC.in(fetchCondition.getFunctions()));
+        searchCondition = searchCondition.and(T_CONTENT.FUNC.in(fetchCondition.getFunctions()));
       }
     }
     // 菜单隶属
     if (null != fetchCondition.getParent()) {
-      searchCondition.and(T_CONTENT.PARENT.eq(fetchCondition.getParent()));
+      if (fetchCondition.getParent().checkNull()) {
+        searchCondition = searchCondition.and(T_CONTENT.PARENT.isNull());
+      } else {
+        searchCondition = searchCondition.and(T_CONTENT.PARENT.eq(fetchCondition.getParent().getValue()));
+      }
     }
     // 菜单是否可见
     if (null != fetchCondition.getVisible()) {
-      searchCondition.and(T_CONTENT.VISIBLE.eq(fetchCondition.getVisible()));
+      searchCondition = searchCondition.and(T_CONTENT.VISIBLE.eq(fetchCondition.getVisible()));
     }
     // 相邻（前）菜单ID
     if (null != fetchCondition.getPrev()) {
-      searchCondition.and(T_CONTENT.ID.lt(fetchCondition.getPrev()));
+      if (fetchCondition.getPrev().checkNull()) {
+        searchCondition = searchCondition.and(T_CONTENT.PREV.isNull());
+      } else {
+        searchCondition = searchCondition.and(T_CONTENT.PREV.eq(fetchCondition.getPrev().getValue()));
+      }
+
     }
     // 相邻（后）菜单ID
     if (null != fetchCondition.getNext()) {
-      searchCondition.and(T_CONTENT.ID.gt(fetchCondition.getNext()));
+      if (fetchCondition.getNext().checkNull()) {
+        searchCondition = searchCondition.and(T_CONTENT.NEXT.isNull());
+      } else {
+        searchCondition = searchCondition.and(T_CONTENT.NEXT.eq(fetchCondition.getNext().getValue()));
+      }
     }
     // 菜单创建开始时间
     if (null != fetchCondition.getCreateStartTime()) {
-      searchCondition.and(T_CONTENT.CREATE_AT.ge(fetchCondition.getCreateStartTime()));
+      searchCondition = searchCondition.and(T_CONTENT.CREATE_AT.ge(fetchCondition.getCreateStartTime()));
     }
     // 菜单创建结束时间
     if (null != fetchCondition.getCreateEndTime()) {
-      searchCondition.and(T_CONTENT.CREATE_AT.le(fetchCondition.getCreateEndTime()));
+      searchCondition = searchCondition.and(T_CONTENT.CREATE_AT.le(fetchCondition.getCreateEndTime()));
     }
     // 菜单更新开始时间
     if (null != fetchCondition.getUpdateStartTime()) {
-      searchCondition.and(T_CONTENT.UPDATE_AT.ge(fetchCondition.getUpdateStartTime()));
+      searchCondition = searchCondition.and(T_CONTENT.UPDATE_AT.ge(fetchCondition.getUpdateStartTime()));
     }
     // 菜单更新结束时间
     if (null != fetchCondition.getUpdateEndTime()) {
-      searchCondition.and(T_CONTENT.UPDATE_AT.le(fetchCondition.getUpdateEndTime()));
+      searchCondition = searchCondition.and(T_CONTENT.UPDATE_AT.le(fetchCondition.getUpdateEndTime()));
     }
 
     // 构建内容主表查询

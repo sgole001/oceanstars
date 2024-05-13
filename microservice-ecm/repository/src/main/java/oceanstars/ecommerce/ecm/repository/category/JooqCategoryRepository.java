@@ -59,6 +59,9 @@ public class JooqCategoryRepository extends BaseDomainRepository<Category> imple
     categoryPojo = this.buildCategoryPojo(category);
     this.categoryDao.insert(categoryPojo);
 
+    // 分类领域实体委托者信息绑定
+    category.delegate(categoryPojo);
+
     // 判断分类是否有父级分类
     if (!CollectionUtils.isEmpty(category.getParents())) {
       // 获取分类委托者ID

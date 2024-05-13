@@ -21,11 +21,14 @@ public class FunctionStrategy implements AssetRawDataStrategy {
     try {
       final EcmAssetFunction function = message.unpack(EcmAssetFunction.class);
 
-      return FunctionValueObject.newBuilder()
-          // 功能隶属 - 通过资产ID关联隶属关系
-          .parent(function.getParent())
-          // 实施构建
-          .build();
+      // 初始化功能原生数据构建器
+      final FunctionValueObject.Builder rawDataBuilder = FunctionValueObject.newBuilder();
+      // 功能隶属 - 通过资产ID关联隶属关系
+      if (0L != function.getParent()) {
+        rawDataBuilder.parent(function.getParent());
+      }
+
+      return rawDataBuilder.build();
 
     } catch (Exception e) {
       throw new IllegalArgumentException("资产原生数据功能列表解包失败!");

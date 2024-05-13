@@ -50,6 +50,9 @@ public class JooqTagRepository extends BaseDomainRepository<Tag> implements TagR
     // 保存标签数据
     tagPojo = this.buildTagPojo(tag);
     tagDao.insert(tagPojo);
+
+    // 标签领域实体委托者信息绑定
+    tag.delegate(tagPojo);
   }
 
   @Override

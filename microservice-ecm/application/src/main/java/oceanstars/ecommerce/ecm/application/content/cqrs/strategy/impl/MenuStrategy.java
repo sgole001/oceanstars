@@ -21,7 +21,7 @@ public class MenuStrategy implements ContentRawDataStrategy {
     try {
       final EcmContentMenu menu = message.unpack(EcmContentMenu.class);
 
-      return ContentMenuValueObject.newBuilder()
+      final ContentMenuValueObject.Builder rawDataBuild = ContentMenuValueObject.newBuilder()
           // 菜单类型
           .type(ContentMenuType.of(menu.getType()))
           // 菜单对应的功能ID
@@ -30,12 +30,14 @@ public class MenuStrategy implements ContentRawDataStrategy {
           .action(menu.getAction())
           // 菜单图标
           .icon(menu.getIcon())
-          // 菜单隶属
-          .parent(menu.getParent())
           // 菜单是否可见
-          .visible(menu.getVisible())
-          // 实施构建
-          .build();
+          .visible(menu.getVisible());
+      // 菜单隶属
+      if (0L != menu.getParent()) {
+        rawDataBuild.parent(menu.getParent());
+      }
+
+      return rawDataBuild.build();
 
     } catch (Exception e) {
       throw new IllegalArgumentException("内容原生数据菜单解包失败!");

@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.ecm.domain.content.repository.condition;
 
 import java.util.Set;
+import oceanstars.ecommerce.common.domain.repository.condition.NullCondition;
 import oceanstars.ecommerce.ecm.constant.enums.EcmEnums.ContentMenuType;
 
 /**
@@ -25,7 +26,7 @@ public class MenuFetchCondition extends ContentFetchCondition {
   /**
    * 菜单隶属
    */
-  private final Long parent;
+  private final NullCondition<Long> parent;
 
   /**
    * 菜单是否可见
@@ -35,12 +36,12 @@ public class MenuFetchCondition extends ContentFetchCondition {
   /**
    * 相邻（前）菜单ID
    */
-  private final Long prev;
+  private final NullCondition<Long> prev;
 
   /**
    * 相邻（后）菜单ID
    */
-  private final Long next;
+  private final NullCondition<Long> next;
 
   /**
    * 构造函数
@@ -74,7 +75,7 @@ public class MenuFetchCondition extends ContentFetchCondition {
     return functions;
   }
 
-  public Long getParent() {
+  public NullCondition<Long> getParent() {
     return parent;
   }
 
@@ -82,11 +83,11 @@ public class MenuFetchCondition extends ContentFetchCondition {
     return visible;
   }
 
-  public Long getPrev() {
+  public NullCondition<Long> getPrev() {
     return prev;
   }
 
-  public Long getNext() {
+  public NullCondition<Long> getNext() {
     return next;
   }
 
@@ -101,10 +102,10 @@ public class MenuFetchCondition extends ContentFetchCondition {
 
     private ContentMenuType menuType;
     private Set<Long> functions;
-    private Long parent;
+    private NullCondition<Long> parent;
     private Boolean visible;
-    private Long prev;
-    private Long next;
+    private NullCondition<Long> prev;
+    private NullCondition<Long> next;
 
     public Builder() {
     }
@@ -119,7 +120,7 @@ public class MenuFetchCondition extends ContentFetchCondition {
       return this;
     }
 
-    public Builder parent(Long val) {
+    public Builder parent(NullCondition<Long> val) {
       parent = val;
       return this;
     }
@@ -129,12 +130,12 @@ public class MenuFetchCondition extends ContentFetchCondition {
       return this;
     }
 
-    public Builder prev(Long val) {
+    public Builder prev(NullCondition<Long> val) {
       prev = val;
       return this;
     }
 
-    public Builder next(Long val) {
+    public Builder next(NullCondition<Long> val) {
       next = val;
       return this;
     }

@@ -10,6 +10,7 @@ import oceanstars.ecommerce.ecm.api.rpc.v1.dto.category.EcmCreateCategoryCommand
 import oceanstars.ecommerce.ecm.api.rpc.v1.dto.category.EcmCreateCategoryResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Restful请求处理: 创建内容分类
@@ -39,7 +40,7 @@ public class CreateCategoryRestHandler extends BaseRestHandler<CreateCategoryReq
   public GeneratedMessageV3[] parsingRequestMessage(CreateCategoryRequestMessage restRequestMessage) {
 
     // 构建创建分类命令
-    final EcmCreateCategoryCommand createCategoryCommand = EcmCreateCategoryCommand.newBuilder()
+    final EcmCreateCategoryCommand.Builder createCategoryCommandBuilder = EcmCreateCategoryCommand.newBuilder()
         // 分类名称
         .setName(restRequestMessage.getName())
         // 分类展示名称
@@ -47,13 +48,13 @@ public class CreateCategoryRestHandler extends BaseRestHandler<CreateCategoryReq
         // 分类描述
         .setDescription(restRequestMessage.getDescription())
         // 分类链接
-        .setUrl(restRequestMessage.getUrl())
-        // 内容分类父分类
-        .addAllParents(restRequestMessage.getParentIds())
-        // 执行构建
-        .build();
+        .setUrl(restRequestMessage.getUrl());
+    // 内容分类父分类
+    if (!CollectionUtils.isEmpty(restRequestMessage.getParentIds())) {
+      createCategoryCommandBuilder.addAllParents(restRequestMessage.getParentIds());
+    }
 
-    return new GeneratedMessageV3[]{createCategoryCommand};
+    return new GeneratedMessageV3[]{createCategoryCommandBuilder.build()};
   }
 
   @Override

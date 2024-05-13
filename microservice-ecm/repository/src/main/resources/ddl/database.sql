@@ -13,7 +13,7 @@ CREATE TABLE `ecm_content_menu`
     `icon`         varchar(255) COMMENT '菜单图标',
     `func`         bigint(0)    NOT NULL COMMENT '菜单功能ID',
     `action`       text(4096) COMMENT '菜单动作：点击菜单后的执行脚本',
-    `parent`       bigint(0)    NOT NULL COMMENT '菜单隶属',
+    `parent`       bigint(0) COMMENT '菜单隶属',
     `visible`      tinyint      NOT NULL DEFAULT 1 COMMENT '菜单是否可见：0-不可见，1-可见',
     `prev`         bigint(0) COMMENT '相邻（前）菜单ID',
     `next`         bigint(0) COMMENT '相邻（后）菜单ID',
@@ -70,7 +70,6 @@ CREATE TABLE `ecm_category`
     `display_name` varchar(255) NOT NULL COMMENT '分类展示名称',
     `description`  text(4096) COMMENT '分类描述',
     `url`          varchar(255) COMMENT '分类链接',
-    `type`         smallint(0)  NOT NULL COMMENT '分类类型: 0-默认, 1-内容空间',
     `status`       smallint(0)  NOT NULL COMMENT '分类状态: 0-草稿, 1-待审核, 2-审核通过, 3-审核不通过, 4-已发布, 5-已下架, 6-已删除',
     `create_by`    varchar(255) NOT NULL COMMENT '创建者',
     `create_at`    datetime(0)  NOT NULL COMMENT '创建时间',
@@ -84,6 +83,7 @@ CREATE TABLE `ecm_category`
   COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `idx_content_category_display_name` ON `ecm_category` (`display_name` ASC);
+CREATE INDEX `idx_content_category_status` ON `ecm_category` (`status` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_ecm           */
@@ -121,7 +121,7 @@ CREATE TABLE `ecm_asset_ip_function`
     `name`        varchar(128) NOT NULL COMMENT '功能名称（字符类型：英数字，_,-）',
     `description` text(4096) COMMENT '功能描述',
     `status`      smallint(0)  NOT NULL COMMENT '功能状态: 0-已删除, 1-已发布',
-    `parent`      bigint(0)    NOT NULL COMMENT '功能隶属',
+    `parent`      bigint(0) COMMENT '功能隶属',
     `create_by`   varchar(255) NOT NULL COMMENT '创建者',
     `create_at`   datetime(0)  NOT NULL COMMENT '创建时间',
     `update_by`   varchar(255) NOT NULL COMMENT '更新者',

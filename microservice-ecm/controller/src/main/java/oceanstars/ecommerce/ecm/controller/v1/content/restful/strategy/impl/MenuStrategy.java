@@ -38,8 +38,8 @@ public class MenuStrategy implements ContentRequestMessageStrategy {
     // 内容分类
     contentRequestMessage.setCategories(requestMessage.getCategories());
 
-    // 资产原生信息设定
-    contentRequestMessage.setRawData(EcmContentMenu.newBuilder()
+    // 初始化菜单原生内容构建器
+    final EcmContentMenu.Builder rawDataBuilder = EcmContentMenu.newBuilder()
         // 菜单类型
         .setType(requestMessage.getType())
         // 菜单对应的功能ID
@@ -48,12 +48,15 @@ public class MenuStrategy implements ContentRequestMessageStrategy {
         .setAction(requestMessage.getAction())
         // 菜单图标
         .setIcon(requestMessage.getIcon())
-        // 菜单隶属
-        .setParent(requestMessage.getParent())
         // 菜单是否可见
-        .setVisible(requestMessage.getVisible())
-        // 执行构建
-        .build());
+        .setVisible(requestMessage.getVisible());
+    // 菜单隶属
+    if (null != requestMessage.getParent()) {
+      rawDataBuilder.setParent(requestMessage.getParent());
+    }
+
+    // 资产原生信息设定
+    contentRequestMessage.setRawData(rawDataBuilder.build());
 
     return contentRequestMessage;
   }

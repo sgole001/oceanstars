@@ -31,12 +31,15 @@ public class FunctionStrategy implements AssetRequestMessageStrategy {
     assetRequestMessage.setType(AssetType.INTELLECTUAL_PROPERTY_FUNCTION.key());
     // 资产描述
     assetRequestMessage.setDescription(requestMessage.getDescription());
+
+    // 初始化资产功能构建器
+    final EcmAssetFunction.Builder rawDataBuilder = EcmAssetFunction.newBuilder();
+    // 功能隶属 - 通过内容ID关联隶属关系
+    if (null != requestMessage.getParent()) {
+      rawDataBuilder.setParent(requestMessage.getParent());
+    }
     // 资产原生信息设定
-    assetRequestMessage.setRawData(EcmAssetFunction.newBuilder()
-        // 功能隶属 - 通过内容ID关联隶属关系
-        .setParent(requestMessage.getParent())
-        // 执行构建
-        .build());
+    assetRequestMessage.setRawData(rawDataBuilder.build());
 
     return assetRequestMessage;
   }

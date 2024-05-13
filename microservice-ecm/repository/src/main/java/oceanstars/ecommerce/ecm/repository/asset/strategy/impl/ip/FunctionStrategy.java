@@ -52,38 +52,38 @@ public class FunctionStrategy implements AssetRepositoryStrategy {
     final FunctionFetchCondition fetchCondition = (FunctionFetchCondition) condition;
 
     // 初始化查询条件
-    final Condition searchCondition = DSL.trueCondition();
+    Condition searchCondition = DSL.trueCondition();
     // 功能ID
     if (null != fetchCondition.getId()) {
-      searchCondition.and(T_ASSET.ID.eq(fetchCondition.getId()));
+      searchCondition = searchCondition.and(T_ASSET.ID.eq(fetchCondition.getId()));
     }
     // 功能名称
     if (StringUtils.hasText(fetchCondition.getName())) {
-      searchCondition.and(T_ASSET.NAME.likeIgnoreCase(fetchCondition.getName().trim()));
+      searchCondition = searchCondition.and(T_ASSET.NAME.likeIgnoreCase(fetchCondition.getName().trim()));
     }
     // 功能状态
     if (null != fetchCondition.getStatus()) {
-      searchCondition.and(T_ASSET.STATUS.eq(fetchCondition.getStatus().key().shortValue()));
+      searchCondition = searchCondition.and(T_ASSET.STATUS.eq(fetchCondition.getStatus().key().shortValue()));
     }
     // 功能隶属
     if (null != fetchCondition.getParent()) {
-      searchCondition.and(T_ASSET.PARENT.eq(fetchCondition.getParent()));
+      searchCondition = searchCondition.and(T_ASSET.PARENT.eq(fetchCondition.getParent()));
     }
     // 功能创建开始时间
     if (null != fetchCondition.getCreateStartTime()) {
-      searchCondition.and(T_ASSET.CREATE_AT.ge(fetchCondition.getCreateStartTime()));
+      searchCondition = searchCondition.and(T_ASSET.CREATE_AT.ge(fetchCondition.getCreateStartTime()));
     }
     // 功能创建结束时间
     if (null != fetchCondition.getCreateEndTime()) {
-      searchCondition.and(T_ASSET.CREATE_AT.le(fetchCondition.getCreateEndTime()));
+      searchCondition = searchCondition.and(T_ASSET.CREATE_AT.le(fetchCondition.getCreateEndTime()));
     }
     // 功能更新开始时间
     if (null != fetchCondition.getUpdateStartTime()) {
-      searchCondition.and(T_ASSET.UPDATE_AT.ge(fetchCondition.getUpdateStartTime()));
+      searchCondition = searchCondition.and(T_ASSET.UPDATE_AT.ge(fetchCondition.getUpdateStartTime()));
     }
     // 功能更新结束时间
     if (null != fetchCondition.getUpdateEndTime()) {
-      searchCondition.and(T_ASSET.UPDATE_AT.le(fetchCondition.getUpdateEndTime()));
+      searchCondition = searchCondition.and(T_ASSET.UPDATE_AT.le(fetchCondition.getUpdateEndTime()));
     }
 
     // 构建查询
