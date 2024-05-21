@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package oceanstars.user.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto.permission";
+
+// 权限操作行为
+message UserPermissionBehavior {
+  // 权限操作资源ID
+  int64 resource = 1;
+  // 权限操作行为：是否禁用
+  bool isForbidden = 2;
+  // 权限操作行为：是否允许读取
+  bool canRead = 3;
+  // 权限操作行为：是否允许创建
+  bool canCreate = 4;
+  // 权限操作行为：是否允许更新
+  bool canUpdate = 5;
+  // 权限操作行为：是否允许删除
+  bool canDelete = 6;
+}
+
+// 创建权限命令实体
+message UserCreatePermissionCommand {
+  // 权限名
+  string       name = 1;
+  // 权限类型（区分对应操作的资源）
+  int32       type = 2;
+  // 权限描述
+  string       desc = 3;
+  // 权限操作行为列表
+  repeated UserPermissionBehavior behaviors = 4;
+}
+
+// 权限创建返回结果实体
+message UserCreatePermissionResult {
+  // 权限代理唯一识别符（物理主键）
+  int64 identifier = 1;
+}

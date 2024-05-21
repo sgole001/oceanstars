@@ -306,21 +306,21 @@ public class UserEnums {
    * @version 1.0.0
    * @since 2022/1/5 1:41 PM
    */
-  public enum PermissionType implements IEnum<Short, String, PermissionType> {
+  public enum PermissionType implements IEnum<Integer, String, PermissionType> {
 
     // 功能权限
-    FUNCTION(Short.valueOf("0"), "功能权限"),
+    FUNCTION(0, "F"),
 
     // 数据权限
-    DATA(Short.valueOf("1"), "数据权限"),
+    DATA(1, "D"),
 
     // 多媒体文件权限
-    MEDIA(Short.valueOf("2"), "多媒体文件权限");
+    MEDIA(2, "M");
 
     /**
      * 枚举编号
      */
-    private final Short code;
+    private final Integer code;
 
     /**
      * 枚举显示名
@@ -333,7 +333,7 @@ public class UserEnums {
      * @param code 枚举编号
      * @param name 枚举显示名
      */
-    PermissionType(Short code, String name) {
+    PermissionType(Integer code, String name) {
       this.code = code;
       this.name = name;
     }
@@ -344,7 +344,7 @@ public class UserEnums {
      * @param key 枚举项KEY
      * @return 枚举对象
      */
-    public static PermissionType of(Short key) {
+    public static PermissionType of(Integer key) {
       for (PermissionType value : values()) {
         if (value.key().equals(key)) {
           return value;
@@ -359,7 +359,7 @@ public class UserEnums {
     }
 
     @Override
-    public Short key() {
+    public Integer key() {
       return this.code;
     }
 
@@ -379,15 +379,15 @@ public class UserEnums {
   public enum PermissionOperationType implements IEnum<Byte, String, PermissionOperationType> {
 
     // 资源禁止操作
-    PROHIBIT((byte) 0x00, "资源禁止操作"),
+    PROHIBIT((byte) 0x01, "资源禁止操作"),
     // 资源允许读入
-    READ((byte) 0x01, "资源允许读入"),
+    READ((byte) 0x02, "资源允许读入"),
     // 资源可允许写入
-    WRITE((byte) 0x02, "资源可允许写入"),
+    WRITE((byte) 0x04, "资源可允许写入"),
     // 资源允许更新
-    UPDATE((byte) 0x04, "资源允许更新"),
+    UPDATE((byte) 0x08, "资源允许更新"),
     // 资源允许删除
-    DELETE((byte) 0x06, "资源允许删除"),
+    DELETE((byte) 0x10, "资源允许删除"),
     ;
 
     /**

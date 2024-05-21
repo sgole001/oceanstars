@@ -1,9 +1,9 @@
 package oceanstars.ecommerce.user.domain.account.entity;
 
-import oceanstars.ecommerce.common.constant.CommonConstant;
+import java.io.Serial;
 import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
+import org.springframework.util.StringUtils;
 
 /**
  * 账号实体唯一识别符生成器
@@ -14,35 +14,28 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
  */
 public final class AccountIdentifier extends BaseEntityIdentifier<String> {
 
+  @Serial
+  private static final long serialVersionUID = 7255231152849737890L;
+
   /**
    * 账号注册源
    */
   private final AccountRegisterSource source;
 
   /**
-   * 账号注册方式
+   * 邮箱（非邮箱注册时可绑定或解绑）
    */
-  private final AccountRegisterMeans means;
+  private String email;
 
   /**
-   * 邮箱
+   * 手机（非手机注册时可绑定或解绑）
    */
-  private final String email;
-
-  /**
-   * 手机
-   */
-  private final String mobile;
+  private String mobile;
 
   /**
    * 第三方外部UID
    */
-  private final String externalId;
-
-  /**
-   * ID前缀
-   */
-  private static final String ID_PREFIX = "ACC-";
+  private String externalId;
 
   /**
    * 构造函数：初始化成员变量
@@ -50,37 +43,53 @@ public final class AccountIdentifier extends BaseEntityIdentifier<String> {
    * @param email  账号邮箱
    * @param source 账号注册源
    */
-  public AccountIdentifier(String email, String mobile, String externalId, AccountRegisterSource source, AccountRegisterMeans means) {
+  public AccountIdentifier(String email, String mobile, String externalId, AccountRegisterSource source) {
     super(null);
     this.email = email;
     this.mobile = mobile;
     this.externalId = externalId;
     this.source = source;
-    this.means = means;
+  }
+
+  public AccountRegisterSource getSource() {
+    return source;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
+
+  public String getExternalId() {
+    return externalId;
+  }
+
+  public void setExternalId(String externalId) {
+    this.externalId = externalId;
   }
 
   @Override
   public String generateIdentifier() {
 
-    // ID生成规则相关元素拼接
-    String elements = this.source.value() + CommonConstant.SEPARATOR_HYPHEN + this.means.value();
-
-    // 邮件注册账号
-    if (AccountRegisterMeans.EMAIL.equals(this.means)) {
-      elements += CommonConstant.SEPARATOR_HYPHEN + this.email;
-    }
-    // 手机注册账号
-    else if (AccountRegisterMeans.MOBILE.equals(this.means)) {
-      elements += CommonConstant.SEPARATOR_HYPHEN + this.mobile;
-    }
-    // 其他第三方授权注册账号
-    else {
-      elements += CommonConstant.SEPARATOR_HYPHEN + this.externalId;
+    if (StringUtils.hasText(this.mobile)) {
+      return this.mobile;
     }
 
-    // 获取UUID
-    final String[] uuid = super.uuid(elements);
+    if (StringUtils.hasText(this.email)) {
+      return this.email;
+    }
 
-    return ID_PREFIX + uuid[0];
+    return source.key() + "#" + this.externalId;
   }
 }

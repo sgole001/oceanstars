@@ -21,7 +21,7 @@
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
       <artifactId>kafka</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${infrastructure.kafka.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
@@ -30,8 +30,8 @@
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>user-domain</artifactId>
-      <version>${user.domain.version}</version>
+      <artifactId>user-repository</artifactId>
+      <version>${user.repository.version}</version>
     </dependency>
   </dependencies>
 

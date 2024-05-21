@@ -21,13 +21,13 @@
   <dependencies>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>user-constant</artifactId>
-      <version>${user.constant.version}</version>
+      <artifactId>jooq</artifactId>
+      <version>${infrastructure.jooq.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>jooq</artifactId>
-      <version>${infrastructure.jooq.version}</version>
+      <artifactId>user-domain</artifactId>
+      <version>${user.domain.version}</version>
     </dependency>
   </dependencies>
 

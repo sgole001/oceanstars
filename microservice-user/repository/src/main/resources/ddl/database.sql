@@ -5,7 +5,6 @@
 CREATE TABLE `user_account`
 (
     `id`            bigint(0)    NOT NULL COMMENT 'id',
-    `code`          varchar(12)  NOT NULL COMMENT '账号编码-自然键',
     `source`        smallint(0)  NOT NULL COMMENT '账号注册源',
     `means`         smallint(0)  NOT NULL COMMENT '账号注册方式',
     `email`         varchar(50)  NOT NULL DEFAULT '' COMMENT '邮箱',
@@ -22,20 +21,18 @@ CREATE TABLE `user_account`
     `update_at`     datetime(0)  NOT NULL COMMENT '更新时间',
     `version`       int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_account_identifier` (`code`) USING BTREE,
-    UNIQUE INDEX `idx_register` (`source`, `means`, `email`, `mobile`, `external_id`) USING BTREE
+    UNIQUE INDEX `idx_account_identifier_mobile` (`mobile`) USING BTREE,
+    UNIQUE INDEX `idx_account_identifier_email` (`email`) USING BTREE,
+    UNIQUE INDEX `idx_account_identifier_external` (`source`, `external_id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `idx_mobile` ON `user_account` (`mobile` ASC);
-CREATE INDEX `idx_email` ON `user_account` (`email` ASC);
-CREATE INDEX `idx_status` ON `user_account` (`status` ASC);
-CREATE INDEX `idx_source` ON `user_account` (`source` ASC);
-CREATE INDEX `idx_external_id` ON `user_account` (`external_id` ASC);
-CREATE INDEX `idx_creat_ip` ON `user_account` (`creat_ip` ASC);
-CREATE INDEX `idx_last_login_ip` ON `user_account` (`last_login_ip` ASC);
-CREATE INDEX `idx_login_times` ON `user_account` (`login_times` ASC);
+CREATE INDEX `idx_account_means` ON `user_account` (`means` ASC);
+CREATE INDEX `idx_account_creat_ip` ON `user_account` (`creat_ip` ASC);
+CREATE INDEX `idx_account_last_login_ip` ON `user_account` (`last_login_ip` ASC);
+CREATE INDEX `idx_account_login_times` ON `user_account` (`login_times` ASC);
+CREATE INDEX `idx_account_status` ON `user_account` (`status` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */
@@ -44,7 +41,7 @@ CREATE INDEX `idx_login_times` ON `user_account` (`login_times` ASC);
 CREATE TABLE `user_profile`
 (
     `id`         bigint(0)    NOT NULL COMMENT 'id',
-    `code`       varchar(32)  NOT NULL COMMENT '账号简况编码-自然键',
+    `account`    bigint(0)    NOT NULL COMMENT '账号ID',
     `first_name` varchar(50)  NULL COMMENT '姓',
     `last_name`  varchar(50)  NULL COMMENT '名',
     `nick_name`  varchar(50)  NULL COMMENT '昵称',
@@ -56,10 +53,15 @@ CREATE TABLE `user_profile`
     `update_at`  datetime(0)  NOT NULL COMMENT '更新时间',
     `version`    int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_profile_identifier` (`code`) USING BTREE
+    UNIQUE INDEX `idx_profile_identifier` (`account`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_profile_first_name` ON `user_profile` (`first_name` ASC);
+CREATE INDEX `idx_profile_last_name` ON `user_profile` (`last_name` ASC);
+CREATE INDEX `idx_profile_nick_name` ON `user_profile` (`nick_name` ASC);
+CREATE INDEX `idx_profile_gender` ON `user_profile` (`gender` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user   */
@@ -68,7 +70,6 @@ CREATE TABLE `user_profile`
 CREATE TABLE `user_role`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `code`      varchar(13)  NOT NULL COMMENT '角色编码-自然键',
     `name`      varchar(255) NOT NULL COMMENT '角色名',
     `desc`      varchar(255) COMMENT '描述',
     `enabled`   tinyint(0)   NOT NULL DEFAULT 1 COMMENT '角色逻辑有效标志位',
@@ -78,11 +79,12 @@ CREATE TABLE `user_role`
     `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
     `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_role_identifier` (`code`) USING BTREE,
-    UNIQUE INDEX `idx_role` (`name`) USING BTREE
+    UNIQUE INDEX `idx_role_identifier` (`name`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_role_enabled` ON `user_role` (`enabled` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */
@@ -91,9 +93,8 @@ CREATE TABLE `user_role`
 CREATE TABLE `user_permission`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `code`      varchar(13)  NOT NULL COMMENT '权限编号-自然键',
     `name`      varchar(255) NOT NULL COMMENT '权限名',
-    `type`      smallint(0)   NOT NULL COMMENT '权限类型: 0 - 功能权限; 1 - 数据权限; 2 - 多媒体文件权限',
+    `type`      smallint(0)  NOT NULL COMMENT '权限类型（区分对应操作的资源）',
     `desc`      varchar(255) COMMENT '权限描述',
     `enabled`   tinyint(0)   NOT NULL DEFAULT 1 COMMENT '权限逻辑有效标志位',
     `create_by` varchar(255) NOT NULL COMMENT '创建者',
@@ -102,8 +103,30 @@ CREATE TABLE `user_permission`
     `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
     `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_perm_identifier` (`code`) USING BTREE,
-    UNIQUE INDEX `idx_perm` (`name`, `type`) USING BTREE
+    UNIQUE INDEX `idx_perm_identifier` (`name`, `type`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_permission_enabled` ON `user_permission` (`enabled` ASC);
+
+/******************************************/
+/*   数据库全名 = oceanstars_user           */
+/*   表名称 = 权限资源操作多对多映射              */
+/******************************************/
+CREATE TABLE `user_permission_behavior`
+(
+    `id`         bigint(0)    NOT NULL COMMENT 'id',
+    `permission` bigint(0)    NOT NULL COMMENT '权限ID',
+    `resource`   bigint(0)    NOT NULL COMMENT '资源ID',
+    `opt`        tinyint(0)   NOT NULL COMMENT '资源操作行为(二进制存储): 0x01 - 禁止操作; 0x02 - 允许读入; 0x04 - 允许创建; 0x08 - 允许更新; 0x10 - 允许删除',
+    `create_by`  varchar(255) NOT NULL COMMENT '创建者',
+    `create_at`  datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by`  varchar(255) NOT NULL COMMENT '更新者',
+    `update_at`  datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`    int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_perm_behavior_identifier` (`permission`, `resource`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -115,18 +138,15 @@ CREATE TABLE `user_permission`
 CREATE TABLE `rel_account_role`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `aid`       bigint(0)    NOT NULL COMMENT '账号ID',
-    `rid`       bigint(0)    NOT NULL COMMENT '角色ID',
+    `account`   bigint(0)    NOT NULL COMMENT '账号ID',
+    `role`      bigint(0)    NOT NULL COMMENT '角色ID',
     `create_by` varchar(255) NOT NULL COMMENT '创建者',
     `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_rel_acc_role` (`aid`, `rid`) USING BTREE
+    UNIQUE INDEX `idx_rel_acc_role_identifier` (`account`, `role`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `idx_rel_acc_role_aid` ON `rel_account_role` (`aid` ASC);
-CREATE INDEX `idx_rel_acc_role_rid` ON `rel_account_role` (`rid` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */
@@ -135,18 +155,15 @@ CREATE INDEX `idx_rel_acc_role_rid` ON `rel_account_role` (`rid` ASC);
 CREATE TABLE `rel_role_role`
 (
     `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `rid`       bigint(0)    NOT NULL COMMENT '角色ID',
-    `pid`       bigint(0)    NOT NULL COMMENT '隶属角色ID',
+    `role`      bigint(0)    NOT NULL COMMENT '角色ID',
+    `parent`    bigint(0)    NOT NULL COMMENT '隶属角色ID',
     `create_by` varchar(255) NOT NULL COMMENT '创建者',
     `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_rel_role` (`rid`, `pid`) USING BTREE
+    UNIQUE INDEX `idx_rel_role_identifier` (`role`, `parent`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `idx_rel_role_rid` ON `rel_role_role` (`rid` ASC);
-CREATE INDEX `idx_rel_role_pid` ON `rel_role_role` (`pid` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */
@@ -154,41 +171,13 @@ CREATE INDEX `idx_rel_role_pid` ON `rel_role_role` (`pid` ASC);
 /******************************************/
 CREATE TABLE `rel_role_permission`
 (
-    `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `rid`       bigint(0)    NOT NULL COMMENT '角色ID',
-    `pid`       bigint(0)    NOT NULL COMMENT '权限ID',
-    `create_by` varchar(255) NOT NULL COMMENT '创建者',
-    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
+    `id`         bigint(0)    NOT NULL COMMENT 'id',
+    `role`       bigint(0)    NOT NULL COMMENT '角色ID',
+    `permission` bigint(0)    NOT NULL COMMENT '权限ID',
+    `create_by`  varchar(255) NOT NULL COMMENT '创建者',
+    `create_at`  datetime(0)  NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_rel_role_perm` (`rid`, `pid`) USING BTREE
+    UNIQUE INDEX `idx_rel_role_perm_identifier` (`role`, `permission`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `idx_rel_role_perm_rid` ON `rel_role_permission` (`rid` ASC);
-CREATE INDEX `idx_rel_role_perm_pid` ON `rel_role_permission` (`pid` ASC);
-
-/******************************************/
-/*   数据库全名 = oceanstars_user           */
-/*   表名称 = 权限资源操作多对多映射              */
-/******************************************/
-CREATE TABLE `rel_permission_resource`
-(
-    `id`        bigint(0)    NOT NULL COMMENT 'id',
-    `pid`       bigint(0)    NOT NULL COMMENT '权限ID',
-    `rid`       bigint(0)    NOT NULL COMMENT '资源ID',
-    `opt`       tinyint(0)   NOT NULL COMMENT '资源操作行为: 0 - 禁止; 1 - 允许读入; 2 - 允许创建; 3 - 允许更新; 4 - 允许删除',
-    `create_by` varchar(255) NOT NULL COMMENT '创建者',
-    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
-    `update_by` varchar(255) NOT NULL COMMENT '更新者',
-    `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
-    `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_rel_perm_res_ops` (`pid`, `rid`, `opt`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `idx_rel_perm_res_ops_pid` ON `rel_permission_resource` (`pid` ASC);
-CREATE INDEX `idx_rel_perm_res_ops_rid` ON `rel_permission_resource` (`rid` ASC);
-CREATE INDEX `idx_rel_perm_res_ops_opt` ON `rel_permission_resource` (`opt` ASC);

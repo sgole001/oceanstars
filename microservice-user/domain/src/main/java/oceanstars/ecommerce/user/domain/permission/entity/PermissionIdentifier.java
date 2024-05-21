@@ -1,7 +1,8 @@
 package oceanstars.ecommerce.user.domain.permission.entity;
 
-import oceanstars.ecommerce.common.constant.CommonConstant;
+import java.io.Serial;
 import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
+import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionType;
 
 /**
@@ -13,6 +14,9 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionType;
  */
 public final class PermissionIdentifier extends BaseEntityIdentifier<String> {
 
+  @Serial
+  private static final long serialVersionUID = -4294197801262569230L;
+  
   /**
    * 权限名
    */
@@ -24,31 +28,27 @@ public final class PermissionIdentifier extends BaseEntityIdentifier<String> {
   private final PermissionType type;
 
   /**
-   * ID前缀
-   */
-  private static final String ID_PREFIX = "PERM-";
-
-  /**
    * 构造函数；初始化成员变量
    *
    * @param name 权限名
    * @param type 权限类型
    */
   public PermissionIdentifier(final String name, final PermissionType type) {
-    super(null);
+    super(type.value() + "#" + name);
     this.name = name;
     this.type = type;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public PermissionType getType() {
+    return type;
+  }
+
   @Override
   public String generateIdentifier() {
-
-    // ID生成规则相关元素拼接
-    final String elements = this.name + CommonConstant.SEPARATOR_HYPHEN + this.type.value();
-
-    // 获取UUID
-    final String[] uuid = super.uuid(elements);
-
-    return ID_PREFIX + uuid[0];
+    throw new BusinessException("权限唯一标识符非自动生成，权限名称和权限类型组合唯一");
   }
 }

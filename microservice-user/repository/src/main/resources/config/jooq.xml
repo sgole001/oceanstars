@@ -66,7 +66,7 @@
         <forcedType>
           <name>BOOLEAN</name>
           <types>tinyint.*</types>
-          <excludeExpression>.*\.rel_permission_resource\.opt</excludeExpression>
+          <excludeExpression>.*\.user_permission_behavior\.opt</excludeExpression>
         </forcedType>
       </forcedTypes>
 

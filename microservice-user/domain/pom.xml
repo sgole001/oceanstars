@@ -21,13 +21,13 @@
   <dependencies>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>user-api-message</artifactId>
-      <version>${user.api.message.version}</version>
+      <artifactId>user-constant</artifactId>
+      <version>${user.constant.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>user-repository</artifactId>
-      <version>${user.repository.version}</version>
+      <artifactId>user-api-message</artifactId>
+      <version>${user.api.message.version}</version>
     </dependency>
   </dependencies>
 

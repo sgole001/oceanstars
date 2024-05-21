@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.user.domain.account.entity;
 
+import java.io.Serial;
 import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.common.exception.BusinessException;
 
@@ -11,6 +12,9 @@ import oceanstars.ecommerce.common.exception.BusinessException;
  * @since 2022/1/6 11:49 AM
  */
 public final class ProfileIdentifier extends BaseEntityIdentifier<Long> {
+
+  @Serial
+  private static final long serialVersionUID = -5510864963886988135L;
 
   /**
    * 构造函数：初始化成员变量
