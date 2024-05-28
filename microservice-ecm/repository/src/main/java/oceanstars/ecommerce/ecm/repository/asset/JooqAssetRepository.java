@@ -9,7 +9,7 @@ import oceanstars.ecommerce.ecm.domain.asset.entity.Asset;
 import oceanstars.ecommerce.ecm.domain.asset.repository.AssetRepository;
 import oceanstars.ecommerce.ecm.domain.asset.repository.condition.AssetFetchCondition;
 import oceanstars.ecommerce.ecm.repository.asset.strategy.impl.AssetRepositoryStrategyContext;
-import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsTransactional;
+import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -38,7 +38,6 @@ public class JooqAssetRepository extends BaseDomainRepository<Asset> implements 
     return repositoryStrategy.fetch(assetFetchCondition);
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void create(Asset asset) {
 
@@ -52,7 +51,6 @@ public class JooqAssetRepository extends BaseDomainRepository<Asset> implements 
     repositoryStrategy.create(asset);
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void modify(Asset asset) {
 

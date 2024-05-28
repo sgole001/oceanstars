@@ -27,7 +27,7 @@ public class PermissionBehaviorIdentifier extends BaseEntityIdentifier<String> {
   private final Long resource;
 
   public PermissionBehaviorIdentifier(Permission permission, Long resource) {
-    super(permission.getDelegator().getId() + "_" + resource);
+    super(permission.getIdentifier().getIdentifier() + "_" + resource);
     this.permission = permission;
     this.resource = resource;
   }
@@ -43,6 +43,6 @@ public class PermissionBehaviorIdentifier extends BaseEntityIdentifier<String> {
   @Override
   public String generateIdentifier() {
     // 权限资源操作实体唯一标识符非自动生成，需初始化关联资源实体数据物理PK
-    throw new BusinessException("权限资源操作实体唯一标识符非自动生成，权限ID和资源ID组合唯一");
+    throw new BusinessException("权限资源操作实体唯一标识符非自动生成，权限唯一识别码和资源ID组合唯一");
   }
 }

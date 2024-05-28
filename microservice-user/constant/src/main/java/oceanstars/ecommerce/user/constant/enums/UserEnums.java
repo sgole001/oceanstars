@@ -309,13 +309,13 @@ public class UserEnums {
   public enum PermissionType implements IEnum<Integer, String, PermissionType> {
 
     // 功能权限
-    FUNCTION(0, "F"),
+    FUNCTION_MENU(100, "F_MENU"),
 
     // 数据权限
-    DATA(1, "D"),
+    DATA(200, "D"),
 
     // 多媒体文件权限
-    MEDIA(2, "M");
+    MEDIA(300, "M");
 
     /**
      * 枚举编号
@@ -430,23 +430,17 @@ public class UserEnums {
    */
   public enum Message implements IEnum<String, String, Message> {
 
-    // 编码为{0}的权限操作数据已经存在！
+    // 名称为{0}的权限数据已经存在！
     MSG_BIZ_00000("MSG_BIZ_00000"),
 
-    // 编码为{0}的权限操作数据不存在！
+    // 名称为{0}的权限数据不存在！
     MSG_BIZ_00001("MSG_BIZ_00001"),
 
-    // 编码为{0}的权限资源类型数据已经存在！
+    // 名称为{0}的角色数据已经存在！
     MSG_BIZ_00002("MSG_BIZ_00002"),
 
-    // 编码为{0}的权限资源类型数据不存在！
+    // 角色继承的父角色全部不存在！
     MSG_BIZ_00003("MSG_BIZ_00003"),
-
-    // 编码为{0}的权限数据已经存在！
-    MSG_BIZ_00004("MSG_BIZ_00004"),
-
-    // 编码为{0}的权限数据不存在！
-    MSG_BIZ_00005("MSG_BIZ_00005"),
     ;
 
     /**

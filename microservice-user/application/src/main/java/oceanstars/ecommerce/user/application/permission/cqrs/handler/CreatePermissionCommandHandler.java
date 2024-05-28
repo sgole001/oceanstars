@@ -13,7 +13,7 @@ import oceanstars.ecommerce.user.domain.permission.repository.PermissionReposito
 import org.springframework.stereotype.Component;
 
 /**
- * 创建权限资源类型命令处理类
+ * 创建权限命令处理类
  *
  * @author Clover
  * @version 1.0.0

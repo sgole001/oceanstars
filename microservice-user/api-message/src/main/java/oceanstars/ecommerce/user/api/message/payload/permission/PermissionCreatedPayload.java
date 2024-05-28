@@ -1,6 +1,5 @@
 package oceanstars.ecommerce.user.api.message.payload.permission;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +12,4 @@ import java.io.Serializable;
  */
 public record PermissionCreatedPayload(Long permission) implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -5535586349832474459L;
 }

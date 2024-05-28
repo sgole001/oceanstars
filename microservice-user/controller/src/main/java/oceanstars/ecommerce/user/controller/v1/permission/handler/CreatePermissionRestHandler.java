@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 /**
- * 创建权限资源类型的Restful请求处理
+ * 创建权限的Restful请求处理
  *
  * @author Clover
  * @version 1.0.0
@@ -87,7 +87,7 @@ public class CreatePermissionRestHandler extends BaseRestHandler<CreatePermissio
   @Override
   public RestResponseMessage packageResponseMessage(GeneratedMessageV3 result) {
 
-    // 获取创建权限资源类型命令处理结果
+    // 获取创建权限命令处理结果
     final UserCreatePermissionResult createPermissionResult = (UserCreatePermissionResult) result;
 
     return RestResponseMessage.newBuilder(HttpStatus.OK)

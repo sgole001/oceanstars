@@ -24,7 +24,7 @@ import oceanstars.ecommerce.ecm.repository.generate.tables.daos.RelContentCatego
 import oceanstars.ecommerce.ecm.repository.generate.tables.daos.RelContentTagDao;
 import oceanstars.ecommerce.ecm.repository.generate.tables.pojos.RelContentCategoryPojo;
 import oceanstars.ecommerce.ecm.repository.generate.tables.pojos.RelContentTagPojo;
-import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsTransactional;
+import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -109,7 +109,6 @@ public class JooqContentRepository extends BaseDomainRepository<Content> impleme
     return contents;
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void create(Content content) {
 
@@ -129,7 +128,6 @@ public class JooqContentRepository extends BaseDomainRepository<Content> impleme
     this.saveContentCategories(content);
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void modify(Content aggregator) {
 

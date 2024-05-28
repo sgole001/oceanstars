@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 1.0.0
  * @since 2022/1/14 10:36 AM
  */
-@Tag(name = "Resource", description = "权限外部API接口")
+@Tag(name = "Permission", description = "权限外部API接口")
 public interface IPermissionController extends RestApi {
 
   /**

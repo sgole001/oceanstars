@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package oceanstars.user.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto.role";
+
+// 创建角色命令实体
+message UserCreateRoleCommand {
+  // 角色名
+  string       name = 1;
+  // 角色描述
+  string       desc = 2;
+  // 父角色（隶属关系）列表
+  repeated int64 parentIds = 3;
+  // 角色权限列表
+  repeated int64 permissionIds = 4;
+}
+
+// 角色创建返回结果实体
+message UserCreateRoleResult {
+  // 角色代理唯一识别符（物理主键）
+  int64 identifier = 1;
+}

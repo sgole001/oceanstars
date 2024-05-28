@@ -2,9 +2,10 @@ package oceanstars.ecommerce.user.repository.permission.view;
 
 import jakarta.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionOperationType;
 import oceanstars.ecommerce.user.domain.permission.repository.condition.PermissionFetchCondition;
@@ -14,7 +15,6 @@ import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserPermission
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserPermissionPojo;
 import oceanstars.ecommerce.user.repository.permission.view.bo.PermissionView;
 import org.jooq.Condition;
-import org.jooq.Field;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDSLContext;
 import org.springframework.stereotype.Repository;
@@ -145,16 +145,17 @@ public class PermissionViewDao {
       searchCondition = searchCondition.and(T_PERMISSION.UPDATE_AT.le(fetchCondition.getUpdateEndTime()));
     }
 
-    // 构建查询字段
-    final List<Field<?>> searchFields = new ArrayList<>(Arrays.stream(T_PERMISSION.fields()).toList());
-    searchFields.addAll(Arrays.stream(T_BEHAVIOR.fields()).toList());
-
     // 查询
-    final Map<UserPermissionPojo, List<UserPermissionBehaviorPojo>> results = dsl.select(searchFields)
+    final Map<UserPermissionPojo, List<UserPermissionBehaviorPojo>> results = dsl
+        .select(T_PERMISSION.fields())
+        .select(T_BEHAVIOR.fields())
         .from(T_PERMISSION)
         .join(T_BEHAVIOR).on(T_PERMISSION.ID.eq(T_BEHAVIOR.PERMISSION))
         .where(searchCondition)
-        .fetchGroups(UserPermissionPojo.class, UserPermissionBehaviorPojo.class);
+        .collect(Collectors.groupingBy(
+            record -> record.into(T_PERMISSION).into(UserPermissionPojo.class),
+            Collectors.mapping(record -> record.into(T_BEHAVIOR).into(UserPermissionBehaviorPojo.class), Collectors.toList())
+        ));
 
     // 查询结果为空，返回空
     if (CollectionUtils.isEmpty(results)) {
@@ -169,6 +170,9 @@ public class PermissionViewDao {
       permissionView.setBehaviors(behaviors);
       permissionViews.add(permissionView);
     });
+
+    // 排序
+    Collections.sort(permissionViews);
 
     return permissionViews;
   }

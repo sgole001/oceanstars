@@ -2,6 +2,7 @@ package oceanstars.ecommerce.common.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
+import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.common.domain.entity.EntityDelegator;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
@@ -35,6 +36,7 @@ public abstract class BaseDomainRepository<T extends AggregateRoot<?>> implement
     return Optional.of(result.getFirst());
   }
 
+  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   public void save(T aggregator) {
 

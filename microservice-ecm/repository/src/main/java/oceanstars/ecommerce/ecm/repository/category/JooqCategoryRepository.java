@@ -15,7 +15,7 @@ import oceanstars.ecommerce.ecm.repository.generate.tables.daos.EcmCategoryDao;
 import oceanstars.ecommerce.ecm.repository.generate.tables.daos.RelCategoryCategoryDao;
 import oceanstars.ecommerce.ecm.repository.generate.tables.pojos.EcmCategoryPojo;
 import oceanstars.ecommerce.ecm.repository.generate.tables.pojos.RelCategoryCategoryPojo;
-import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsTransactional;
+import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -40,7 +40,6 @@ public class JooqCategoryRepository extends BaseDomainRepository<Category> imple
     return List.of();
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void create(Category category) {
 
@@ -77,7 +76,6 @@ public class JooqCategoryRepository extends BaseDomainRepository<Category> imple
     }
   }
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void modify(Category aggregator) {
 

@@ -1,4 +1,4 @@
-package oceanstars.ecommerce.infrastructure.pool.configuration;
+package oceanstars.ecommerce.common.spring;
 
 
 import java.lang.annotation.Documented;

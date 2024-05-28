@@ -9,7 +9,6 @@ import java.util.List;
 import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
-import oceanstars.ecommerce.infrastructure.pool.configuration.OceanstarsTransactional;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.Message;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionType;
 import oceanstars.ecommerce.user.domain.permission.entity.Permission;
@@ -60,7 +59,6 @@ public class JooqPermissionRepository extends BaseDomainRepository<Permission> i
    */
   private final Logger logger = LoggerFactory.getLogger(JooqPermissionRepository.class);
 
-  @OceanstarsTransactional(rollbackFor = Exception.class)
   @Override
   protected void create(Permission permission) {
 
@@ -81,7 +79,7 @@ public class JooqPermissionRepository extends BaseDomainRepository<Permission> i
 
     // 校验权限是否已存在，如果存在则抛出业务异常
     if (!CollectionUtils.isEmpty(permissions)) {
-      throw new BusinessException(Message.MSG_BIZ_00004, permissions.getFirst().getPermission().getName());
+      throw new BusinessException(Message.MSG_BIZ_00000, permissions.getFirst().getPermission().getName());
     }
 
     // 构建权限数据库映射

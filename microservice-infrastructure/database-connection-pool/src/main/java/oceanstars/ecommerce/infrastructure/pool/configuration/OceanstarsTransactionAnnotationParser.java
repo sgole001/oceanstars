@@ -5,6 +5,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
