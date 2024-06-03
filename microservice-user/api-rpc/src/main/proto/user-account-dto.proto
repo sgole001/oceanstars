@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package oceanstars.user.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto.account";
+
+// 创建账号命令实体
+message UserCreateAccountCommand {
+  // 账号注册源
+  int32 source = 1;
+  // 账号注册方式（手机 | 邮箱 | 第三方授权）
+  int32 mean = 2;
+  // 账号名
+  string account = 3;
+  // 账号密码
+  string password = 4;
+}
+
+// 创建账号简况命令实体
+message UserCreateAccountProfileCommand {
+  // 账号ID
+  int64 account = 1;
+  // 姓
+  string firstName = 2;
+  // 名
+  string lastName = 3;
+  // 昵称
+  string nickName = 4;
+  // 用户头像(路径)
+  string avatar = 5;
+  // 性别
+  int32 gender = 6;
+  // 生日
+  google.protobuf.Timestamp birthday = 7;
+}
+
+// 分配账号角色命令实体
+message UserAssignAccountRolesCommand {
+  // 账号ID
+  int64 account = 1;
+  // 角色ID列表
+  repeated int64 roles = 2;
+}
+
+// 账号创建返回结果实体
+message UserCreateAccountResult {
+  // 账号代理唯一识别符（物理主键）
+  int64 id = 1;
+}
+
+// 账号简况创建返回结果实体
+message UserCreateAccountProfileResult {
+  // 账号代理唯一识别符（物理主键）
+  int64 id = 1;
+}
+
+// 账号角色分配返回结果实体
+message UserAssignAccountRolesResult {
+  // 账号代理唯一识别符（物理主键）
+  int64 id = 1;
+}

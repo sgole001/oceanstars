@@ -1,10 +1,12 @@
 package oceanstars.ecommerce.user.domain.account.entity;
 
+import java.util.List;
 import java.util.Set;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
+import oceanstars.ecommerce.user.domain.account.entity.valueobject.AccountActivityLog;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -27,21 +29,6 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
   private String password;
 
   /**
-   * 创建时IP
-   */
-  private String creatIp;
-
-  /**
-   * 最后登陆IP
-   */
-  private String lastLoginIp;
-
-  /**
-   * 登陆次数
-   */
-  private Integer loginTimes;
-
-  /**
    * 账号状态
    */
   private AccountStatus status;
@@ -57,6 +44,11 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
   private Set<Long> roles;
 
   /**
+   * 账号活动日志列表
+   */
+  private List<AccountActivityLog> activityLogs;
+
+  /**
    * 构造函数：根据构建器初始化成员变量
    *
    * @param builder 构建器
@@ -65,12 +57,10 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
     super(new AccountIdentifier(builder.email, builder.mobile, builder.externalId, builder.source));
     means = builder.means;
     password = builder.password;
-    creatIp = builder.creatIp;
-    lastLoginIp = builder.lastLoginIp;
-    loginTimes = builder.loginTimes;
     status = builder.status;
     profile = builder.profile;
     roles = builder.roles;
+    activityLogs = builder.activityLogs;
   }
 
   /**
@@ -91,18 +81,6 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
     return password;
   }
 
-  public String getCreatIp() {
-    return creatIp;
-  }
-
-  public String getLastLoginIp() {
-    return lastLoginIp;
-  }
-
-  public Integer getLoginTimes() {
-    return loginTimes;
-  }
-
   public AccountStatus getStatus() {
     return status;
   }
@@ -119,18 +97,6 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
     this.password = password;
   }
 
-  public void setCreatIp(String creatIp) {
-    this.creatIp = creatIp;
-  }
-
-  public void setLastLoginIp(String lastLoginIp) {
-    this.lastLoginIp = lastLoginIp;
-  }
-
-  public void setLoginTimes(Integer loginTimes) {
-    this.loginTimes = loginTimes;
-  }
-
   public void setStatus(AccountStatus status) {
     this.status = status;
   }
@@ -141,6 +107,14 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
 
   public void setRoles(Set<Long> roles) {
     this.roles = roles;
+  }
+
+  public List<AccountActivityLog> getActivityLogs() {
+    return activityLogs;
+  }
+
+  public void setActivityLogs(List<AccountActivityLog> activityLogs) {
+    this.activityLogs = activityLogs;
   }
 
   /**
@@ -158,12 +132,10 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
     private String mobile;
     private String password;
     private String externalId;
-    private String creatIp;
-    private String lastLoginIp;
-    private Integer loginTimes;
     private AccountStatus status;
     private Profile profile;
     private Set<Long> roles;
+    private List<AccountActivityLog> activityLogs;
 
     public Builder(AccountRegisterSource source, AccountRegisterMeans means) {
       this.source = source;
@@ -190,21 +162,6 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
       return this;
     }
 
-    public Builder creatIp(String val) {
-      creatIp = val;
-      return this;
-    }
-
-    public Builder lastLoginIp(String val) {
-      lastLoginIp = val;
-      return this;
-    }
-
-    public Builder loginTimes(Integer val) {
-      loginTimes = val;
-      return this;
-    }
-
     public Builder status(AccountStatus val) {
       status = val;
       return this;
@@ -217,6 +174,11 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
 
     public Builder roles(Set<Long> val) {
       roles = val;
+      return this;
+    }
+
+    public Builder activityLogs(List<AccountActivityLog> val) {
+      activityLogs = val;
       return this;
     }
 

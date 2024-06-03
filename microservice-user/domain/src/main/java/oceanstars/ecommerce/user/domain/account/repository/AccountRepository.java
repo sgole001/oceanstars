@@ -12,4 +12,17 @@ import oceanstars.ecommerce.user.domain.account.entity.Account;
  */
 public interface AccountRepository extends DomainRepository<Account> {
 
+  /**
+   * 保存账号简况
+   *
+   * @param account 账号实体
+   */
+  void saveProfile(Account account);
+
+  /**
+   * 分配账号角色
+   *
+   * @param account 账号实体
+   */
+  void assignRoles(Account account);
 }

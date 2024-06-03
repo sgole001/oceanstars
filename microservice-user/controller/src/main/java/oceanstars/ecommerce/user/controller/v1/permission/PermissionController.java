@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 权限资源外部API实现类
+ * 权限外部API实现类
  *
  * @author Clover
  * @version 1.0.0

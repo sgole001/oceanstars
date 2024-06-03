@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.user.domain.account.entity;
 
+import java.time.LocalDate;
 import oceanstars.ecommerce.common.domain.entity.Entity;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.Gender;
 
@@ -38,6 +39,11 @@ public final class Profile extends Entity<ProfileIdentifier> {
   private Gender gender;
 
   /**
+   * 生日
+   */
+  private LocalDate birthday;
+
+  /**
    * 构造函数：根据构建器初始化成员变量
    *
    * @param builder 构建器
@@ -49,6 +55,7 @@ public final class Profile extends Entity<ProfileIdentifier> {
     nickName = builder.nickName;
     avatar = builder.avatar;
     gender = builder.gender;
+    birthday = builder.birthday;
   }
 
   /**
@@ -101,6 +108,14 @@ public final class Profile extends Entity<ProfileIdentifier> {
     this.gender = gender;
   }
 
+  public LocalDate getBirthday() {
+    return birthday;
+  }
+
+  public void setBirthday(LocalDate birthday) {
+    this.birthday = birthday;
+  }
+
   /**
    * 账号简况实体构建器
    *
@@ -116,6 +131,7 @@ public final class Profile extends Entity<ProfileIdentifier> {
     private String nickName;
     private String avatar;
     private Gender gender;
+    private LocalDate birthday;
 
     public Builder(final Long account) {
       this.account = account;
@@ -143,6 +159,11 @@ public final class Profile extends Entity<ProfileIdentifier> {
 
     public Builder gender(Gender val) {
       gender = val;
+      return this;
+    }
+
+    public Builder birthday(LocalDate val) {
+      birthday = val;
       return this;
     }
 

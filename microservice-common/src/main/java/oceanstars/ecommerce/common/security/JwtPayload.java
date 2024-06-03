@@ -1,4 +1,4 @@
-package oceanstars.ecommerce.common.beans;
+package oceanstars.ecommerce.common.security;
 
 import java.util.Date;
 

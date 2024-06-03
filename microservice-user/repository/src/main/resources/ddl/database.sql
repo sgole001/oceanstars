@@ -4,22 +4,19 @@
 /******************************************/
 CREATE TABLE `user_account`
 (
-    `id`            bigint(0)    NOT NULL COMMENT 'id',
-    `source`        smallint(0)  NOT NULL COMMENT '账号注册源',
-    `means`         smallint(0)  NOT NULL COMMENT '账号注册方式',
-    `email`         varchar(50)  NOT NULL DEFAULT '' COMMENT '邮箱',
-    `mobile`        varchar(11)  NOT NULL DEFAULT '' COMMENT '手机',
-    `password`      varchar(250) NOT NULL COMMENT '账号密码',
-    `external_id`   varchar(50)  NOT NULL DEFAULT '' COMMENT '第三方外部UID',
-    `creat_ip`      varchar(50)  NOT NULL COMMENT '创建时IP',
-    `last_login_ip` varchar(50)  NOT NULL COMMENT '最后登陆IP',
-    `login_times`   int(0)       NOT NULL DEFAULT 0 COMMENT '登陆次数',
-    `status`        smallint(0)  NOT NULL COMMENT '账号状态',
-    `create_by`     varchar(255) NOT NULL COMMENT '创建者',
-    `create_at`     datetime(0)  NOT NULL COMMENT '创建时间',
-    `update_by`     varchar(255) NOT NULL COMMENT '更新者',
-    `update_at`     datetime(0)  NOT NULL COMMENT '更新时间',
-    `version`       int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    `id`          bigint(0)    NOT NULL COMMENT 'id',
+    `source`      smallint(0)  NOT NULL COMMENT '账号注册源',
+    `means`       smallint(0)  NOT NULL COMMENT '账号注册方式',
+    `email`       varchar(50)  NOT NULL DEFAULT '' COMMENT '邮箱',
+    `mobile`      varchar(11)  NOT NULL DEFAULT '' COMMENT '手机',
+    `password`    varchar(250) NOT NULL COMMENT '账号密码',
+    `external_id` varchar(50)  NOT NULL DEFAULT '' COMMENT '第三方外部UID',
+    `status`      smallint(0)  NOT NULL COMMENT '账号状态',
+    `create_by`   varchar(255) NOT NULL COMMENT '创建者',
+    `create_at`   datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by`   varchar(255) NOT NULL COMMENT '更新者',
+    `update_at`   datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`     int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `idx_account_identifier_mobile` (`mobile`) USING BTREE,
     UNIQUE INDEX `idx_account_identifier_email` (`email`) USING BTREE,
@@ -29,9 +26,6 @@ CREATE TABLE `user_account`
   COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `idx_account_means` ON `user_account` (`means` ASC);
-CREATE INDEX `idx_account_creat_ip` ON `user_account` (`creat_ip` ASC);
-CREATE INDEX `idx_account_last_login_ip` ON `user_account` (`last_login_ip` ASC);
-CREATE INDEX `idx_account_login_times` ON `user_account` (`login_times` ASC);
 CREATE INDEX `idx_account_status` ON `user_account` (`status` ASC);
 
 /******************************************/
@@ -47,6 +41,7 @@ CREATE TABLE `user_profile`
     `nick_name`  varchar(50)  NULL COMMENT '昵称',
     `avatar`     varchar(255) NULL COMMENT '用户头像路径',
     `gender`     smallint(0)  NULL COMMENT '性别 0 : male; 1 : female',
+    `birthday`   date         NULL COMMENT '生日',
     `create_by`  varchar(255) NOT NULL COMMENT '创建者',
     `create_at`  datetime(0)  NOT NULL COMMENT '创建时间',
     `update_by`  varchar(255) NOT NULL COMMENT '更新者',
@@ -62,6 +57,7 @@ CREATE INDEX `idx_profile_first_name` ON `user_profile` (`first_name` ASC);
 CREATE INDEX `idx_profile_last_name` ON `user_profile` (`last_name` ASC);
 CREATE INDEX `idx_profile_nick_name` ON `user_profile` (`nick_name` ASC);
 CREATE INDEX `idx_profile_gender` ON `user_profile` (`gender` ASC);
+CREATE INDEX `idx_profile_birthday` ON `user_profile` (`birthday` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user   */

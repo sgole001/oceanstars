@@ -7,3 +7,4 @@ oceanstars.ecommerce.common.domain.event.EventConfiguration
 oceanstars.ecommerce.common.exception.CommonExceptionHandler
 oceanstars.ecommerce.common.restful.RestConfiguration
 oceanstars.ecommerce.common.restful.Swagger3Config
+oceanstars.ecommerce.common.security.OceanStarsSecurityAutoConfig

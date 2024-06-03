@@ -6,4 +6,4 @@ spring:
   jackson:
     time-zone: Asia/Shanghai
   profiles:
-    include: server,redis,mysql #,cache,kafka,elasticsearch
+    include: common,server,redis,mysql #,cache,kafka,elasticsearch

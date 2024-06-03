@@ -7,7 +7,7 @@ import oceanstars.ecommerce.user.api.message.payload.role.RoleCreatedPayload;
 import oceanstars.ecommerce.user.domain.role.entity.Role;
 
 /**
- * 领域事件: 角色创建
+ * 领域事件: 角色已创建
  *
  * @author Clover
  * @version 1.0.0

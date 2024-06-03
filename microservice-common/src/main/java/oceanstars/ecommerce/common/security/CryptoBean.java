@@ -1,4 +1,4 @@
-package oceanstars.ecommerce.common.beans;
+package oceanstars.ecommerce.common.security;
 
 /**
  * 对称加解密算法信息Bean
@@ -7,7 +7,7 @@ package oceanstars.ecommerce.common.beans;
  * @version 1.0.0
  * @since 2021/11/3 3:26 下午
  */
-public abstract class BaseCryptoBean {
+public class CryptoBean {
 
   /**
    * 对称加密-算法

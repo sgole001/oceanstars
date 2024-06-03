@@ -1,0 +1,12 @@
+logging:
+  config: "classpath:config/logger/log4j2.xml"
+oceanstars:
+  security:
+    cryptos:
+      "aes256":
+        algorithm: AES
+        mode: CBC
+        padding: PKCS5Padding
+        digest: SHA-256
+        key_digit: 256
+        iv_digit: 16

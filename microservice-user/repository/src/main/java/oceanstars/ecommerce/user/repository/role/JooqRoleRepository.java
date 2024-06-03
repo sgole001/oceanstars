@@ -68,7 +68,7 @@ public class JooqRoleRepository extends BaseDomainRepository<Role> implements Ro
 
     // 判断角色信息是否存在, 如果存在则抛出业务异常
     if (rolePojo != null) {
-      throw new BusinessException(Message.MSG_BIZ_00002, role.getIdentifier().getName());
+      throw new BusinessException(Message.MSG_BIZ_10000, role.getIdentifier().getName());
     }
 
     // 构建角色数据库映射
@@ -153,7 +153,7 @@ public class JooqRoleRepository extends BaseDomainRepository<Role> implements Ro
     final List<UserRolePojo> parentRoles = this.roleDao.fetchById(role.getParents().toArray(new Long[0]));
     // 判断父角色信息是否存在, 如果不存在则抛出业务异常
     if (CollectionUtils.isEmpty(parentRoles)) {
-      throw new BusinessException(Message.MSG_BIZ_00003, role.getIdentifier().getName());
+      throw new BusinessException(Message.MSG_BIZ_10001, role.getIdentifier().getName());
     }
 
     // 构建角色关联关系数据库映射

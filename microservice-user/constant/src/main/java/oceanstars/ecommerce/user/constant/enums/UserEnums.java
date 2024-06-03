@@ -28,7 +28,9 @@ public class UserEnums {
     MOBILE(1, "MOBILE"),
 
     // 第三方授权注册
-    EXTERNAL(2, "EXTERNAL");
+    EXTERNAL(2, "EXTERNAL"),
+
+    ;
 
     /**
      * 枚举编号
@@ -91,20 +93,20 @@ public class UserEnums {
    */
   public enum AccountRegisterSource implements IEnum<Integer, String, AccountRegisterSource> {
 
-    // 邮箱登录
+    // Backoffice注册
     BACKOFFICE(0, "BACKOFFICE"),
 
-    // 手机登录
+    // 商场注册
     MALL(1, "MALL"),
 
-    // 账号正常
+    // 第三方授权：支付宝
     ALIPAY(2, "ALIPAY"),
 
-    // 账号注销
+    // 第三方授权：微信
     WECHAT(3, "WECHAT"),
 
-    // 账号禁用
-    SSO(4, "SSO");
+    // 第三方授权：抖音
+    DOUYIN(4, "DOUYIN");
 
     /**
      * 枚举编号
@@ -437,10 +439,17 @@ public class UserEnums {
     MSG_BIZ_00001("MSG_BIZ_00001"),
 
     // 名称为{0}的角色数据已经存在！
-    MSG_BIZ_00002("MSG_BIZ_00002"),
+    MSG_BIZ_10000("MSG_BIZ_10000"),
 
     // 角色继承的父角色全部不存在！
-    MSG_BIZ_00003("MSG_BIZ_00003"),
+    MSG_BIZ_10001("MSG_BIZ_10001"),
+
+    // 账号[{0}]的数据不存在！
+    MSG_BIZ_20000("MSG_BIZ_20000"),
+
+    // 通过{0}注册账号[{0}]已经存在！
+    MSG_BIZ_20001("MSG_BIZ_20000"),
+
     ;
 
     /**

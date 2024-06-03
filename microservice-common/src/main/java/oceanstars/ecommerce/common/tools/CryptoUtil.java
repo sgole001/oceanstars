@@ -14,14 +14,11 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import oceanstars.ecommerce.common.beans.AES256;
-import oceanstars.ecommerce.common.beans.BaseCryptoBean;
 import oceanstars.ecommerce.common.exception.SystemException;
+import oceanstars.ecommerce.common.security.CryptoBean;
+import oceanstars.ecommerce.common.spring.ApplicationContextProvider;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.context.properties.bind.Bindable;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
  * 对称加解密公共处理类
@@ -30,29 +27,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @version 1.0.0
  * @since 2021/11/3 5:19 下午
  */
-@Configuration
+@AutoConfiguration
 public class CryptoUtil {
-
-  /**
-   * 对称加解密算法信息Bean
-   */
-  private BaseCryptoBean cryptoBean;
 
   /**
    * 字符串可用字符范围
    */
   private static final String POSSIBLE_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  @Bean(name = "cryptoUtilForAes256")
-  public CryptoUtil cryptoUtilForAes256() {
-    this.cryptoBean = PropertyUtil.BINDER.bind(AES256.PREFIX, Bindable.of(AES256.class)).get();
-    return this;
-  }
-
-  @Bean(name = "passwordEncoder")
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
 
   /**
    * BASE64Encoder 加密
@@ -87,9 +68,9 @@ public class CryptoUtil {
    * @return 加密后字符串
    * @throws Exception 处理异常
    */
-  public String encrypt(String target, String encodingFormat, AlgorithmParameters iv, SecretKeySpec keySpec) throws Exception {
+  public static String encrypt(String target, String encodingFormat, AlgorithmParameters iv, SecretKeySpec keySpec) throws Exception {
 
-    Cipher cipher = Cipher.getInstance(this.buildCipher());
+    Cipher cipher = Cipher.getInstance(buildCipher());
     cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
 
     byte[] encrypted = cipher.doFinal(target.getBytes(encodingFormat));
@@ -107,9 +88,9 @@ public class CryptoUtil {
    * @return 解密后字符串
    * @throws Exception 处理异常
    */
-  public String decrypt(String target, String encodingFormat, AlgorithmParameters iv, SecretKeySpec keySpec) throws Exception {
+  public static String decrypt(String target, String encodingFormat, AlgorithmParameters iv, SecretKeySpec keySpec) throws Exception {
 
-    Cipher cipher = Cipher.getInstance(this.buildCipher());
+    Cipher cipher = Cipher.getInstance(buildCipher());
     cipher.init(Cipher.DECRYPT_MODE, keySpec, iv);
 
     // 先用base64解密
@@ -125,15 +106,18 @@ public class CryptoUtil {
    * @return 对称密钥
    * @throws NoSuchAlgorithmException 算法缺失异常
    */
-  public SecretKeySpec generateKey(String key) throws NoSuchAlgorithmException {
+  public static SecretKeySpec generateKey(String key) throws NoSuchAlgorithmException {
+
+    // 加载加解密配置
+    final CryptoBean cryptoBean = ApplicationContextProvider.getApplicationContext().getBean(CryptoBean.class);
 
     // "AES"：请求的密钥算法的标准名称
-    KeyGenerator keyGenerator = KeyGenerator.getInstance(this.cryptoBean.getAlgorithm());
+    KeyGenerator keyGenerator = KeyGenerator.getInstance(cryptoBean.getAlgorithm());
 
     // 256：密钥生成参数；secure random：密钥生成器的随机源
-    SecureRandom securerandom = new SecureRandom(this.digestKey(key));
+    SecureRandom securerandom = new SecureRandom(digestKey(key));
 
-    keyGenerator.init(this.cryptoBean.getKeyDigit(), securerandom);
+    keyGenerator.init(cryptoBean.getKeyDigit(), securerandom);
 
     // 生成秘密（对称）密钥
     SecretKey secretKey = keyGenerator.generateKey();
@@ -142,7 +126,7 @@ public class CryptoUtil {
     byte[] enCodeFormat = secretKey.getEncoded();
 
     // 根据给定的字节数组构造一个密钥。enCodeFormat：密钥内容；"AES"：与给定的密钥内容相关联的密钥算法的名称
-    return new SecretKeySpec(enCodeFormat, this.cryptoBean.getAlgorithm());
+    return new SecretKeySpec(enCodeFormat, cryptoBean.getAlgorithm());
   }
 
   /**
@@ -151,12 +135,15 @@ public class CryptoUtil {
    * @return 初始向量
    * @throws Exception 处理异常
    */
-  public AlgorithmParameters generateIv() throws Exception {
+  public static AlgorithmParameters generateIv() throws Exception {
+
+    // 加载加解密配置
+    final CryptoBean cryptoBean = ApplicationContextProvider.getApplicationContext().getBean(CryptoBean.class);
 
     // AES加密参数（初始向量）
-    AlgorithmParameters params = AlgorithmParameters.getInstance(this.cryptoBean.getAlgorithm());
+    AlgorithmParameters params = AlgorithmParameters.getInstance(cryptoBean.getAlgorithm());
 
-    params.init(new IvParameterSpec(this.generateRandomString(this.cryptoBean.getIvDigit())));
+    params.init(new IvParameterSpec(generateRandomString(cryptoBean.getIvDigit())));
 
     return params;
   }
@@ -167,10 +154,14 @@ public class CryptoUtil {
    * @param key 对称加密密钥
    * @return 对称加密密钥摘要
    */
-  public byte[] digestKey(String key) {
+  public static byte[] digestKey(String key) {
+
+    // 加载加解密配置
+    final CryptoBean cryptoBean = ApplicationContextProvider.getApplicationContext().getBean(CryptoBean.class);
+
     try {
       // 创建消息摘要算法
-      MessageDigest digester = MessageDigest.getInstance(this.cryptoBean.getDigest());
+      MessageDigest digester = MessageDigest.getInstance(cryptoBean.getDigest());
       // 数据摘要处理
       digester.update(key.getBytes());
 
@@ -186,7 +177,7 @@ public class CryptoUtil {
    * @param length 字符串长度
    * @return 指定长度随机字符串
    */
-  private byte[] generateRandomString(Integer length) {
+  private static byte[] generateRandomString(Integer length) {
     StringBuilder randomStr = new StringBuilder(length);
     SecureRandom random = new SecureRandom();
     for (int i = 0; i < length; i++) {
@@ -200,14 +191,17 @@ public class CryptoUtil {
    *
    * @return 算法模式
    */
-  private String buildCipher() {
+  private static String buildCipher() {
+
+    // 加载加解密配置
+    final CryptoBean cryptoBean = ApplicationContextProvider.getApplicationContext().getBean(CryptoBean.class);
 
     // 对称加解密算法
-    String algorithm = this.cryptoBean.getAlgorithm();
+    String algorithm = cryptoBean.getAlgorithm();
     // 对称加解密模式
-    String mode = this.cryptoBean.getMode();
+    String mode = cryptoBean.getMode();
     // 对称加解密填充
-    String padding = this.cryptoBean.getPadding();
+    String padding = cryptoBean.getPadding();
 
     if (StringUtils.isNotEmpty(algorithm) && StringUtils.isNotEmpty(mode) && StringUtils
         .isNotEmpty(padding)) {

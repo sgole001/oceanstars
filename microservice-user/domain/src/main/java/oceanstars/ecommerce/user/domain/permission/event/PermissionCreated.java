@@ -7,7 +7,7 @@ import oceanstars.ecommerce.user.api.message.payload.permission.PermissionCreate
 import oceanstars.ecommerce.user.domain.permission.entity.Permission;
 
 /**
- * 领域事件: 权限创建
+ * 领域事件: 权限已创建
  *
  * @author Clover
  * @version 1.0.0
