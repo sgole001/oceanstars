@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: iam-service
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    time-zone: Asia/Shanghai
+  profiles:
+    include: common,server,redis,mysql #,cache,kafka,elasticsearch

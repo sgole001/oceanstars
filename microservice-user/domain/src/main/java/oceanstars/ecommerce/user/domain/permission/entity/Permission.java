@@ -13,7 +13,7 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.PermissionType;
  * @version 1.0.0
  * @since 2022/1/5 11:49 AM
  */
-public class Permission extends AggregateRoot<PermissionIdentifier> {
+public final class Permission extends AggregateRoot<PermissionIdentifier> {
 
   /**
    * 权限描述

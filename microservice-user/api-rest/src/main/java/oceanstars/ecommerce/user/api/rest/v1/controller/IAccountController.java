@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 1.0.0
  * @since 2024/5/28 14:37
  */
-@Tag(name = "Role", description = "角色外部API接口")
+@Tag(name = "Account", description = "账号外部API接口")
 public interface IAccountController extends RestApi {
 
   /**

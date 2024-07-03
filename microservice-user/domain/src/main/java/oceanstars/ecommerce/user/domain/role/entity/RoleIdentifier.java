@@ -1,5 +1,6 @@
 package oceanstars.ecommerce.user.domain.role.entity;
 
+import java.io.Serial;
 import oceanstars.ecommerce.common.domain.entity.BaseEntityIdentifier;
 import oceanstars.ecommerce.common.exception.BusinessException;
 
@@ -12,6 +13,8 @@ import oceanstars.ecommerce.common.exception.BusinessException;
  */
 public final class RoleIdentifier extends BaseEntityIdentifier<String> {
 
+  @Serial
+  private static final long serialVersionUID = -8423250598043874836L;
   /**
    * 角色名
    */

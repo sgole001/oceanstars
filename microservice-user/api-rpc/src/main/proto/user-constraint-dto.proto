@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package oceanstars.user.protobuf;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto.constraint";
+
+// 约束规则基类
+message BaseConstraintRule {
+  // 规则执行优先级(数值越大优先级越高)
+  int32 salience = 1;
+  // 规则是否启用
+  bool enabled = 2;
+  // 规则生效时间
+  google.protobuf.Timestamp effective = 3;
+  // 规则失效时间
+  google.protobuf.Timestamp expire = 4;
+}
+
+// 关系约束规则
+message RelationConstraintRule {
+  // 基础约束规则
+  BaseConstraintRule base = 1;
+  // 互斥关系列表
+  repeated int64 exclusivity = 2;
+  // 最大基数
+  int32 maxCardinality = 3;
+  // 最小基数
+  int32 minCardinality = 4;
+}
+
+// 会话约束规则
+message SessionConstraintRule {
+  // 基础约束规则
+  BaseConstraintRule base = 1;
+}
+
+// 账户约束规则
+message AccountConstraintRule {
+  // 基础约束规则
+  BaseConstraintRule base = 1;
+}
+
+// 数据约束规则
+message DataConstraintRule {
+  // 基础约束规则
+  BaseConstraintRule base = 1;
+}
+
+// 约束规则
+message ConstraintRule {
+  // 约束规则类型
+  oneof rule_type {
+    RelationConstraintRule relation = 1;
+    SessionConstraintRule session = 2;
+    AccountConstraintRule account = 3;
+    DataConstraintRule data = 4;
+  }
+}
+
+// 创建约束命令实体
+message UserCreateConstraintCommand {
+  // 约束名称
+  string name = 1;
+  // 约束类型
+  int32 type = 2;
+  // 约束说明
+  string desc = 3;
+  // 约束规则列表
+  repeated ConstraintRule rules = 4;
+}
+
+// 约束创建返回结果实体
+message UserCreateConstraintResult {
+  // 约束代理唯一识别符（物理主键）
+  int64 id = 1;
+}

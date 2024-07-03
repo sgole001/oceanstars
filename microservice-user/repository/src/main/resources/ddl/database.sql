@@ -108,7 +108,7 @@ CREATE INDEX `idx_permission_enabled` ON `user_permission` (`enabled` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */
-/*   表名称 = 权限资源操作多对多映射              */
+/*   表名称 = 权限资源操作多对多映射           */
 /******************************************/
 CREATE TABLE `user_permission_behavior`
 (
@@ -126,6 +126,49 @@ CREATE TABLE `user_permission_behavior`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+/******************************************/
+/*   数据库全名 = oceanstars_user           */
+/*   表名称 = 约束                          */
+/******************************************/
+CREATE TABLE `user_constraint`
+(
+    `id`        bigint(0)    NOT NULL COMMENT 'id',
+    `name`      varchar(255) NOT NULL COMMENT '约束名',
+    `type`      smallint(0)  NOT NULL COMMENT '约束类型 0: 静态约束, 1: 动态约束',
+    `desc`      varchar(255) COMMENT '约束描述',
+    `create_by` varchar(255) NOT NULL COMMENT '创建者',
+    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by` varchar(255) NOT NULL COMMENT '更新者',
+    `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_constraint_identifier` (`name`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_constraint_type` ON `user_constraint` (`type` ASC);
+
+/******************************************/
+/*   数据库全名 = oceanstars_user           */
+/*   表名称 = 约束规则                       */
+/******************************************/
+CREATE TABLE `rel_constraint_rule`
+(
+    `id`         bigint(0)    NOT NULL COMMENT 'id',
+    `constraint` bigint(0)    NOT NULL COMMENT '约束ID',
+    `type`       smallint(0)  NOT NULL COMMENT '约束规则类型 0: 关系约束，1: 会话约束， 2: 账号信息约束，3: 数据约束',
+    `rule`       json         NOT NULL COMMENT '约束规则（规则详细JSON）',
+    `create_by`  varchar(255) NOT NULL COMMENT '创建者',
+    `create_at`  datetime(0)  NOT NULL COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_rel_const_rule_const` ON `rel_constraint_rule` (`constraint` ASC);
+CREATE INDEX `idx_rel_const_rule_type` ON `rel_constraint_rule` (`type` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */

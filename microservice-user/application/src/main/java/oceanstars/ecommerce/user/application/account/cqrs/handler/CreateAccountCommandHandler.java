@@ -78,7 +78,7 @@ public class CreateAccountCommandHandler implements ICommandHandler<UserCreateAc
     // 构建账号实体
     final Account account = accountBuilder.build();
 
-    // 保存角色实体信息
+    // 保存账号实体信息
     this.accountRepository.save(account);
 
     // 发布领域事件

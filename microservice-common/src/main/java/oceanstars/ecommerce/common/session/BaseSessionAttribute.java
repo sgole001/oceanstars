@@ -2,6 +2,7 @@ package oceanstars.ecommerce.common.session;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Session属性对象
@@ -16,22 +17,37 @@ public class BaseSessionAttribute implements Serializable {
   private static final long serialVersionUID = 850903871456246616L;
 
   /**
-   * 用户ID
+   * 会话发起对象
    */
   private String userId;
 
   /**
-   * 会话调用链ID
+   * 会话发起时间
+   */
+  private LocalDateTime time;
+
+  /**
+   * 会话发起位置(ip信息)
+   */
+  private String location;
+
+  /**
+   * 会话发起设备
+   */
+  private String device;
+
+  /**
+   * 会话服务调用链ID
    */
   private String traceId;
 
   /**
-   * 会话发起方
+   * 会话服务发起方
    */
   private String traceConsumer;
 
   /**
-   * 会话接受方
+   * 会话服务接受方
    */
   private String traceProvider;
 
@@ -41,6 +57,30 @@ public class BaseSessionAttribute implements Serializable {
 
   public void setUserId(String userId) {
     this.userId = userId;
+  }
+
+  public LocalDateTime getTime() {
+    return time;
+  }
+
+  public void setTime(LocalDateTime time) {
+    this.time = time;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getDevice() {
+    return device;
+  }
+
+  public void setDevice(String device) {
+    this.device = device;
   }
 
   public String getTraceId() {

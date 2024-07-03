@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>oceanstars-ecommerce</groupId>
+    <artifactId>infrastructure</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>iam</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>iam</name>
+  <description>iam project for oceanstars bz platform</description>
+
+  <properties>
+    <iam.api.message.version>0.0.1-SNAPSHOT</iam.api.message.version>
+    <iam.api.rest.version>0.0.1-SNAPSHOT</iam.api.rest.version>
+    <iam.api.rpc.version>0.0.1-SNAPSHOT</iam.api.rpc.version>
+    <iam.constant.version>0.0.1-SNAPSHOT</iam.constant.version>
+    <iam.controller.version>0.0.1-SNAPSHOT</iam.controller.version>
+    <iam.application.version>0.0.1-SNAPSHOT</iam.application.version>
+    <iam.domain.version>0.0.1-SNAPSHOT</iam.domain.version>
+    <iam.repository.version>0.0.1-SNAPSHOT</iam.repository.version>
+  </properties>
+
+  <!--聚合子模块-->
+  <modules>
+    <module>api-message</module>
+    <module>api-rest</module>
+    <module>api-rpc</module>
+    <module>constant</module>
+    <module>controller</module>
+    <module>application</module>
+    <module>domain</module>
+    <module>repository</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

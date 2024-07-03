@@ -1,0 +1,15 @@
+kafka:
+  producer:
+    bootstrap:
+      servers: 10.168.3.54:9092,10.168.3.55:9092,10.168.3.56:9092
+    key:
+      serializer: org.apache.kafka.common.serialization.StringSerializer
+    value:
+      serializer: org.apache.kafka.common.serialization.StringSerializer
+  consumer:
+    bootstrap:
+      servers: 10.168.3.54:9092,10.168.3.55:9092,10.168.3.56:9092
+    key:
+      serializer: org.apache.kafka.common.serialization.StringDeserializer
+    value:
+      serializer: org.apache.kafka.common.serialization.StringDeserializer

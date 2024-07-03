@@ -3,6 +3,7 @@ package oceanstars.ecommerce.user.api.rest.v1.request.account;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import java.time.LocalDate;
+import oceanstars.ecommerce.common.constant.DatePattern;
 import oceanstars.ecommerce.common.restful.RestRequestMessage;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -58,7 +59,7 @@ public class CreateAccountProfileRequestMessage extends RestRequestMessage {
    * 生日
    */
   @Schema(description = "生日：pattern = 'yyyy-MM-dd'")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @DateTimeFormat(pattern = DatePattern.NORM_DATE_PATTERN)
   private LocalDate birthday;
 
   public Long getAccount() {

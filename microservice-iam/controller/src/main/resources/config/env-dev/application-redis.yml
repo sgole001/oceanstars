@@ -1,0 +1,14 @@
+redis:
+  configuration: default,session
+default:
+  redis:
+    host: ${REDIS_DEFAULT_SERVICE_HOST}
+    password: ${REDIS_DEFAULT_AUTH}
+    port: 6379
+    database: 2
+session:
+  redis:
+    host: ${REDIS_SESSION_SERVICE_HOST}
+    password: ${REDIS_SESSION_AUTH}
+    port: 6379
+    database: 1
