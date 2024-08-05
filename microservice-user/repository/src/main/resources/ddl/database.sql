@@ -4,29 +4,48 @@
 /******************************************/
 CREATE TABLE `user_account`
 (
-    `id`          bigint(0)    NOT NULL COMMENT 'id',
-    `source`      smallint(0)  NOT NULL COMMENT '账号注册源',
-    `means`       smallint(0)  NOT NULL COMMENT '账号注册方式',
-    `email`       varchar(50)  NOT NULL DEFAULT '' COMMENT '邮箱',
-    `mobile`      varchar(11)  NOT NULL DEFAULT '' COMMENT '手机',
-    `password`    varchar(250) NOT NULL COMMENT '账号密码',
-    `external_id` varchar(50)  NOT NULL DEFAULT '' COMMENT '第三方外部UID',
-    `status`      smallint(0)  NOT NULL COMMENT '账号状态',
-    `create_by`   varchar(255) NOT NULL COMMENT '创建者',
-    `create_at`   datetime(0)  NOT NULL COMMENT '创建时间',
-    `update_by`   varchar(255) NOT NULL COMMENT '更新者',
-    `update_at`   datetime(0)  NOT NULL COMMENT '更新时间',
-    `version`     int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    `id`        bigint(0)    NOT NULL COMMENT 'id',
+    `name`      varchar(50)  NOT NULL COMMENT '账号名称(注册成功后无法修改)',
+    `domain`    smallint(0)  NOT NULL COMMENT '账号域',
+    `password`  varchar(250) NOT NULL COMMENT '账号密码',
+    `status`    smallint(0)  NOT NULL COMMENT '账号状态',
+    `create_by` varchar(255) NOT NULL COMMENT '创建者',
+    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by` varchar(255) NOT NULL COMMENT '更新者',
+    `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `idx_account_identifier_mobile` (`mobile`) USING BTREE,
-    UNIQUE INDEX `idx_account_identifier_email` (`email`) USING BTREE,
-    UNIQUE INDEX `idx_account_identifier_external` (`source`, `external_id`) USING BTREE
+    UNIQUE INDEX `idx_account_identifier` (`name`, `domain`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `idx_account_means` ON `user_account` (`means` ASC);
 CREATE INDEX `idx_account_status` ON `user_account` (`status` ASC);
+
+/******************************************/
+/*   数据库全名 = oceanstars_user           */
+/*   表名称 = 用户账号访问方式                */
+/******************************************/
+CREATE TABLE `user_access`
+(
+    `id`        bigint(0)    NOT NULL COMMENT 'id',
+    `account`   bigint(0)    NOT NULL COMMENT '账号ID',
+    `access`    varchar(50)  NOT NULL DEFAULT '' COMMENT '访问方式',
+    `type`      smallint(0)  NOT NULL COMMENT '访问方式类型',
+    `primary`   tinyint(0)   NOT NULL COMMENT '是否主要访问方式(对于同一类型的访问方式，只能有一个主要的访问方式)',
+    `create_by` varchar(255) NOT NULL COMMENT '创建者',
+    `create_at` datetime(0)  NOT NULL COMMENT '创建时间',
+    `update_by` varchar(255) NOT NULL COMMENT '更新者',
+    `update_at` datetime(0)  NOT NULL COMMENT '更新时间',
+    `version`   int(0)       NOT NULL DEFAULT 1 COMMENT '版本(乐观锁)',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_access_identifier` (`account`, `access`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_access_type` ON `user_access` (`type` ASC);
+CREATE INDEX `idx_access_primary` ON `user_access` (`primary` ASC);
 
 /******************************************/
 /*   数据库全名 = oceanstars_user           */

@@ -3,24 +3,80 @@ syntax = "proto3";
 package oceanstars.user.protobuf;
 
 import "google/protobuf/any.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "oceanstars/protobuf/cqrs.proto";
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/descriptor.proto";
+import "oceanstars/protobuf/cqrs.proto";
 
 option java_multiple_files = true;
 option java_package = "oceanstars.ecommerce.user.api.rpc.v1.dto.account";
 
+// 账号访问认证方式DTO
+message UserAccountAccessDto {
+  // 账号访问认证方式 （手机号 | 邮箱 | 第三方授权ID）
+  string access = 1;
+  // 账号访问认证方式类型
+  int32 accessType = 2;
+  // 是否主要(对于同一类型的访问方式，只能有一个主要的访问方式)
+  bool isPrimary = 3;
+}
+
+// 账号简况DTO
+message UserAccountProfileDto {
+  // 姓
+  string firstName = 1;
+  // 名
+  string lastName = 2;
+  // 昵称
+  string nickName = 3;
+  // 用户头像(路径)
+  string avatar = 4;
+  // 性别
+  int32 gender = 5;
+  // 生日
+  google.protobuf.Timestamp birthday = 6;
+}
+
+// 账号DTO
+message UserAccountDto {
+  // 账号代理信息
+  oceanstars.protobuf.DelegateDto delegate = 1;
+  // 账号域
+  int32 domain = 2;
+  // 用户名
+  string name = 3;
+  // 账号访问认证方式列表
+  repeated UserAccountAccessDto accesses = 4;
+  // 账号简况
+  UserAccountProfileDto profile = 5;
+  // 账号角色ID列表
+  repeated int64 roles = 6;
+}
+
+// 判断账号是否存在查询实体
+message UserAccountExistQuery {
+  // 账号域
+  int32 domain = 1;
+  // 账号访问认证方式 （手机号 | 邮箱 | 第三方授权ID）
+  string access = 2;
+  // 账号访问认证方式类型
+  int32 accessType = 3;
+  // 用户名
+  string userName = 4;
+}
+
 // 创建账号命令实体
 message UserCreateAccountCommand {
-  // 账号注册源
-  int32 source = 1;
-  // 账号注册方式（手机 | 邮箱 | 第三方授权）
-  int32 mean = 2;
-  // 账号名
-  string account = 3;
+  // 账号域
+  int32 domain = 1;
+  // 账号访问认证方式 （手机号 | 邮箱 | 第三方授权ID）
+  string access = 2;
+  // 账号访问认证方式类型
+  int32 accessType = 3;
   // 账号密码
   string password = 4;
+  // 用户名
+  string userName = 5;
 }
 
 // 创建账号简况命令实体
@@ -47,6 +103,14 @@ message UserAssignAccountRolesCommand {
   int64 account = 1;
   // 角色ID列表
   repeated int64 roles = 2;
+}
+
+// 账号是否存在查询返回结果实体
+message UserAccountExistResult {
+  // 账号是否存在
+  bool exist = 1;
+  // 账号信息
+  UserAccountDto account = 2;
 }
 
 // 账号创建返回结果实体

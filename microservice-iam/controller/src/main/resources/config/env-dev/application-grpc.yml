@@ -1,0 +1,6 @@
+grpc:
+  server:
+    port: 9091
+  client:
+    user-account-app-service:
+      address: localhost:9090

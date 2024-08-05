@@ -2,6 +2,7 @@ package oceanstars.ecommerce.user.repository.account.view.bo;
 
 import java.util.List;
 import java.util.Objects;
+import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccessPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccountPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserProfilePojo;
 
@@ -25,6 +26,11 @@ public class AccountView implements Comparable<AccountView> {
   private UserProfilePojo profile;
 
   /**
+   * 账号访问方式列表
+   */
+  private List<UserAccessPojo> accesses;
+
+  /**
    * 账号角色ID列表
    */
   private List<Long> roles;
@@ -43,6 +49,14 @@ public class AccountView implements Comparable<AccountView> {
 
   public void setProfile(UserProfilePojo profile) {
     this.profile = profile;
+  }
+
+  public List<UserAccessPojo> getAccesses() {
+    return accesses;
+  }
+
+  public void setAccesses(List<UserAccessPojo> accesses) {
+    this.accesses = accesses;
   }
 
   public List<Long> getRoles() {

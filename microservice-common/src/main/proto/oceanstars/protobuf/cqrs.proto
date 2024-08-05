@@ -3,6 +3,25 @@ syntax = "proto3";
 package oceanstars.protobuf;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/descriptor.proto";
 
 option java_multiple_files = true;
 option java_package = "oceanstars.ecommerce.common.cqrs";
+
+// 数据信息代理DTO
+message DelegateDto {
+  // 数据信息代理唯一识别符（物理主键）
+  int64 id = 1;
+  // 数据信息代理创建时间
+  google.protobuf.Timestamp createAt = 2;
+  // 数据信息代理更新时间
+  google.protobuf.Timestamp updateAt = 3;
+  // 数据信息代理创建者
+  string creatBy = 4;
+  // 数据信息代理更新者
+  string updateBy = 5;
+  // 数据信息代理版本
+  int32 version = 6;
+}

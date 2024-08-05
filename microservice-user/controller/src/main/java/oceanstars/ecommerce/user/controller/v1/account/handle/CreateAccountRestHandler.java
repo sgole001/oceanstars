@@ -45,12 +45,14 @@ public class CreateAccountRestHandler extends BaseRestHandler<CreateAccountReque
 
     // 构建创建账号命令请求参数
     final UserCreateAccountCommand userCreateAccountCommand = UserCreateAccountCommand.newBuilder()
-        // 账号注册源
-        .setSource(restRequestMessage.getSource())
-        // 账号注册方式
-        .setMean(restRequestMessage.getMean())
-        // 账号名
-        .setAccount(restRequestMessage.getAccount())
+        // 账号域
+        .setDomain(restRequestMessage.getDomain())
+        // 账号名称
+        .setUserName(restRequestMessage.getUserName())
+        // 账号访问方式
+        .setAccess(restRequestMessage.getAccess())
+        // 账号访问方式类型
+        .setAccessType(restRequestMessage.getAccessType())
         // 账号密码
         .setPassword(restRequestMessage.getPassword())
         // 实施构建

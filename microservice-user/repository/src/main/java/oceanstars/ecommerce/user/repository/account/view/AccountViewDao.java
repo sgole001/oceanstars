@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.domain.account.repository.condition.AccountFetchCondition;
 import oceanstars.ecommerce.user.repository.account.view.bo.AccountView;
 import oceanstars.ecommerce.user.repository.generate.tables.RelAccountRole;
+import oceanstars.ecommerce.user.repository.generate.tables.UserAccess;
 import oceanstars.ecommerce.user.repository.generate.tables.UserAccount;
 import oceanstars.ecommerce.user.repository.generate.tables.UserProfile;
+import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccessPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccountPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserProfilePojo;
 import org.jooq.Condition;
@@ -36,6 +36,11 @@ public class AccountViewDao {
    * 账号表
    */
   final static UserAccount T_ACCOUNT = UserAccount.USER_ACCOUNT.as("account");
+
+  /**
+   * 账号访问方式表
+   */
+  final static UserAccess T_ACCESS = UserAccess.USER_ACCESS.as("access");
 
   /**
    * 账号简况表
@@ -72,29 +77,14 @@ public class AccountViewDao {
       searchCondition = searchCondition.and(T_ACCOUNT.ID.eq(fetchCondition.getId()));
     }
 
-    // 账号注册方式
-    if (!CollectionUtils.isEmpty(fetchCondition.getMeans())) {
-      searchCondition = searchCondition.and(T_ACCOUNT.MEANS.in(fetchCondition.getMeans().stream().map(AccountRegisterMeans::key).toList()));
+    // 账号名称
+    if (StringUtils.hasText(fetchCondition.getName())) {
+      searchCondition = searchCondition.and(T_ACCOUNT.NAME.eq(fetchCondition.getName()));
     }
 
-    // 账号注册源
-    if (!CollectionUtils.isEmpty(fetchCondition.getSource())) {
-      searchCondition = searchCondition.and(T_ACCOUNT.SOURCE.in(fetchCondition.getSource().stream().map(AccountRegisterSource::key).toList()));
-    }
-
-    // 邮箱（非邮箱注册时可绑定或解绑）
-    if (StringUtils.hasText(fetchCondition.getEmail())) {
-      searchCondition = searchCondition.and(T_ACCOUNT.EMAIL.eq(fetchCondition.getEmail()));
-    }
-
-    // 手机号（非手机注册时可绑定或解绑）
-    if (StringUtils.hasText(fetchCondition.getMobile())) {
-      searchCondition = searchCondition.and(T_ACCOUNT.MOBILE.eq(fetchCondition.getMobile()));
-    }
-
-    // 第三方授权外部UID
-    if (StringUtils.hasText(fetchCondition.getExternalId())) {
-      searchCondition = searchCondition.and(T_ACCOUNT.EXTERNAL_ID.eq(fetchCondition.getExternalId()));
+    // 账号域
+    if (!CollectionUtils.isEmpty(fetchCondition.getDomain())) {
+      searchCondition = searchCondition.and(T_ACCOUNT.DOMAIN.in(fetchCondition.getDomain()));
     }
 
     // 账号状态
@@ -213,12 +203,39 @@ public class AccountViewDao {
       return null;
     }
 
+    // 初始化查询条件 - 账号ID
+    Condition searchAccessCondition = T_ACCESS.ACCOUNT.in(
+        results.keySet().stream().map(AccountView::getAccount).map(UserAccountPojo::getId).toList());
+
+    // 访问方式
+    if (null != fetchCondition.getAccess()) {
+      searchAccessCondition = searchAccessCondition.and(T_ACCESS.ACCESS.eq(fetchCondition.getAccess()));
+    }
+    // 访问方式类型
+    if (!CollectionUtils.isEmpty(fetchCondition.getAccessTypes())) {
+      searchAccessCondition = searchAccessCondition.and(T_ACCESS.TYPE.in(fetchCondition.getAccessTypes()));
+    }
+    if (null != fetchCondition.getAccessPrimary()) {
+      searchAccessCondition = searchAccessCondition.and(T_ACCESS.PRIMARY.eq(fetchCondition.getAccessPrimary()));
+    }
+
+    // 构建账号访问方式信息查询
+    final Map<Long, List<UserAccessPojo>> accessResults = dsl.select(T_ACCESS.fields())
+        .from(T_ACCESS)
+        .where(searchAccessCondition)
+        .fetchGroups(T_ACCESS.ACCOUNT, UserAccessPojo.class);
+
+    if (CollectionUtils.isEmpty(accessResults)) {
+      return null;
+    }
+
     // 遍历查询结果, 构建角色视图信息并排序后返回
     return results.entrySet().stream().map(entry -> {
       // LeftJoin情况下，角色信息可能为空，空的情况下不设定角色信息
       if (entry.getValue().getFirst() != null) {
         entry.getKey().setRoles(entry.getValue());
       }
+      entry.getKey().setAccesses(accessResults.get(entry.getKey().getAccount().getId()));
       return entry.getKey();
     }).sorted().toList();
   }

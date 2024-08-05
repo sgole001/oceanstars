@@ -11,8 +11,9 @@ import java.util.Date;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import oceanstars.ecommerce.common.constant.CommonMessageConstant;
+import oceanstars.ecommerce.common.exception.SystemException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * JWT工具类
@@ -30,7 +31,7 @@ public class JwtUtil {
    * @param key    签名用密钥
    * @return JWS
    */
-  public static String createJws(Header header, Claims claims, SecretKey key, Long exp, Long nbf) {
+  public static String createJws(Header header, Claims claims, SecretKey key) {
 
     // 签名加密算法(HMAC-SHA256)
     final MacAlgorithm signatureAlgorithm = Jwts.SIG.HS256;
@@ -46,23 +47,22 @@ public class JwtUtil {
     // JWT Payload数据设定
     builder = builder.claims().add(claims).and();
 
-    // JWT的签发时间
-    if (claims.getIssuedAt() == null) {
-
-      builder = builder.issuedAt(new Date());
-      // JWT的过期时间，这个过期时间必须要大于签发时间
-      if (exp != null) {
-        builder = builder.expiration(DateUtils.addMilliseconds(claims.getIssuedAt(), exp.intValue()));
-      }
-      // 定义在什么时间之前，该JWT都是不可用的
-      if (nbf != null) {
-        builder = builder.notBefore(DateUtils.addMilliseconds(claims.getIssuedAt(), nbf.intValue()));
-      }
+    // 获取JWT签发时间
+    Date iat = claims.getIssuedAt();
+    // 签发时间没有设置时，设置当前时间
+    if (null == iat) {
+      iat = new Date();
+      builder = builder.issuedAt(iat);
+    }
+    // JWT的过期时间，这个过期时间必须要大于签发时间
+    if (null != claims.getExpiration() && iat.after(claims.getExpiration())) {
+      throw new SystemException(CommonMessageConstant.MSG_COM_00008, claims.getExpiration(), iat);
     }
     // JWT的唯一身份标识
     if (StringUtils.isBlank(claims.getId())) {
       builder = builder.id(UUID.randomUUID().toString());
     }
+
     // 签名
     builder.signWith(key, signatureAlgorithm);
 

@@ -18,6 +18,7 @@ import oceanstars.ecommerce.common.tools.PropertyUtil;
 import oceanstars.ecommerce.common.tools.ServletUtil;
 import oceanstars.ecommerce.infrastructure.redis.constant.RedisEnum.FUNCTION_GROUP;
 import oceanstars.ecommerce.infrastructure.redis.tools.RedisUtil;
+import oceanstars.ecommerce.infrastructure.redis.tools.RedisUtil.RedisOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,15 +38,21 @@ public class HttpRequestFilter implements Filter {
    */
   public static final String FILTER_ALIAS = "http-request";
 
+  /**
+   * 英文正则表达式
+   */
   public static final String STR_ENG_PATTERN = "^[a-z0-9A-Z]+$";
 
+  /**
+   * 日志对象
+   */
   private static Logger logger = LogManager.getLogger(HttpRequestFilter.class.getName());
 
   @Override
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
     // 获取HTTP请求对象
-    HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+    final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 
     // 获取请求跟踪ID
     String traceId = httpRequest.getHeader(CommonConstant.KEY_TRACE);
@@ -53,7 +60,7 @@ public class HttpRequestFilter implements Filter {
     // 获取ApiKey
     String apiKey = httpRequest.getHeader("Authentication");
     // 获取Session数据库（Redis）客户端
-    final RedisUtil redisUtil = RedisUtil.build(FUNCTION_GROUP.SESSION.getName());
+    final RedisOperation redisOpt = RedisUtil.redisTemplate(FUNCTION_GROUP.SESSION.getName());
     // 是否授权认证请求
     boolean isAuthRequest = StringUtils.isBlank(apiKey);
 
@@ -87,9 +94,9 @@ public class HttpRequestFilter implements Filter {
       sessions = new Sessions(sessionAttribute);
 
       // 缓存Session信息，默认一次请求的最长时间(60s)
-      redisUtil.set(traceId, sessions, 60);
+      redisOpt.set(traceId, sessions, 60);
     } else {
-      sessions = JsonUtil.parse(JsonUtil.toString(redisUtil.get(traceId)), Sessions.class);
+      sessions = JsonUtil.parse(JsonUtil.toString(redisOpt.get(traceId)), Sessions.class);
       if (null == sessions) {
         // 创建Session属性对象
         final BaseSessionAttribute sessionAttribute = new BaseSessionAttribute();
@@ -104,7 +111,7 @@ public class HttpRequestFilter implements Filter {
     }
     httpRequest.setAttribute(Sessions.SESSION_KEY, sessions);
     // 将跟踪ID回传
-    HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+    final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
     httpResponse.setHeader(CommonConstant.KEY_TRACE, traceId);
 
     try {
@@ -115,13 +122,13 @@ public class HttpRequestFilter implements Filter {
       int httpStatus = ((HttpServletResponse) servletResponse).getStatus();
       // 非授权认证的请求，一次请求后删除跟踪信息
       if (!isAuthRequest) {
-        redisUtil.delete(traceId);
+        redisOpt.delete(traceId);
       }
       // 授权认证失败的请求，一次请求后删除跟踪信息
       else if (httpStatus >= HttpServletResponse.SC_BAD_REQUEST) {
         // 非Auth服务请求认证通过，找不到相对应的URI资源
         if (httpStatus != HttpServletResponse.SC_NOT_FOUND) {
-          redisUtil.delete(traceId);
+          redisOpt.delete(traceId);
         }
       }
       // 其他情况（用户登录，注册等Auth服务请求等），默认60s自动过期清除跟踪信息

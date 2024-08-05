@@ -16,6 +16,7 @@
   <description>iam application layer project for oceanstars iam service</description>
 
   <properties>
+    <user.api.rpc.version>0.0.1-SNAPSHOT</user.api.rpc.version>
   </properties>
 
   <dependencies>
@@ -28,6 +29,11 @@
       <groupId>oceanstars-ecommerce</groupId>
       <artifactId>iam-api-rpc</artifactId>
       <version>${iam.api.rpc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oceanstars-ecommerce</groupId>
+      <artifactId>user-api-rpc</artifactId>
+      <version>${user.api.rpc.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>

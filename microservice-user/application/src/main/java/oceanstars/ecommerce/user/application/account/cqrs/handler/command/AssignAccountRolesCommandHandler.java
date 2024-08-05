@@ -1,4 +1,4 @@
-package oceanstars.ecommerce.user.application.account.cqrs.handler;
+package oceanstars.ecommerce.user.application.account.cqrs.handler.command;
 
 import java.util.HashSet;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;

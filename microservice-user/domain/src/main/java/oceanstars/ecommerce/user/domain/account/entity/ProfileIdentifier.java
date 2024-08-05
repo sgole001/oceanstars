@@ -11,7 +11,7 @@ import oceanstars.ecommerce.common.exception.BusinessException;
  * @version 1.0.0
  * @since 2022/1/6 11:49 AM
  */
-public final class ProfileIdentifier extends BaseEntityIdentifier<Long> {
+public final class ProfileIdentifier extends BaseEntityIdentifier<String> {
 
   @Serial
   private static final long serialVersionUID = -5510864963886988135L;
@@ -21,12 +21,12 @@ public final class ProfileIdentifier extends BaseEntityIdentifier<Long> {
    *
    * @param account 账号ID
    */
-  public ProfileIdentifier(final Long account) {
-    super(account);
+  public ProfileIdentifier(final Account account) {
+    super(account.getIdentifier().getIdentifier());
   }
 
   @Override
-  public Long generateIdentifier() {
+  public String generateIdentifier() {
     throw new BusinessException("账号简况实体唯一标识符非自动生成，需初始化关联账号实体数据物理PK");
   }
 }

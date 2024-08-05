@@ -44,7 +44,7 @@ public abstract class BaseDomainRepository<T extends AggregateRoot<?>> implement
     final EntityDelegator delegator = aggregator.getDelegator();
 
     // 判断实体代理对象是否为空
-    if (null == delegator) {
+    if (null == delegator || null == delegator.getVersion()) {
       // 创建聚合根
       this.create(aggregator);
     } else {

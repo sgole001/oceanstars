@@ -1,0 +1,12 @@
+oceanstars:
+  iam:
+    token:
+      access:
+        iss: "oceanstars"
+        aud: "https://api.oceanstars.com"
+        exp: 1800s
+        sign: "gcrbpePk8W^s&Y#my38s%cC$P*JMLG@2"
+        encrypt: "D^G^yC4@tDKrsE$ZfmLsFQbk2!rt%cXz"
+      refresh:
+        exp: 604800s
+        salt: "oceanstars"

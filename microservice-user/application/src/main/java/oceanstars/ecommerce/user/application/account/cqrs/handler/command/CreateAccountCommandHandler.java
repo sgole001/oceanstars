@@ -1,14 +1,14 @@
-package oceanstars.ecommerce.user.application.account.cqrs.handler;
+package oceanstars.ecommerce.user.application.account.cqrs.handler.command;
 
+import java.util.Set;
 import oceanstars.ecommerce.common.cqrs.ICommandHandler;
 import oceanstars.ecommerce.common.domain.event.EventBus;
 import oceanstars.ecommerce.common.tools.ServletUtil;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.account.UserCreateAccountCommand;
 import oceanstars.ecommerce.user.api.rpc.v1.dto.account.UserCreateAccountResult;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
 import oceanstars.ecommerce.user.domain.account.entity.Account;
+import oceanstars.ecommerce.user.domain.account.entity.AccountAccess;
 import oceanstars.ecommerce.user.domain.account.repository.AccountRepository;
 import org.springframework.stereotype.Component;
 
@@ -48,35 +48,33 @@ public class CreateAccountCommandHandler implements ICommandHandler<UserCreateAc
 
     // 获取远程调用IP地址
     final String ipAddress = ServletUtil.getRemoteIpAddress();
-    // 获取账号注册源
-    final AccountRegisterSource source = AccountRegisterSource.of(command.getSource());
-    // 获取账号注册方式
-    final AccountRegisterMeans mean = AccountRegisterMeans.of(command.getMean());
+    // 获取账号域
+    final Integer domain = command.getDomain();
 
     // 构建账号实体信息
-    final Account.Builder accountBuilder = Account.newBuilder(source, mean)
+    final Account account = Account.newBuilder(command.getUserName(), domain)
         // 账号密码
         .password(command.getPassword())
         // 账号状态
-        .status(AccountStatus.NORMAL);
+        .status(AccountStatus.NORMAL)
+        // 实施构建
+        .build();
 
-    switch (mean) {
-      case EMAIL:
-        // 邮箱
-        accountBuilder.email(command.getAccount());
-        break;
-      case MOBILE:
-        // 手机
-        accountBuilder.mobile(command.getAccount());
-        break;
-      case EXTERNAL:
-        // 第三方外部UID
-        accountBuilder.externalId(command.getAccount());
-        break;
-    }
+    // 构建账号访问方式实体信息
+    final AccountAccess accountAccess = AccountAccess.newBuilder(
+            // 账号实体
+            account,
+            // 账号访问认证方式
+            command.getAccess(),
+            // 账号访问认证方式类型
+            command.getAccessType())
+        // 是否主要(对于同一类型的访问认证方式，只能有一个主要的访问认证方式)
+        .primary(true)
+        // 实施构建
+        .build();
 
-    // 构建账号实体
-    final Account account = accountBuilder.build();
+    // 设定账号访问认证方式
+    account.setAccesses(Set.of(accountAccess));
 
     // 保存账号实体信息
     this.accountRepository.save(account);

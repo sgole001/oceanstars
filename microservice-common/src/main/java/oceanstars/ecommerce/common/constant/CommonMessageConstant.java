@@ -50,42 +50,12 @@ public interface CommonMessageConstant {
   String MSG_COM_00007 = "MSG_COM_00007";
 
   /**
-   * 开始时间必须小于结束时间！
+   * JWT的过期时间[{0}]必须要大于签发时间[{1}]！
    */
-  String MSG_COM_00081 = "MSG_COM_00081";
-
-  /**
-   * 开始时间、结束时间必须成对！
-   */
-  String MSG_COM_00082 = "MSG_COM_00082";
-
-  /**
-   * SQL限制执行报错
-   */
-  String MSG_COM_00083 = "MSG_COM_00083";
-
-  /**
-   * UPDATE|DELETE statement is missing the WHERE condition
-   */
-  String MSG_COM_00084 = "MSG_COM_00084";
-
-  /**
-   * 缺少用户信息
-   */
-  String MSG_COM_00085 = "MSG_COM_00085";
-
-  /**
-   * 缺少用户信息: sourceType
-   */
-  String MSG_COM_00086 = "MSG_COM_00086";
+  String MSG_COM_00008 = "MSG_COM_00008";
 
   /**
    * traceId 验证未通过
    */
   String MSG_COM_00087 = "MSG_COM_00087";
-
-  /**
-   * 数据读取失败:错误原因:{0}
-   */
-  String MSG_COM_00090 = "MSG_COM_00090";
 }

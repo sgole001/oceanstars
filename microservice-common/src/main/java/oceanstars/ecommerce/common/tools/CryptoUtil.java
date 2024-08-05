@@ -122,11 +122,8 @@ public class CryptoUtil {
     // 生成秘密（对称）密钥
     SecretKey secretKey = keyGenerator.generateKey();
 
-    // 返回基本编码格式的密钥
-    byte[] enCodeFormat = secretKey.getEncoded();
-
     // 根据给定的字节数组构造一个密钥。enCodeFormat：密钥内容；"AES"：与给定的密钥内容相关联的密钥算法的名称
-    return new SecretKeySpec(enCodeFormat, cryptoBean.getAlgorithm());
+    return new SecretKeySpec(secretKey.getEncoded(), cryptoBean.getAlgorithm());
   }
 
   /**

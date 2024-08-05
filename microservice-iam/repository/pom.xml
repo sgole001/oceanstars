@@ -19,10 +19,15 @@
   </properties>
 
   <dependencies>
+<!--    <dependency>-->
+<!--      <groupId>oceanstars-ecommerce</groupId>-->
+<!--      <artifactId>jooq</artifactId>-->
+<!--      <version>${infrastructure.jooq.version}</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>
-      <artifactId>jooq</artifactId>
-      <version>${infrastructure.jooq.version}</version>
+      <artifactId>redis</artifactId>
+      <version>${infrastructure.redis.version}</version>
     </dependency>
     <dependency>
       <groupId>oceanstars-ecommerce</groupId>

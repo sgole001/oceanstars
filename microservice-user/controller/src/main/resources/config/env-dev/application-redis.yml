@@ -1,14 +1,31 @@
-redis:
-  configuration: default,session
-default:
-  redis:
-    host: ${REDIS_DEFAULT_SERVICE_HOST}
-    password: ${REDIS_DEFAULT_AUTH}
-    port: 6379
-    database: 2
-session:
-  redis:
-    host: ${REDIS_SESSION_SERVICE_HOST}
-    password: ${REDIS_SESSION_AUTH}
-    port: 6379
-    database: 1
+oceanstars:
+  data:
+    redis:
+      default:
+        host: ${REDIS_DEFAULT_SERVICE_HOST}
+        username: ${REDIS_DEFAULT_USERNAME}
+        password: ${REDIS_DEFAULT_PASSWORD}
+        port: 6379
+        database: 3
+        timeout: 2s
+        connectTimeout: 2s
+        lettuce:
+          pool:
+            max-active: 16
+            max-wait: 6s
+            max-idle: 8
+            min-idle: 4
+      session:
+        host: ${REDIS_SESSION_SERVICE_HOST}
+        username: ${REDIS_SESSION_USERNAME}
+        password: ${REDIS_SESSION_PASSWORD}
+        port: 6379
+        database: 1
+        timeout: 2s
+        connectTimeout: 2s
+        lettuce:
+          pool:
+            max-active: 16
+            max-wait: -1
+            max-idle: 8
+            min-idle: 0

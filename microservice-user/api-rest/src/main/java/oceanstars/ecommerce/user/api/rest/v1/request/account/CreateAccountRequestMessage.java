@@ -20,20 +20,38 @@ public class CreateAccountRequestMessage extends RestRequestMessage {
   /**
    * 账号注册源
    */
-  @Schema(description = "账号注册源")
-  private Integer source;
+  @Schema(description = "账号域")
+  private Integer domain;
 
   /**
-   * 账号注册方式（手机 | 邮箱 | 第三方授权）
+   * 账号名称（注册后无法修改）
    */
-  @Schema(description = "账号注册方式（手机 | 邮箱 | 第三方授权）")
-  private Integer mean;
+  @Schema(description = "账号名称（注册后无法修改）")
+  private String userName;
 
   /**
-   * 账号名
+   * 账号访问方式
    */
-  @Schema(description = "账号名")
-  private String account;
+  @Schema(description = "账号访问认证方式（邮箱 | 手机 | 第三方授权UID）")
+  private String access;
+
+  /**
+   * 账号访问方式类型
+   */
+  @Schema(description = "账号访问认证方式类型 ("
+      + "0:Email, "
+      + "1:Mobile, "
+      + "2:External Wechat, "
+      + "3:External Alipay, "
+      + "4:External Douyin, "
+      + "5:External QQ, "
+      + "6:External Weibo, "
+      + "7:External Facebook, "
+      + "8:External Google, "
+      + "9:External Twitter, "
+      + "10:External Apple, "
+      + "11:External LinkedIn)")
+  private Integer accessType;
 
   /**
    * 账号密码
@@ -53,28 +71,36 @@ public class CreateAccountRequestMessage extends RestRequestMessage {
   @Schema(description = "验证码（一次性：One-Time Password）")
   private String otp;
 
-  public Integer getSource() {
-    return source;
+  public Integer getDomain() {
+    return domain;
   }
 
-  public void setSource(Integer source) {
-    this.source = source;
+  public void setDomain(Integer domain) {
+    this.domain = domain;
   }
 
-  public Integer getMean() {
-    return mean;
+  public String getUserName() {
+    return userName;
   }
 
-  public void setMean(Integer mean) {
-    this.mean = mean;
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
-  public String getAccount() {
-    return account;
+  public String getAccess() {
+    return access;
   }
 
-  public void setAccount(String account) {
-    this.account = account;
+  public void setAccess(String access) {
+    this.access = access;
+  }
+
+  public Integer getAccessType() {
+    return accessType;
+  }
+
+  public void setAccessType(Integer accessType) {
+    this.accessType = accessType;
   }
 
   public String getPassword() {

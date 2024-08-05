@@ -1,6 +1,7 @@
 package oceanstars.ecommerce.common.domain.entity;
 
 import java.time.LocalDateTime;
+import oceanstars.ecommerce.common.tools.PkWorker;
 
 /**
  * 领域实体委托者类
@@ -68,6 +69,15 @@ public class EntityDelegator {
    */
   public static Builder newBuilder(Long id) {
     return new Builder(id, null, null);
+  }
+
+  /**
+   * 创建领域实体代理构造器
+   *
+   * @return 领域实体代理构造器
+   */
+  public static Builder newBuilder() {
+    return new Builder(PkWorker.build().nextId(), null, null);
   }
 
   public Long getId() {

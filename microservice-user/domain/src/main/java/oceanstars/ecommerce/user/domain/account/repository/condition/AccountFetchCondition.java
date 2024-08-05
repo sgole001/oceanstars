@@ -3,8 +3,6 @@ package oceanstars.ecommerce.user.domain.account.repository.condition;
 import java.time.LocalDate;
 import java.util.Set;
 import oceanstars.ecommerce.common.domain.repository.condition.BaseCondition;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.Gender;
 
@@ -18,29 +16,29 @@ import oceanstars.ecommerce.user.constant.enums.UserEnums.Gender;
 public class AccountFetchCondition extends BaseCondition {
 
   /**
-   * 账号注册方式
+   * 账号名称
    */
-  private final Set<AccountRegisterMeans> means;
+  private final String name;
 
   /**
-   * 账号注册源
+   * 账号域
    */
-  private final Set<AccountRegisterSource> source;
+  private final Set<Integer> domain;
 
   /**
-   * 邮箱（非邮箱注册时可绑定或解绑）
+   * 账号访问方式类型
    */
-  private final String email;
+  private final Set<Integer> accessTypes;
 
   /**
-   * 手机（非手机注册时可绑定或解绑）
+   * 账号访问方式
    */
-  private final String mobile;
+  private final String access;
 
   /**
-   * 第三方外部UID
+   * 是否主要访问方式
    */
-  private final String externalId;
+  private final Boolean accessPrimary;
 
   /**
    * 创建时IP
@@ -109,11 +107,11 @@ public class AccountFetchCondition extends BaseCondition {
    */
   private AccountFetchCondition(Builder builder) {
     super(builder);
-    means = builder.means;
-    source = builder.source;
-    email = builder.email;
-    mobile = builder.mobile;
-    externalId = builder.externalId;
+    name = builder.name;
+    domain = builder.domain;
+    accessTypes = builder.accessTypes;
+    access = builder.access;
+    accessPrimary = builder.accessPrimary;
     createIp = builder.createIp;
     lastLoginIp = builder.lastLoginIp;
     loginTimesLeft = builder.loginTimesLeft;
@@ -137,24 +135,24 @@ public class AccountFetchCondition extends BaseCondition {
     return new Builder();
   }
 
-  public Set<AccountRegisterMeans> getMeans() {
-    return means;
+  public String getName() {
+    return name;
   }
 
-  public Set<AccountRegisterSource> getSource() {
-    return source;
+  public Set<Integer> getAccessTypes() {
+    return accessTypes;
   }
 
-  public String getEmail() {
-    return email;
+  public String getAccess() {
+    return access;
   }
 
-  public String getMobile() {
-    return mobile;
+  public Boolean getAccessPrimary() {
+    return accessPrimary;
   }
 
-  public String getExternalId() {
-    return externalId;
+  public Set<Integer> getDomain() {
+    return domain;
   }
 
   public String getCreateIp() {
@@ -214,11 +212,11 @@ public class AccountFetchCondition extends BaseCondition {
    */
   public static final class Builder extends BaseCondition.Builder<AccountFetchCondition, AccountFetchCondition.Builder> {
 
-    private Set<AccountRegisterMeans> means;
-    private Set<AccountRegisterSource> source;
-    private String email;
-    private String mobile;
-    private String externalId;
+    private String name;
+    private Set<Integer> domain;
+    private Set<Integer> accessTypes;
+    private String access;
+    private Boolean accessPrimary;
     private String createIp;
     private String lastLoginIp;
     private Integer loginTimesLeft;
@@ -235,28 +233,28 @@ public class AccountFetchCondition extends BaseCondition {
     public Builder() {
     }
 
-    public Builder means(Set<AccountRegisterMeans> val) {
-      means = val;
+    public Builder name(String val) {
+      name = val;
       return this;
     }
 
-    public Builder source(Set<AccountRegisterSource> val) {
-      source = val;
+    public Builder accessTypes(Set<Integer> val) {
+      accessTypes = val;
       return this;
     }
 
-    public Builder email(String val) {
-      email = val;
+    public Builder domain(Set<Integer> val) {
+      domain = val;
       return this;
     }
 
-    public Builder mobile(String val) {
-      mobile = val;
+    public Builder access(String val) {
+      access = val;
       return this;
     }
 
-    public Builder externalId(String val) {
-      externalId = val;
+    public Builder accessPrimary(Boolean val) {
+      accessPrimary = val;
       return this;
     }
 

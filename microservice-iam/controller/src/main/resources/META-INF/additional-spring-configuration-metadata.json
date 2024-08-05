@@ -1,0 +1,78 @@
+{
+  "groups": [
+    {
+      "name": "oceanstars.iam.token",
+      "type": "oceanstars.ecommerce.iam.configuration.IamTokenProperties",
+      "sourceType": "oceanstars.ecommerce.iam.configuration.IamTokenProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "oceanstars.iam.token.access.iss",
+      "type": "java.lang.String",
+      "description": "JWT签发者.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.sub",
+      "type": "java.lang.String",
+      "description": "JWT所面向的用户.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.aud",
+      "type": "java.lang.String",
+      "description": "接收JWT的一方.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.exp",
+      "type": "java.time.Duration",
+      "description": "JWT的过期Duration.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.nbf",
+      "type": "java.time.LocalDateTime",
+      "description": "定义在什么时间之前，该JWT都是不可用的.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.iat",
+      "type": "java.time.LocalDateTime",
+      "description": "JWT的签发时间.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.id",
+      "type": "java.lang.String",
+      "description": "JWT的签发时间.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.sign",
+      "type": "java.lang.String",
+      "description": "JWT签名密钥.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.access.encrypt",
+      "type": "java.lang.String",
+      "description": "JWT加密密钥.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.refresh.exp",
+      "type": "java.time.Duration",
+      "description": "Token过期Duration.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    },
+    {
+      "name": "oceanstars.iam.token.refresh.salt",
+      "type": "java.lang.String",
+      "description": "Token盐值.",
+      "sourceType": "oceanstars.ecommerce.common.security.TokenProperties"
+    }
+  ],
+  "hints": []
+}

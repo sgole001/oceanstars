@@ -3,11 +3,8 @@ package oceanstars.ecommerce.user.domain.account.entity;
 import java.util.List;
 import java.util.Set;
 import oceanstars.ecommerce.common.domain.entity.AggregateRoot;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
 import oceanstars.ecommerce.user.domain.account.entity.valueobject.AccountActivityLog;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 账号实体：聚合根
@@ -17,11 +14,6 @@ import org.apache.commons.lang3.StringUtils;
  * @since 2022/1/6 10:56 AM
  */
 public final class Account extends AggregateRoot<AccountIdentifier> {
-
-  /**
-   * 账号注册方式
-   */
-  private final AccountRegisterMeans means;
 
   /**
    * 账号密码
@@ -39,6 +31,11 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
   private Profile profile;
 
   /**
+   * 账号访问方式列表
+   */
+  private Set<AccountAccess> accesses;
+
+  /**
    * 账号角色列表
    */
   private Set<Long> roles;
@@ -54,10 +51,10 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
    * @param builder 构建器
    */
   private Account(Builder builder) {
-    super(new AccountIdentifier(builder.email, builder.mobile, builder.externalId, builder.source));
-    means = builder.means;
+    super(new AccountIdentifier(builder.name, builder.domain));
     password = builder.password;
     status = builder.status;
+    accesses = builder.accesses;
     profile = builder.profile;
     roles = builder.roles;
     activityLogs = builder.activityLogs;
@@ -66,15 +63,12 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
   /**
    * 创建账号实体构建器
    *
-   * @param source 账号注册源
+   * @param name   账号名称
+   * @param domain 账号域
    * @return 账号实体构建器
    */
-  public static Builder newBuilder(final AccountRegisterSource source, final AccountRegisterMeans means) {
-    return new Builder(source, means);
-  }
-
-  public AccountRegisterMeans getMeans() {
-    return means;
+  public static Builder newBuilder(final String name, final Integer domain) {
+    return new Builder(name, domain);
   }
 
   public String getPassword() {
@@ -99,6 +93,14 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
 
   public void setStatus(AccountStatus status) {
     this.status = status;
+  }
+
+  public Set<AccountAccess> getAccesses() {
+    return accesses;
+  }
+
+  public void setAccesses(Set<AccountAccess> accesses) {
+    this.accesses = accesses;
   }
 
   public void setProfile(Profile profile) {
@@ -126,30 +128,18 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
    */
   public static final class Builder {
 
-    private final AccountRegisterSource source;
-    private final AccountRegisterMeans means;
-    private String email;
-    private String mobile;
+    private final String name;
+    private final Integer domain;
     private String password;
-    private String externalId;
     private AccountStatus status;
+    private Set<AccountAccess> accesses;
     private Profile profile;
     private Set<Long> roles;
     private List<AccountActivityLog> activityLogs;
 
-    public Builder(AccountRegisterSource source, AccountRegisterMeans means) {
-      this.source = source;
-      this.means = means;
-    }
-
-    public Builder email(String val) {
-      email = val;
-      return this;
-    }
-
-    public Builder mobile(String val) {
-      mobile = val;
-      return this;
+    public Builder(String name, Integer domain) {
+      this.name = name;
+      this.domain = domain;
     }
 
     public Builder password(String val) {
@@ -157,13 +147,13 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
       return this;
     }
 
-    public Builder externalId(String val) {
-      externalId = val;
+    public Builder status(AccountStatus val) {
+      status = val;
       return this;
     }
 
-    public Builder status(AccountStatus val) {
-      status = val;
+    public Builder accesses(Set<AccountAccess> val) {
+      accesses = val;
       return this;
     }
 
@@ -183,25 +173,6 @@ public final class Account extends AggregateRoot<AccountIdentifier> {
     }
 
     public Account build() {
-      switch (this.means) {
-        case EMAIL:
-          if (StringUtils.isBlank(this.email)) {
-            throw new IllegalArgumentException("email is required");
-          }
-          break;
-        case MOBILE:
-          if (StringUtils.isBlank(this.mobile)) {
-            throw new IllegalArgumentException("mobile is required");
-          }
-          break;
-        case EXTERNAL:
-          if (StringUtils.isBlank(this.externalId)) {
-            throw new IllegalArgumentException("externalId is required");
-          }
-          break;
-        default:
-          throw new IllegalArgumentException("means is illegal");
-      }
       return new Account(this);
     }
   }

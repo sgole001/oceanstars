@@ -40,7 +40,7 @@ public class ShiroConfig {
    * @param securityManager Shiro安全管理器
    * @return shiro过滤器
    */
-  @Bean(name = "MarriottShiroFilterFactoryBean")
+  @Bean(name = "OceanstarsShiroFilterFactoryBean")
   public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, ShiroBuilder shiroBuilder) {
 
     // 1.定义shiroFactoryBean

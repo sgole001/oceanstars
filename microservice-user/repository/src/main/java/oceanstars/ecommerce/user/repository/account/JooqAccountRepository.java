@@ -7,16 +7,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import oceanstars.ecommerce.common.domain.repository.BaseDomainRepository;
 import oceanstars.ecommerce.common.domain.repository.condition.ICondition;
 import oceanstars.ecommerce.common.exception.BusinessException;
 import oceanstars.ecommerce.common.spring.OceanstarsTransactional;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterMeans;
-import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountRegisterSource;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.AccountStatus;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.Gender;
 import oceanstars.ecommerce.user.constant.enums.UserEnums.Message;
 import oceanstars.ecommerce.user.domain.account.entity.Account;
+import oceanstars.ecommerce.user.domain.account.entity.AccountAccess;
 import oceanstars.ecommerce.user.domain.account.entity.AccountIdentifier;
 import oceanstars.ecommerce.user.domain.account.entity.Profile;
 import oceanstars.ecommerce.user.domain.account.repository.AccountRepository;
@@ -24,9 +24,11 @@ import oceanstars.ecommerce.user.domain.account.repository.condition.AccountFetc
 import oceanstars.ecommerce.user.repository.account.view.AccountViewDao;
 import oceanstars.ecommerce.user.repository.account.view.bo.AccountView;
 import oceanstars.ecommerce.user.repository.generate.tables.daos.RelAccountRoleDao;
+import oceanstars.ecommerce.user.repository.generate.tables.daos.UserAccessDao;
 import oceanstars.ecommerce.user.repository.generate.tables.daos.UserAccountDao;
 import oceanstars.ecommerce.user.repository.generate.tables.daos.UserProfileDao;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.RelAccountRolePojo;
+import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccessPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserAccountPojo;
 import oceanstars.ecommerce.user.repository.generate.tables.pojos.UserProfilePojo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +51,12 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
    */
   @Resource
   private UserAccountDao accountDao;
+
+  /**
+   * 账号访问方式数据访问对象
+   */
+  @Resource
+  private UserAccessDao accessDao;
 
   /**
    * 账号简况数据访问对象
@@ -85,14 +93,10 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
 
     // 构建账号查询条件(根据账号唯一标识符)
     final AccountFetchCondition condition = AccountFetchCondition.newBuilder()
-        // 账号邮箱
-        .email(accountIdentifier.getEmail())
-        // 账号手机
-        .mobile(accountIdentifier.getMobile())
-        // 第三方授权外部UID
-        .externalId(accountIdentifier.getExternalId())
-        // 账号注册源
-        .source(Collections.singleton(accountIdentifier.getSource()))
+        // 账号名称
+        .name(accountIdentifier.getName())
+        // 账号域
+        .domain(Collections.singleton(accountIdentifier.getDomain()))
         // 构建查询条件
         .build();
 
@@ -101,7 +105,7 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
 
     // 校验账号是否已存在，如果存在则抛出业务异常
     if (!CollectionUtils.isEmpty(accounts)) {
-      throw new BusinessException(Message.MSG_BIZ_20001, accountIdentifier.getSource().value(), accountIdentifier.getIdentifier());
+      throw new BusinessException(Message.MSG_BIZ_20001, accountIdentifier.getDomain(), accountIdentifier.getIdentifier());
     }
 
     // 构建账号数据库映射
@@ -111,6 +115,11 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
 
     // 委托账号实体
     account.delegate(accountPojo);
+
+    // 构建账号访问方式数据库映射列表
+    final List<UserAccessPojo> accessPojoList = this.buildAccountAccessRepoPojo(account);
+    // 保存账号访问方式数据
+    this.accessDao.insert(accessPojoList);
 
     // 账号简况不为空的情况下，保存账号简况数据
     if (null != account.getProfile()) {
@@ -251,34 +260,27 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
     final UserAccountPojo accountPojo = accountView.getAccount();
     // 获取账号简况数据
     final UserProfilePojo profilePojo = accountView.getProfile();
+    // 获取账号访问方式数据
+    final List<UserAccessPojo> accessPojoList = accountView.getAccesses();
     // 获取账号角色ID列表
     final List<Long> roles = accountView.getRoles();
 
-    // 获取账号注册源
-    final AccountRegisterSource source = AccountRegisterSource.of(accountPojo.getSource().intValue());
-    // 获取账号注册方式
-    final AccountRegisterMeans means = AccountRegisterMeans.of(accountPojo.getMeans().intValue());
-
     // 初始化账号实体
-    final Account account = Account.newBuilder(source, means)
-        // 账号邮箱
-        .email(accountPojo.getEmail())
-        // 账号手机
-        .mobile(accountPojo.getMobile())
-        // 第三方授权外部UID
-        .externalId(accountPojo.getExternalId())
+    final Account account = Account.newBuilder(accountPojo.getName(), accountPojo.getDomain().intValue())
         // 账号密码（加密后）
         .password(accountPojo.getPassword())
         // 账号状态
         .status(AccountStatus.of(accountPojo.getStatus().intValue()))
         // 实施构建
         .build();
+    // 设定账号访问方式
+    account.setAccesses(accessPojoList.stream().map(access -> this.buildAccountAccessEntity(account, access)).collect(Collectors.toSet()));
 
     // 判定账号简况是否为空, 如果不为空则进行处理
     if (null != profilePojo) {
 
       // 初始化账号简况实体
-      final Profile profile = Profile.newBuilder(accountPojo.getId())
+      final Profile profile = Profile.newBuilder(account)
           // 姓
           .firstName(profilePojo.getFirstName())
           // 名
@@ -324,22 +326,10 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
     // 初始化账号数据库映射
     final UserAccountPojo accountPojo = new UserAccountPojo();
 
+    // 账号名称
+    accountPojo.setName(account.getIdentifier().getName());
     // 账号注册源
-    accountPojo.setSource(account.getIdentifier().getSource().key().shortValue());
-    // 账号注册方式
-    accountPojo.setMeans(account.getMeans().key().shortValue());
-    // 账号邮箱
-    if (StringUtils.hasText(account.getIdentifier().getEmail())) {
-      accountPojo.setEmail(account.getIdentifier().getEmail());
-    }
-    // 账号手机
-    if (StringUtils.hasText(account.getIdentifier().getMobile())) {
-      accountPojo.setMobile(account.getIdentifier().getMobile());
-    }
-    // 第三方授权外部UID
-    if (StringUtils.hasText(account.getIdentifier().getExternalId())) {
-      accountPojo.setExternalId(account.getIdentifier().getExternalId());
-    }
+    accountPojo.setDomain(account.getIdentifier().getDomain().shortValue());
     // 账号密码
     if (StringUtils.hasText(account.getPassword())) {
       accountPojo.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -348,6 +338,47 @@ public class JooqAccountRepository extends BaseDomainRepository<Account> impleme
     accountPojo.setStatus(account.getStatus().key().shortValue());
 
     return accountPojo;
+  }
+
+  /**
+   * 构建账号访问方式数据库映射
+   *
+   * @param account    账号实体
+   * @param accessPojo 访问方式数据库映射
+   * @return 账号访问方式实体
+   */
+  private AccountAccess buildAccountAccessEntity(final Account account, final UserAccessPojo accessPojo) {
+
+    return AccountAccess.newBuilder(account, accessPojo.getAccess(), accessPojo.getType().intValue())
+        .primary(accessPojo.getPrimary())
+        .build();
+  }
+
+  /**
+   * 构建账号访问方式数据库映射列表
+   *
+   * @param account 账号实体
+   * @return 账号访问方式数据库映射列表
+   */
+  private List<UserAccessPojo> buildAccountAccessRepoPojo(final Account account) {
+
+    // 获取账号ID
+    final Long accountId = account.getDelegator().getId();
+
+    return account.getAccesses().stream().map(access -> {
+      // 初始化账号访问方式数据库映射
+      final UserAccessPojo accessPojo = new UserAccessPojo();
+      // 账号ID
+      accessPojo.setAccount(accountId);
+      // 访问方式
+      accessPojo.setAccess(access.getIdentifier().getAccess());
+      // 访问方式类型
+      accessPojo.setType(access.getType().shortValue());
+      // 是否主要访问方式
+      accessPojo.setPrimary(access.getPrimary());
+
+      return accessPojo;
+    }).toList();
   }
 
   /**

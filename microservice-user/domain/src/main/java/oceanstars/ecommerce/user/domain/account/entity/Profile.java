@@ -64,7 +64,7 @@ public final class Profile extends Entity<ProfileIdentifier> {
    * @param account 账号ID
    * @return 账号简况实体构建器
    */
-  public static Builder newBuilder(final Long account) {
+  public static Builder newBuilder(final Account account) {
     return new Builder(account);
   }
 
@@ -125,7 +125,7 @@ public final class Profile extends Entity<ProfileIdentifier> {
    */
   public static final class Builder {
 
-    private final Long account;
+    private final Account account;
     private String firstName;
     private String lastName;
     private String nickName;
@@ -133,7 +133,7 @@ public final class Profile extends Entity<ProfileIdentifier> {
     private Gender gender;
     private LocalDate birthday;
 
-    public Builder(final Long account) {
+    public Builder(final Account account) {
       this.account = account;
     }
 

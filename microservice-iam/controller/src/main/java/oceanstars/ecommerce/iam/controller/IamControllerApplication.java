@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 用户对外服务启动接口
+ * IAM对外服务启动接口
  *
  * @author Clover
  * @version 1.0.0

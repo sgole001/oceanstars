@@ -1,4 +1,4 @@
-package oceanstars.ecommerce.user.application.account.cqrs.handler;
+package oceanstars.ecommerce.user.application.account.cqrs.handler.command;
 
 import com.google.protobuf.Timestamp;
 import java.time.Instant;
@@ -57,7 +57,7 @@ public class CreateAccountProfileCommandHandler implements ICommandHandler<UserC
         .orElseThrow(() -> new BusinessException(Message.MSG_BIZ_20000, command.getAccount()));
 
     // 构建账号简况实体
-    final Profile profile = account.getProfile() == null ? Profile.newBuilder(command.getAccount()).build() : account.getProfile();
+    final Profile profile = account.getProfile() == null ? Profile.newBuilder(account).build() : account.getProfile();
     // 姓
     if (StringUtils.hasText(command.getFirstName())) {
       profile.setFirstName(command.getFirstName());
